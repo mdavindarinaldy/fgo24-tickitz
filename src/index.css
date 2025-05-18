@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+body {
+  @apply bg-white w-svw overflow-x-hidden box-border
+}
+
+.button {
+  @apply size-fit py-1 px-4 box-border flex justify-center items-center border-1 rounded-full font-medium text-sm
+}
+
+.button.off {
+  @apply bg-white text-black border-black
+}
+
+.button.on {
+  @apply bg-orange-500 text-white border-white
+}
+
+.navbar {
+  @apply fixed top-0 h-[10svh] w-svw bg-white flex flex-row justify-between items-center px-[3svw] py-[5px] box-border shadow z-50
+}
+
+.currentlyHere {
+  @apply font-semibold border-b-1 border-orange-500
+}
+
+.currentlyNotHere {
+  @apply font-medium
+}
+
+.currentlyNotHere:hover {
+  @apply border-b-1 border-orange-500
+}
+
+.subscription-input {
+  @apply pr-8 pl-3 py-1 bg-white border-1 rounded-2xl text-sm w-1/2 outline-0
+}
+
+::-webkit-scrollbar {
+  width: 1svw;
+  z-index: 0;
+}
+
+::-webkit-scrollbar-track {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(70.5% 0.213 47.604);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
