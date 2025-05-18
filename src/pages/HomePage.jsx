@@ -29,12 +29,11 @@ function HomePage() {
         setLoading(false);
       }
     };
-
     getMovies();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div className='flex flex-col justify-center items-center'>Loading...</div>;
+  if (error) return <div className='flex flex-col justify-center items-center'>{error}</div>;
 
   return (
     <div className='flex flex-col'>
