@@ -7,7 +7,7 @@ import GenreButton from '../components/GenreButton';
 import MovieCard from '../components/MovieCard';
 import search from '../assets/Search.png';
 
-function Movie() {
+function MoviePage() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,8 +26,8 @@ function Movie() {
     getMovies();
   }, []);
 
-  if (loading) return <div className='flex flex-col justify-center items-center'>Loading...</div>;
-  if (error) return <div className='flex flex-col justify-center items-center'>{error}</div>;
+  if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>;
+  if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>;
   
   return (
     <div>
@@ -35,7 +35,7 @@ function Movie() {
       <div className='h-[12svh]'></div>
       <section id='hero' className='flex flex-row justify-center items-center w-svw h-[40svh] mb-10'>
         <div className="relative h-full w-[88%] rounded-4xl">
-          <div className="absolute inset-0 bg-[url(../../public/background.png)] bg-cover bg-center rounded-4xl" />
+          <div className="absolute inset-0 bg-[url(/background.png)] bg-cover bg-center rounded-4xl" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 to-black/85 rounded-4xl" />
           <div className='absolute start-5 bottom-10 flex flex-col justify-center items-start gap-5'>
             <span className='bg-orange-100 rounded-3xl text-orange-500 font-bold text-[10px] w-fit py-2 px-3'>LIST MOVIE OF THE WEEK</span>
@@ -73,7 +73,7 @@ function Movie() {
           </form>
           <div className='w-full h-fit py-5 grid grid-cols-4'>
               {movies.map((movie) => (
-                <MovieCard key={movie.id} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width='w-[20svw]' height='h-[30svw]' textSize="text-lg" buttonSize='text-[1svw]' date=''/>
+                <MovieCard key={movie.id} id={movie.id} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width='w-[20svw]' height='h-[30svw]' textSize="text-lg" buttonSize='text-[1svw]' date=''/>
               ))}
           </div>
           <div className='flex flex-row gap-5'>
@@ -90,4 +90,4 @@ function Movie() {
   )
 }
 
-export default Movie
+export default MoviePage

@@ -32,8 +32,8 @@ function HomePage() {
     getMovies();
   }, []);
 
-  if (loading) return <div className='flex flex-col justify-center items-center'>Loading...</div>;
-  if (error) return <div className='flex flex-col justify-center items-center'>{error}</div>;
+  if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>;
+  if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>;
 
   return (
     <div className='flex flex-col'>
@@ -58,7 +58,7 @@ function HomePage() {
           <div className='w-[100%] h-fit flex justify-center'>
             <div className='w-[90%] h-fit flex flex-row overflow-x-scroll gap-5'>
               {movies.map((movie) => (
-                <MovieCard key={movie.id} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width='w-[20svw]' height='h-[30svw]' textSize="text-lg" buttonSize='text-[1svw]' date=''/>
+                <MovieCard key={movie.id} id={movie.id} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width='w-[20svw]' height='h-[30svw]' textSize="text-lg" buttonSize='text-[1svw]' date='' details={true}/>
               ))}
             </div>
           </div>
@@ -100,7 +100,7 @@ function HomePage() {
           <div className='flex flex-col justify-between w-2/3 h-[90%]'>
             <div className='flex flex-row overflow-x-scroll w-full h-fit gap-5'>
             {upcomingMovies.map((movie) => (
-                <MovieCard key={movie.id} src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width='w-[10svw]' height='h-[15svw]' textSize='text-sm' buttonSize='text-[0.75svw]' date={movie.release_date}/>
+                <MovieCard key={movie.id} src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width='w-[10svw]' height='h-[15svw]' textSize='text-sm' buttonSize='text-[0.75svw]' date={movie.release_date} details={false}/>
               ))}
             </div>
             <div></div>

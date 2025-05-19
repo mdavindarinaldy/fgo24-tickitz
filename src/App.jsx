@@ -1,8 +1,8 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from './pages/HomePage'
-import BuyTicket from './pages/BuyTicket'
-import Movie from './pages/Movie'
+import BuyTicketPage from './pages/BuyTicketPage'
+import MoviePage from './pages/MoviePage'
 
 const router = createBrowserRouter ([
   {
@@ -16,14 +16,14 @@ const router = createBrowserRouter ([
     path: '/movie',
     element: (
       <>
-        <Movie/>
+        <MoviePage/>
       </>
     )
   }, {
-    path: '/buy-ticket',
+    path: '/buy-ticket/:id',
     element: (
       <>
-        <BuyTicket/>
+        <BuyTicketPage/>
       </>
     )
   }

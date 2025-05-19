@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
-function MovieCard({src, width, height, name, genre, textSize, buttonSize, date, ...props}) {
+function MovieCard({id, src, width, height, name, genre, textSize, buttonSize, date, details, ...props}) {
   const genres=[]
   function addGenre(item) {
     if (item === '28') genres.push('Action');
@@ -24,22 +25,27 @@ function MovieCard({src, width, height, name, genre, textSize, buttonSize, date,
     if (item === '37') genres.push('Western');
   }
 
+  let anchor=''
   genre.forEach((item) => addGenre(item))
   if (!src.includes('null')) {
+    if (details===true) { anchor = `/buy-ticket/${id}` }
+    else if (details===false) { anchor = `/` }
     return (
-        <div className='flex flex-col mb-10 gap-2' {...props}>
-            <img src={src} alt="poster-movie" className={`max-w-none rounded-3xl object-cover ${width} ${height}`}/>
-            <span className={`font-bold ${textSize} text-center`}>{name}</span>
-            <div className='flex flex-row justify-center gap-5 max-w-[20svw]'>
-                {date === '' ? (
-                    genres.map((item, index) => (
-                        <div key={`movie-card-${index}`} className={`bg-gray-300 rounded-2xl py-1 px-5 font-normal ${buttonSize} text-gray-600 w-fit`}>{item}</div>
-                    ))
-                ) : (
-                    <div className={`bg-orange-100 rounded-3xl text-orange-500 font-bold text-[10px] w-fit py-2 px-3`}>{date}</div>
-                )}
+        <Link to={anchor}>
+            <div className='flex flex-col justify-center items-center mb-10 gap-2' {...props}>
+              <img src={src} alt="poster-movie" className={`max-w-none rounded-3xl object-cover ${width} ${height}`}/>
+              <span className={`font-bold ${textSize} text-center`}>{name}</span>
+              <div className='flex flex-row justify-center gap-5 max-w-[20svw]'>
+                  {date === '' ? (
+                      genres.map((item, index) => (
+                          <div key={`movie-card-${index}`} className={`bg-gray-300 rounded-2xl py-1 px-5 font-normal ${buttonSize} text-gray-600 w-fit`}>{item}</div>
+                      ))
+                  ) : (
+                      <div className={`bg-orange-100 rounded-3xl text-orange-500 font-bold text-[10px] w-fit py-2 px-3`}>{date}</div>
+                  )}
+              </div>
             </div>
-        </div>
+        </Link>
       )
   }
 }

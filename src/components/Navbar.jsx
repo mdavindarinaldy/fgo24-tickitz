@@ -23,7 +23,7 @@ function Navbar({currentlyOn, ...props}) {
         <div className='flex flex-row gap-5'>
             <Link to='/' className={isHome ? 'currentlyHere' : 'currentlyNotHere'}>HOME</Link>
             <Link to='/movie' className={isMovie ? 'currentlyHere' : 'currentlyNotHere'}>MOVIE</Link>
-            <Link to='/buy-ticket' className={isBuy ? 'currentlyHere' : 'currentlyNotHere'}>BUY TICKET</Link>
+            <Link className={isBuy ? 'currentlyHere' : 'currentlyNotHere'}>BUY TICKET</Link>
         </div>
         <div className='flex flex-row gap-5'>
             <Button text="Log In" href="/" className="off"/>
