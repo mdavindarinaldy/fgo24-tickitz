@@ -73,7 +73,7 @@ function MoviePage() {
           </form>
           <div className='w-full h-fit py-5 grid grid-cols-4'>
               {movies.map((movie) => (
-                <MovieCard key={movie.id} id={movie.id} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width='w-[20svw]' height='h-[30svw]' textSize="text-lg" buttonSize='text-[1svw]' date=''/>
+                <MovieCard key={movie.id} id={movie.id} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width='w-[20svw]' height='h-[30svw]' textSize="text-lg" buttonSize='text-[1svw]' date='' details={true}/>
               ))}
           </div>
           <div className='flex flex-row gap-5'>

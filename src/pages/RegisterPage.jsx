@@ -12,7 +12,7 @@ function RegisterPage() {
     <main className='w-svw min-h-svh max-h-fit bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>
       <img src={logo} alt="icon-logo" className='w-[15svw]'/>
       <form id='register' className='flex flex-col gap-3 w-[40%] h-[75%] bg-white rounded-2xl px-10 py-5 mb-5'>
-        <Steps/>
+        <Steps text1='Fill Form' text2='Activate' text3='Done'/>
         <Input type='fullname'/>
         <Input type='phonenumber'/>
         <Input type='email'/>

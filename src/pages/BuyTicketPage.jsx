@@ -41,6 +41,7 @@ function BuyTicketPage() {
     getMovies();
   }, [id]);
 
+  console.log(data)
   if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>;
   if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>;
   

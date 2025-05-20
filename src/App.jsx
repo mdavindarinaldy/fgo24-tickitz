@@ -5,6 +5,7 @@ import BuyTicketPage from './pages/BuyTicketPage'
 import MoviePage from './pages/MoviePage'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
+import PaymentDetailPage from './pages/PaymentDetailPage'
 
 const router = createBrowserRouter ([
   {
@@ -26,6 +27,13 @@ const router = createBrowserRouter ([
     element: (
       <>
         <BuyTicketPage/>
+      </>
+    )
+  }, {
+    path: '/buy-ticket/:id/payment',
+    element: (
+      <>
+        <PaymentDetailPage/>
       </>
     )
   }, {
