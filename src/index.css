@@ -43,12 +43,10 @@ body {
 
 ::-webkit-scrollbar-track {
   background: #888;
-  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: oklch(70.5% 0.213 47.604);
-  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

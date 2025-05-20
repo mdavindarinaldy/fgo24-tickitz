@@ -26,8 +26,8 @@ function Navbar({currentlyOn, ...props}) {
             <Link className={isBuy ? 'currentlyHere' : 'currentlyNotHere'}>BUY TICKET</Link>
         </div>
         <div className='flex flex-row gap-5'>
-            <Button text="Log In" href="/" className="off"/>
-            <Button text="Sign Up" href="/" className="on"/>
+            <Button text="Log In" href="/login" className="off"/>
+            <Button text="Sign Up" href="/register" className="on"/>
         </div>
     </div>
   )
