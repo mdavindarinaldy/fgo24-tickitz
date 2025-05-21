@@ -11,6 +11,7 @@ import TicketResultPage from './pages/TicketResultPage'
 import ProfilePage from './pages/ProfilePage'
 import DashboardPage from './pages/DashboardPage'
 import ListMovieAdminPage from './pages/ListMovieAdminPage'
+import AddNewMoviePage from './pages/AddNewMoviePage'
 
 const router = createBrowserRouter ([
   {
@@ -88,6 +89,13 @@ const router = createBrowserRouter ([
     element: (
       <>
         <ListMovieAdminPage/>
+      </>
+    )
+  }, {
+    path: '/add-movie',
+    element: (
+      <>
+        <AddNewMoviePage/>
       </>
     )
   }
