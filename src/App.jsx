@@ -10,6 +10,7 @@ import SeatPage from './pages/SeatPage'
 import TicketResultPage from './pages/TicketResultPage'
 import ProfilePage from './pages/ProfilePage'
 import DashboardPage from './pages/DashboardPage'
+import ListMovieAdminPage from './pages/ListMovieAdminPage'
 
 const router = createBrowserRouter ([
   {
@@ -80,6 +81,13 @@ const router = createBrowserRouter ([
     element: (
       <>
         <DashboardPage/>
+      </>
+    )
+  }, {
+    path: '/list-movie',
+    element: (
+      <>
+        <ListMovieAdminPage/>
       </>
     )
   }
