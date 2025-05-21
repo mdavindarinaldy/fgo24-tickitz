@@ -9,6 +9,7 @@ import PaymentDetailPage from './pages/PaymentDetailPage'
 import SeatPage from './pages/SeatPage'
 import TicketResultPage from './pages/TicketResultPage'
 import ProfilePage from './pages/ProfilePage'
+import DashboardPage from './pages/DashboardPage'
 
 const router = createBrowserRouter ([
   {
@@ -72,6 +73,13 @@ const router = createBrowserRouter ([
     element: (
       <>
         <ProfilePage/>
+      </>
+    )
+  }, {
+    path: '/dashboard',
+    element: (
+      <>
+        <DashboardPage/>
       </>
     )
   }
