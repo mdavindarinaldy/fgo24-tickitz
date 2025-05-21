@@ -2,7 +2,7 @@ import React from 'react'
 import eye from '../assets/eye.svg'
 // import eyeoff from '../assets/eye-off.svg'
 
-function Input({type}) {
+function Input({type, text}) {
   if (type==='email') {
     return (
         <div className='flex flex-col w-full gap-4'>
@@ -14,7 +14,7 @@ function Input({type}) {
   if (type==='password') {
     return (
         <div className='flex flex-col w-full gap-4'>
-            <label htmlFor="password" className='font-semibold text-lg'>Password</label>
+            <label htmlFor="password" className='font-semibold text-lg'>{text}</label>
             <div className='flex flex-row justify-between items-center border-gray-400 border-1 w-full px-3 py-3 rounded-sm'>
                 <input type="password" id='password' placeholder='Enter your password here' className='outline-0  flex-1 border-0' autoComplete='off'/>
                 <img src={eye} alt="eye-icon" />
