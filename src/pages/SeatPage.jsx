@@ -61,7 +61,7 @@ function SeatPage() {
     <div>
         <Navbar currentlyOn='buy'/>
         <div className='h-[10svh]'></div>
-        <div className='w-svw h-fit bg-gray-100 flex flex-col justify-center items-center py-10 gap-5'>
+        <main className='w-svw h-fit bg-gray-100 flex flex-col justify-center items-center py-10 gap-5'>
             <Steps text1='Date & Time' text2='Seat' text3='Payment'/>
             <form className='w-[90%] h-fit flex flex-row gap-5'>
                 <div className='w-[65%] h-fit bg-white rounded-2xl flex flex-col gap-10 pt-5 pb-10 px-5'>
@@ -135,7 +135,7 @@ function SeatPage() {
                     <button type='submit' className='w-full bg-orange-500 py-3 text-center rounded-3xl text-white font-semibold'>Check Out Now</button>
                 </div>
             </form>
-        </div>
+        </main>
         <Footer/>
     </div>
   )

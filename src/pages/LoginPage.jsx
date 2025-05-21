@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 
 function LoginPage() {
   return (
-    <main className='w-svw min-h-svh max-h-fit bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>
+    <main className='w-svw min-h-svh max-h-fit  flex flex-col justify-center items-center' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>
         <img src={logo} alt="icon-logo" className='w-[15svw]'/>
         <form id='login' className='flex flex-col gap-3 w-[40%] h-[75%] bg-white rounded-2xl px-10 py-5 mb-5'>
             <span className='font-bold text-2xl'>Welcome Back 👋</span>

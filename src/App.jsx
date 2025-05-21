@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
 import PaymentDetailPage from './pages/PaymentDetailPage'
 import SeatPage from './pages/SeatPage'
+import TicketResultPage from './pages/TicketResultPage'
 
 const router = createBrowserRouter ([
   {
@@ -42,6 +43,13 @@ const router = createBrowserRouter ([
     element: (
       <>
         <SeatPage/>
+      </>
+    )
+  }, {
+    path: '/buy-ticket/:id/ticket-result',
+    element: (
+      <>
+        <TicketResultPage/>
       </>
     )
   }, {
