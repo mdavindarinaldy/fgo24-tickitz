@@ -15,7 +15,7 @@ function LoginPage() {
             <span className='text-gray-500'>Sign in with your data that you entered during
             your registration</span>
             <Input type='email'/>
-            <Input type='password'/>
+            <Input type='password' text='Password'/>
             <span className='text-blue-600 text-sm self-end font-semibold'>Forgot Your Password?</span>
             <button type='submit' className='bg-amber-600 text-white font-semibold w-full rounded-sm py-2'>Login</button>
             <span className='text-center text-sm'>Don't have an account? <Link to='/register' className='text-blue-700'>Register</Link></span>

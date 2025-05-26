@@ -1,26 +1,78 @@
-import React from 'react'
+import React, { useState } from 'react'
 import backdrop from '../assets/backdrop.png'
 import logo from '../assets/logo-superwhite.png'
 import Steps from '../components/Steps'
 import Input from '../components/Input'
+import { Link } from 'react-router-dom'
 import { FcGoogle } from "react-icons/fc"
 import { FaFacebook } from "react-icons/fa"
-import { Link } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+const validationSchema = yup.object({
+  fullname: yup.string().min(3, 'Nama minimal 3 karakter').required('Nama harus diisi!'),
+  email: yup.string()
+    // eslint-disable-next-line no-useless-escape
+    .matches(/^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,5}$/, {message:'Email tidak valid!', excludeEmptyString:true})
+    .required('Email harus diisi!'),
+  password: yup.string().min(8, 'Karakter minimal 8 karakter').max(12, 'Karakter maksimal 12 karakter').required('Password harus diisi!'),
+  phonenumber: yup.string().matches(/^[8][0-9]{10,11}$/, {message: 'Nomor Ponsel tidak valid'}).required('Nomor Ponsel harus diisi'),
+  terms: yup.bool().oneOf([true], 'Syarat dan ketentuan harus disetujui'),
+})
 
 function RegisterPage() {
+  const {register, handleSubmit, formState:{errors}} = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      fullname: "",
+      email: "",
+      password: "",
+      phonenumber: "",
+      terms: false,
+    }
+  })
+  const [error, setError] = useState('')
+
+  function registeredUser(email, users) {
+    return users.some(user => user.email === email)
+  }
+
+  function submitData(value) {
+    const sanitizedValue = {
+      ...value,
+      fullname: value.fullname.trim(),
+      email: value.email.trim(),
+      phonenumber: value.phonenumber.trim()
+    }
+    const users = JSON.parse(localStorage.getItem('users')) || []
+    if (!registeredUser(sanitizedValue.email, users)) {
+      setError('')
+      users.push({
+        ...sanitizedValue
+      })
+      localStorage.setItem('users', JSON.stringify(users))
+    } else {
+      setError('Email sudah terdaftar, silakan login dengan email tersebut')
+    }
+    // kurang toggle password input
+  }
+
   return (
     <main className='w-svw min-h-svh max-h-fit bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>
       <img src={logo} alt="icon-logo" className='w-[15svw]'/>
-      <form id='register' className='flex flex-col gap-3 w-[40%] h-[75%] bg-white rounded-2xl px-10 py-5 mb-5'>
+      <form onSubmit={handleSubmit(submitData)} id='register' className='flex flex-col gap-3 w-[40%] h-[75%] bg-white rounded-2xl px-10 py-5 mb-5'>
         <Steps text1='Fill Form' text2='Activate' text3='Done'/>
-        <Input type='fullname'/>
-        <Input type='phonenumber'/>
-        <Input type='email'/>
-        <Input type='password'/>
+        <Input type='fullname' register={register} error={errors.fullname}/>
+        <Input type='phonenumber' register={register} error={errors.phonenumber}/>
+        <Input type='email' register={register} error={errors.email}/>
+        <Input type='password' text='Password' register={register} error={errors.password}/>
         <div className='flex flex-row gap-2 w-full justify-start items-center'>
-            <input type="checkbox" id='checkbox' className='size-4'/>
+            <input {...register('terms')} type="checkbox" id='checkbox' className='size-4'/>
             <label htmlFor="checkbox">I agree to terms and conditions</label>
         </div>
+        {errors.terms && (<p className="text-red-500 text-sm">{errors.terms.message}</p>)}
+        {error && (<p className="text-red-500 text-sm">{error}</p>)}
         <button type='submit' className='bg-amber-600 text-white font-semibold w-full rounded-sm py-2'>Join For Free Now</button>
         <span className='text-center text-sm'>Already have an account? <Link to='/login' className='text-blue-700'>Log In</Link></span>
         <div className='flex flex-row items-center gap-2 w-full'>
