@@ -11,10 +11,11 @@ import ovo from '../assets/ovo.png'
 import paypal from '../assets/paypal.png'
 import visa from '../assets/visa.png'
 import fetchChosenMovie from '../script/fetchChosenMovie'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { addDataAction } from '../redux/reducer.js/buyTicket'
+import { IoIosCloseCircleOutline } from "react-icons/io"
 
 function PaymentDetailPage() {
   const { id } = useParams()
@@ -24,8 +25,10 @@ function PaymentDetailPage() {
   const detailMovie = useSelector((state) => state.data.data)
   const currentLogin = JSON.parse(localStorage.getItem('currentLogin'))
   const {register, handleSubmit, watch} = useForm()
+  const [modal,setModal] = useState(false)
   const formState = watch()
   const dispatch = useDispatch()
+  let navigate = useNavigate()
 
   useEffect(() => {
     const getMovies = async () => {
@@ -51,7 +54,8 @@ function PaymentDetailPage() {
   }
 
   function submitData(value) {
-    dispatch(addDataAction({method: value.method}))  
+    dispatch(addDataAction({method: value.method}))
+    setModal(true)  
   }
 
   if (loading) { return (<div className="h-svh flex flex-col justify-center items-center"> Loading... </div>) }
@@ -61,7 +65,7 @@ function PaymentDetailPage() {
     <main>
         <Navbar currentlyOn='buy'/>
         <div className='h-[10svh]'></div>
-        <div className='w-svw h-fit bg-gray-100 flex flex-col justify-center items-center py-10 gap-5'>
+        <div className='w-svw h-fit bg-gray-100 flex flex-col justify-center items-center py-10 gap-5 relative'>
             <Steps text1='Date & Time' text2='Seat' text3='Payment'/>
             <form onSubmit={handleSubmit(submitData)} id='payment' className='bg-white w-[50%] h-fit rounded-3xl py-10 px-10 flex flex-col gap-10'>
                 <div className='flex flex-col gap-5 w-full'>
@@ -120,7 +124,26 @@ function PaymentDetailPage() {
                 </div>
                 <button type='submit' className='py-5 w-full bg-orange-500 rounded-2xl text-white font-bold'>Pay Your Order</button>
             </form>
-            <section id='modal' className=''>
+            <section id='modal' className={`w-full h-[140%] flex-col justify-center items-center absolute ${ modal ? 'flex' : 'hidden'}`}>
+                <div className='w-[50svw] h-fit px-10 py-5 bg-white rounded-2xl flex flex-col justify-center items-center gap-5'>
+                    <div className='w-full flex flex-row justify-between'>
+                        <div className='size-[20px]'></div>
+                        <span className='text-2xl font-bold'>Payment Info</span>
+                        <IoIosCloseCircleOutline onClick={()=>setModal(false)} className='hover:cursor-pointer size-[25px]'/>
+                    </div>
+                    <hr className='w-full bg-gray-300'/>
+                    <div className='w-full flex flex-row justify-between'>
+                        <span className='text-gray-400 text-base'>No. Rekening Virtual:</span>
+                        <span className='text-lg'>12321328913829724</span>
+                    </div>
+                    <div className='w-full flex flex-row justify-between'>
+                        <span className='text-gray-400 text-base'>Total Payment:</span>
+                        <span className='text-lg'>${detailMovie.payment},00</span>
+                    </div>
+                    <span className='font-semibold'>Pay this payment bill before it's due on <span className='text-red-500'>{`${detailMovie.date} at ${detailMovie.showtime}`}</span></span>
+                    <span className='font-semibold'>If the bill has not been paid by the specified time, it will be forfeited</span>
+                    <button type='button' className='w-full py-3 font-bold text-lg bg-orange-500 text-white rounded-2xl'onClick={()=> navigate(`/buy-ticket/${id}/ticket-result`)}>Pay Now</button>
+                </div>
             </section>
         </div>
         <Footer/>
