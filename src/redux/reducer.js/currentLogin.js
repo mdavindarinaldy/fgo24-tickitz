@@ -10,9 +10,12 @@ const currentLogin = createSlice({
     reducers: {
         currentLoginAction: function(state, action) {
             state.data = {...action.payload}
+        },
+        removeLoginAction: function(state) {
+            state.data = {}
         }
     }
 })
 
-export const { currentLoginAction } = currentLogin.actions
+export const { currentLoginAction, removeLoginAction } = currentLogin.actions
 export default currentLogin.reducer

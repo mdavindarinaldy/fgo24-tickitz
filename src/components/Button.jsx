@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 
 function Button({text, href, className, ...props}) {
   return (
-    <div className={`button ${className}`}>
-        <Link to={href} {...props}>{text}</Link>
+    <div className={`button ${className}`} {...props}>
+        <Link to={href}>{text}</Link>
     </div>
   )
 }

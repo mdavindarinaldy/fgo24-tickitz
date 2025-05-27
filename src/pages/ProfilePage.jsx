@@ -3,8 +3,10 @@ import Navbar from '../components/Navbar'
 import dot from '../assets/dot.png'
 import profile from '../assets/profile.png'
 import Input from '../components/Input'
+import { useForm } from 'react-hook-form'
 
 function ProfilePage() {
+  const {register, handleSubmit} = useForm()
   return (
     <div>
         <Navbar/>
@@ -39,17 +41,17 @@ function ProfilePage() {
                         <div className='border-b-1 border-gray-400 py-3'>
                             <span className='text-semibold text-base'>Details Information</span>
                         </div>
-                        <Input type='fullname'/>
-                        <Input type='email'/>
-                        <Input type='phonenumber'/>
+                        <Input type='fullname' register={register}/>
+                        <Input type='email' register={register}/>
+                        <Input type='phonenumber' register={register}/>
                     </div>
                     <div className='bg-white rounded-2xl w-full px-10 py-5 flex flex-col gap-5'>
                         <div className='border-b-1 border-gray-400 py-3'>
                             <span className='text-semibold text-base'>Account and Privacy</span>
                         </div>
                         <div className='flex flex-row gap-5'>
-                            <Input type='password' text='New Password'/>
-                            <Input type='password' text='Confirm Password'/>
+                            <Input type='password' text='New Password' register={register}/>
+                            <Input type='password' text='Confirm Password' register={register}/>
                         </div>
                     </div>
                     <button type='submit' className='text-white font-semibold bg-orange-500 py-4 w-[30%] rounded-2xl'>Update Changes</button>
