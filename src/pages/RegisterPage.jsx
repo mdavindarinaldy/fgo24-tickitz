@@ -9,6 +9,8 @@ import { FaFacebook } from "react-icons/fa"
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { useDispatch, useSelector } from 'react-redux'
+import { addUserAction } from '../redux/reducer.js/users'
 
 const validationSchema = yup.object({
   fullname: yup.string().min(3, 'Nama minimal 3 karakter').required('Nama harus diisi!'),
@@ -32,6 +34,8 @@ function RegisterPage() {
       terms: false,
     }
   })
+  const users = useSelector((state) => state.users.data) || []
+  const dispatch = useDispatch()
 
   const [error, setError] = useState('')
   let navigate = useNavigate()
@@ -43,17 +47,14 @@ function RegisterPage() {
   function submitData(value) {
     const sanitizedValue = {
       ...value,
+      password: btoa(value.password),
       fullname: value.fullname.trim(),
       email: value.email.trim(),
       phonenumber: value.phonenumber.trim()
     }
-    const users = JSON.parse(localStorage.getItem('users')) || []
     if (!registeredUser(sanitizedValue.email, users)) {
       setError('')
-      users.push({
-        ...sanitizedValue
-      })
-      localStorage.setItem('users', JSON.stringify(users))
+      dispatch(addUserAction(sanitizedValue))
       navigate('/login')
     } else {
       setError('Email sudah terdaftar, silakan login dengan email tersebut')

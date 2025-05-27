@@ -8,6 +8,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { useDispatch, useSelector } from 'react-redux'
+import { currentLoginAction } from '../redux/reducer.js/currentLogin'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email harus diisi!'),
@@ -21,21 +23,22 @@ function LoginPage() {
   const [error, setError] = useState('')
   const [errorPass, setErrorPass] = useState('')
   let navigate = useNavigate()
+  const users = useSelector((state) => state.users.data) || []
+  const dispatch = useDispatch()
   
   function submitData(value) {
     const sanitizedValue = {
       ...value,
       email: value.email.trim(),
     }
-    const users = JSON.parse(localStorage.getItem('users')) || []
     const findUser = users.find((item)=> item.email === sanitizedValue.email)
     if (findUser === -1) {
       setError('Email tidak terdaftar, silakan lakukan registrasi akun terlebih dahulu')
     } else {
       setError('')
-      if(sanitizedValue.password === findUser.password) {
+      if(sanitizedValue.password === atob(findUser.password)) {
         setErrorPass('')
-        localStorage.setItem('currentLogin', JSON.stringify(findUser))
+        dispatch(currentLoginAction(findUser))
         navigate('/')
       } else {
         setErrorPass('Password yang digunakan salah!')
