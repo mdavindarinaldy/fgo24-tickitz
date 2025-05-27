@@ -18,7 +18,11 @@ function SeatPage() {
   const [errorSeat, setErrorSeat] = useState('')
   const detailMovie = useSelector((state) => state.data.data)
   const currentLogin = useSelector((state) => state.currentLogin.data)
-  const { register, handleSubmit, watch } = useForm()
+  const { register, handleSubmit, watch } = useForm({
+    defaultValues: {
+      seat: [],
+    },
+  })
   const [payment, setPayment] = useState(0)
   const dispatch = useDispatch()
   let navigate = useNavigate()
