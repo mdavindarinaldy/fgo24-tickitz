@@ -6,11 +6,14 @@ import Footer from '../components/Footer';
 import GenreButton from '../components/GenreButton';
 import MovieCard from '../components/MovieCard';
 import search from '../assets/Search.png';
+// import { useSearchParams } from 'react-router-dom';
 
 function MoviePage() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // const [searchParams, setSearchParams] = useSearchParams()
+
   useEffect(() => {
     const getMovies = async () => {
       try {

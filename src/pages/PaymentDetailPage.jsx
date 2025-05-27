@@ -11,7 +11,7 @@ import ovo from '../assets/ovo.png'
 import paypal from '../assets/paypal.png'
 import visa from '../assets/visa.png'
 import fetchChosenMovie from '../script/fetchChosenMovie'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { addDataAction } from '../redux/reducer.js/buyTicket'
@@ -43,6 +43,8 @@ function PaymentDetailPage() {
     }
     getMovies()
   }, [id])  
+
+  if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
   
   function Card({src,method}) {
     return (

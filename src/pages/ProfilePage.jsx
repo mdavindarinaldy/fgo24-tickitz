@@ -9,6 +9,7 @@ import { editUserAction } from '../redux/reducer.js/users'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { currentLoginAction } from '../redux/reducer.js/currentLogin'
+import { Navigate } from 'react-router-dom'
 
 const validationSchema = yup.object({
   fullname: yup.string().min(3, 'Nama minimal 3 karakter').required('Nama harus diisi!'),
@@ -32,6 +33,8 @@ function ProfilePage() {
   const currentLogin = useSelector((state) => state.currentLogin.data)
   const historyTransaction = useSelector((state) => state.history.data)
   const filteredTransaction = historyTransaction.filter((transaction) => transaction.createdBy === currentLogin.id)
+
+  if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
 
   function submitChange(value) {
     const sanitizedValue = {

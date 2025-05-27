@@ -13,6 +13,7 @@ function TicketResultPage() {
   const { id } = useParams()
   const [data, setData] = useState({})
   const detailMovie = useSelector((state) => state.data.data)
+  const currentLogin = useSelector((state) => state.currentLogin.data)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
@@ -32,6 +33,7 @@ function TicketResultPage() {
     getMovies()
   }, [id])  
 
+  if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
   if (loading) { return (<div className="h-svh flex flex-col justify-center items-center"> Loading... </div>) }
   if (error) { return (<div className="h-svh flex flex-col justify-center items-center">{error}</div>) }
 

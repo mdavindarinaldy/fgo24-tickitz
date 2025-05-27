@@ -4,7 +4,7 @@ import Footer from '../components/Footer'
 import Steps from '../components/Steps'
 import GenreButton from '../components/GenreButton'
 import Button from '../components/Button'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import fetchChosenMovie from '../script/fetchChosenMovie'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
@@ -16,6 +16,7 @@ function SeatPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const detailMovie = useSelector((state) => state.data.data)
+  const currentLogin = useSelector((state) => state.currentLogin.data)
   const { register, handleSubmit, watch } = useForm()
   const [payment, setPayment] = useState(0)
   const dispatch = useDispatch()
@@ -40,6 +41,8 @@ function SeatPage() {
   useEffect(()=> {
     if (formState.seat !== undefined) {setPayment(formState.seat.length * 10)}
   },[formState])
+
+  if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
 
   function Letter({ letter }) {
     return <div className="size-[20px] text-base font-normal">{letter}</div>
@@ -184,12 +187,12 @@ function SeatPage() {
             </div>
             <div className="w-full flex flex-row justify-between items-center">
               <span className="text-gray-400 font-semibold text-sm">Seat choosed</span>
-              <span className="text-base font-semibold">{formState.seat?.join(', ') || 'None'}</span>
+              <span className="text-base font-semibold">{formState?.seat?.join(', ') || 'None'}</span>
             </div>
             <hr className="w-full h-0.1 border-1 border-gray-300" />
             <div className="w-full flex flex-row justify-between items-center">
               <span className="font-bold text-lg">Total Payment</span>
-              <span className="text-blue-600 font-semibold text-lg">{payment}</span>
+              <span className="text-blue-600 font-semibold text-lg">${payment}</span>
             </div>
             <button type="submit" className="w-full bg-orange-500 py-3 text-center rounded-3xl text-white font-semibold">Check Out Now</button>
           </div>
