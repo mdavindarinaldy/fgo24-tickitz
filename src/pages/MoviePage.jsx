@@ -1,36 +1,43 @@
 import React, {useState, useEffect} from 'react'
 import Navbar from '../components/Navbar'
-import fetchNowPlayingMovies from '../script/fetchNowPlayingMovies';
-import Subscription from '../components/Subscription';
-import Footer from '../components/Footer';
-import GenreButton from '../components/GenreButton';
-import MovieCard from '../components/MovieCard';
-import search from '../assets/Search.png';
-// import { useSearchParams } from 'react-router-dom';
+import fetchNowPlayingMovies from '../script/fetchNowPlayingMovies'
+import Subscription from '../components/Subscription'
+import Footer from '../components/Footer'
+import GenreButton from '../components/GenreButton'
+import MovieCard from '../components/MovieCard'
+import search from '../assets/Search.png'
+import { useSearchParams } from 'react-router-dom'
 
 function MoviePage() {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  // const [searchParams, setSearchParams] = useSearchParams()
+  const [movies, setMovies] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const currentPage = parseInt(searchParams.get('page') || '1', 10)
 
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const data = await fetchNowPlayingMovies();
-        setMovies(data);
-        setLoading(false);
+        const data = await fetchNowPlayingMovies(currentPage)
+        setMovies(data)
+        setLoading(false)
       } catch (err) {
-        setError(err.message);
-        setLoading(false);
+        setError(err.message)
+        setLoading(false)
       }
-    };
+    }
 
-    getMovies();
-  }, []);
+    getMovies()
+  }, [currentPage])
 
-  if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>;
-  if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>;
+  const handlePageChange = (page) => {
+    setSearchParams({page})
+    setLoading(true)
+  };
+
+  if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>
+  if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>
   
   return (
     <div>
@@ -80,10 +87,9 @@ function MoviePage() {
               ))}
           </div>
           <div className='flex flex-row gap-5'>
-            <GenreButton id='page1' text='1' isActive={true}/>
-            <GenreButton id='page2' text='2' isActive={false}/>
-            <GenreButton id='page3' text='3' isActive={false}/>
-            <GenreButton id='page4' text='4' isActive={false}/>
+          {[1, 2, 3].map((page) => (
+              <GenreButton key={`page-${page}`} id={`page-${page}`} text={`${page}`} isActive={currentPage === page} onClick={() => handlePageChange(page)}/>
+            ))}
           </div>
         </div>
       </section>

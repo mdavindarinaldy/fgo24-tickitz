@@ -52,7 +52,7 @@ function HomePage() {
             <div className='w-[10%]'></div>
             <span className='text-[2svw] font-bold'>Now Showing in Cinemas</span>
             <div className='w-[10%]'>
-              <Button text="View All &rarr;" href="/" className="on"/>
+              <Button text="View All &rarr;" href="/movie" className="on"/>
             </div>
           </div>
           <div className='w-[100%] h-fit flex justify-center'>
@@ -111,7 +111,7 @@ function HomePage() {
               <span className='text-[3svw] font-bold'>Exciting Movie Coming Soon</span>
             </div>
             <div className='self-end'>
-              <Button text="View All &rarr;" href="/" className="on"/>
+              <Button text="View All &rarr;" href="/movie" className="on"/>
             </div>
           </div>
         </section>
