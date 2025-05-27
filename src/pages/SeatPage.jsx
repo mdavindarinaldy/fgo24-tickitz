@@ -124,7 +124,7 @@ function SeatPage() {
         <form onSubmit={handleSubmit(submitData)} className="w-[90%] h-fit flex flex-row gap-5">
           <div className="w-[65%] h-fit bg-white rounded-2xl flex flex-col gap-10 pt-5 pb-10 px-5">
             <div className="w-full h-fit flex flex-row gap-5 py-3 px-3 border-1 border-gray-300 rounded-sm">
-              <img src={`https://image.tmdb.org/t/p/w500${data.backdrop_path}`} className="w-[200px] rounded-sm" alt="movie-poster"/>
+              <img src={`https://image.tmdb.org/t/p/w1280${data.backdrop_path}`} className="w-[200px] rounded-sm" alt="movie-poster"/>
               <div className="flex flex-col flex-1 gap-5">
                 <span className="font-bold text-2xl">{data.title}</span>
                 <div className="flex flex-row gap-1">
