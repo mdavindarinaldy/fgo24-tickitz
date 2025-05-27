@@ -10,19 +10,21 @@ import cineone from '../assets/cineone-black.png'
 import ebv from '../assets/ebv-black.png'
 import hiflix from '../assets/hiflix-black.png'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addDataAction } from '../redux/reducer.js/buyTicket'
 import fetchChosenMovie from '../script/fetchChosenMovie'
 
 
 function BuyTicketPage() {
   const {id} = useParams()
-  const [data, setData] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [data, setData] = useState({})
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [errorLogin, setErrorLogin] = useState('')
   const {register, handleSubmit} = useForm()
   const dispatch = useDispatch()
-  let navigate = useNavigate()
+  const navigate = useNavigate()
+  const currentLogin = useSelector((state) => state.currentLogin.data)
 
   useEffect(() => {
     const getMovies = async () => {
@@ -91,8 +93,13 @@ function BuyTicketPage() {
   }
 
   function submitData(value) {
-    dispatch(addDataAction(value))
-    navigate(`/buy-ticket/${id}/seat`)
+    if (currentLogin.email) {
+      setErrorLogin('')
+      dispatch(addDataAction(value))
+      navigate(`/buy-ticket/${id}/seat`)
+    } else {
+      setErrorLogin('*Silakan login terlebih dahulu sebelum memesan tiket!')
+    }
   }
 
   return (
@@ -195,9 +202,10 @@ function BuyTicketPage() {
               <CinemaCard src={ebv} register={register} id='cinema-4' value='ebv'/>
             </div>
           </div>
-          <div className='w-full flex flex-row justify-center mb-10'>
+          <div className='w-full flex flex-col justify-center items-center gap-3 mb-10'>
             {/* <Button className='on' text='BOOK NOW'/> */}
             <button type='submit' className='py-3 w-[30%] bg-orange-500 text-white font-semibold rounded-2xl'>BOOK NOW</button>
+            {errorLogin && <span className='text-lg font-semibold text-red-500'>{errorLogin}</span>}
           </div>
         </form>
       </section>
