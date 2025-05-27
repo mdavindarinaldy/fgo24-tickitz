@@ -12,6 +12,7 @@ import hiflix from '../assets/hiflix-black.png'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { addDataAction } from '../redux/reducer.js/buyTicket'
+import fetchChosenMovie from '../script/fetchChosenMovie'
 
 
 function BuyTicketPage() {
@@ -26,16 +27,7 @@ function BuyTicketPage() {
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const res = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}?&append_to_response=credits`,
-          {
-            method: 'GET',
-              headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
-              }
-          })
-        const details = await res.json()
+        const details = await fetchChosenMovie(id)
         setData(details);
         setLoading(false);
       } catch (err) {
@@ -46,8 +38,8 @@ function BuyTicketPage() {
     getMovies();
   }, [id]);
 
-  if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>;
-  if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>;
+  if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>
+  if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>
   
   function convertMinutesToHours(minutes) {
     const hours = Math.floor(minutes / 60);

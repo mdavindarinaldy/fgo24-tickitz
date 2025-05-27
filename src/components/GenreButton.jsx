@@ -1,7 +1,7 @@
 import React from 'react'
 
 function GenreButton({text, isActive, ...props}) {
-    let baseStyle='border-1 rounded-3xl px-5 py-2 flex gap-2 items-center text-[1.1svw]'
+    let baseStyle='border-1 rounded-3xl px-[1.1svw] py-2 flex gap-2 items-center text-[1.1svw]'
     if (isActive === true) {
         baseStyle = baseStyle +' bg-orange-500 text-white'
     } else if (isActive === false) {
