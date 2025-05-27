@@ -23,9 +23,9 @@ function PaymentDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const detailMovie = useSelector((state) => state.data.data)
-  const currentLogin = JSON.parse(localStorage.getItem('currentLogin'))
+  const currentLogin = useSelector((state) => state.currentLogin.data)
   const {register, handleSubmit, watch} = useForm()
-  const [modal,setModal] = useState(false)
+  const [modal, setModal] = useState(false)
   const formState = watch()
   const dispatch = useDispatch()
   let navigate = useNavigate()
@@ -54,7 +54,10 @@ function PaymentDetailPage() {
   }
 
   function submitData(value) {
-    dispatch(addDataAction({method: value.method}))
+    dispatch(addDataAction({
+        method: value.method,
+        createdBy: currentLogin.id
+    }))
     setModal(true)  
   }
 

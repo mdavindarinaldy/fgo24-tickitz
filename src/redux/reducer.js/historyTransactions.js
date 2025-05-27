@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    data: {}
+    data: []
 }
 
 const historyTransaction = createSlice({
@@ -9,7 +9,7 @@ const historyTransaction = createSlice({
     initialState,
     reducers: {
         addHistoryAction: function(state, action) {
-            state.data = {...action.payload}
+            state.data.push(action.payload)
         }
     }
 })

@@ -15,9 +15,18 @@ const users = createSlice({
                 id: id
             })
             return state
+        },
+        editUserAction: function(state, action) {
+            const {currentLogin, sanitizedValue} = action.payload
+            const found = state.data.findIndex(user => user.id === currentLogin.id)
+            const newValue = {
+                ...currentLogin,
+                ...sanitizedValue
+            }
+            state.data[found] = newValue
         }
     }
 })
 
-export const { addUserAction } = users.actions
+export const { addUserAction, editUserAction } = users.actions
 export default users.reducer
