@@ -22,6 +22,7 @@ function PaymentDetailPage() {
   const [data, setData] = useState({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [errorMethod, setErrorMethod] = useState('')
   const detailMovie = useSelector((state) => state.data.data)
   const currentLogin = useSelector((state) => state.currentLogin.data)
   const {register, handleSubmit, watch} = useForm()
@@ -56,11 +57,17 @@ function PaymentDetailPage() {
   }
 
   function submitData(value) {
-    dispatch(addDataAction({
-        method: value.method,
-        createdBy: currentLogin.id
-    }))
-    setModal(true)  
+    console.log(value.method)
+    if(value.method) {
+        setErrorMethod('')
+        dispatch(addDataAction({
+            method: value.method,
+            createdBy: currentLogin.id
+        }))
+        setModal(true) 
+    } else {
+        setErrorMethod('Silakan pilih metode pembayaran terlebih dahulu')
+    }
   }
 
   if (loading) { return (<div className="h-svh flex flex-col justify-center items-center"> Loading... </div>) }
@@ -128,6 +135,7 @@ function PaymentDetailPage() {
                     </div>
                 </div>
                 <button type='submit' className='py-5 w-full bg-orange-500 rounded-2xl text-white font-bold'>Pay Your Order</button>
+                {errorMethod && <span className='text-lg font-semibold text-red-500 text-center'>{errorMethod}</span>}
             </form>
             <section id='modal' className={`w-full h-[140%] flex-col justify-center items-center absolute ${ modal ? 'flex' : 'hidden'}`}>
                 <div className='w-[50svw] h-fit px-10 py-5 bg-white rounded-2xl flex flex-col justify-center items-center gap-5'>
@@ -147,7 +155,7 @@ function PaymentDetailPage() {
                     </div>
                     <span className='font-semibold'>Pay this payment bill before it's due on <span className='text-red-500'>{`${detailMovie.date} at ${detailMovie.showtime}`}</span></span>
                     <span className='font-semibold'>If the bill has not been paid by the specified time, it will be forfeited</span>
-                    <button type='button' className='w-full py-3 font-bold text-lg bg-orange-500 text-white rounded-2xl'onClick={()=> navigate(`/buy-ticket/${id}/ticket-result`)}>Pay Now</button>
+                    <button type='button' className='w-full py-3 font-bold text-lg bg-orange-500 text-white rounded-2xl' onClick={()=> navigate(`/buy-ticket/${id}/ticket-result`)}>Pay Now</button>
                 </div>
             </section>
         </div>

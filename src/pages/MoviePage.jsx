@@ -10,11 +10,20 @@ import { useSearchParams } from 'react-router-dom'
 
 function MoviePage() {
   const [movies, setMovies] = useState([])
+  const [filteredMovies, setFilteredMovies] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [searchParams, setSearchParams] = useSearchParams()
 
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
+  const currentGenre = searchParams.get('genre') || null
+  const genres = [
+    { id: 28, name: 'ACTION' },
+    { id: 12, name: 'ADVENTURE' },
+    { id: 35, name: 'COMEDY' },
+    { id: 10749, name: 'ROMANCE' },
+    { id: 878, name: 'SCI-FI' },
+  ]
 
   useEffect(() => {
     const getMovies = async () => {
@@ -27,13 +36,34 @@ function MoviePage() {
         setLoading(false)
       }
     }
-
     getMovies()
   }, [currentPage])
 
+  useEffect(() => {
+    if (currentGenre) {
+      const filtered = movies.filter((movie) =>
+        movie.genre_ids.includes(parseInt(currentGenre, 10))
+      );
+      setFilteredMovies(filtered);
+    } else {
+      setFilteredMovies(movies);
+    }
+  }, [movies, currentGenre])
+
+  const handleGenreChange = (genreId) => {
+    const params = Object.fromEntries(searchParams);
+    if (genreId === currentGenre) {
+      delete params.genre
+      setSearchParams({...params, page: '1' })
+    } else if (genreId) {
+      setSearchParams({...params, genre: genreId, page: '1' });
+    }
+    setLoading(false)
+  }
+
   const handlePageChange = (page) => {
     setSearchParams({page})
-    setLoading(true)
+    setLoading(false)
   };
 
   if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>
@@ -73,16 +103,20 @@ function MoviePage() {
             <div className='w-[65%] flex flex-col gap-5'>
               <span className='text-[1.5svw] font-bold'>Filters</span>
               <div className='flex flex-row gap-3'>
-                  <GenreButton id={28} text='ACTION' isActive={false}/>
-                  <GenreButton id={12} text='ADVENTURE' isActive={false}/>
-                  <GenreButton id={35} text='COMEDY' isActive={false}/>
-                  <GenreButton id={10749} text='ROMANCE' isActive={false}/>
-                  <GenreButton id={878} text='SCI-FI' isActive={false}/>
+                {genres.map((genre) => (
+                  <GenreButton
+                    key={genre.id}
+                    id={genre.id}
+                    text={genre.name}
+                    isActive={currentGenre === genre.id.toString()}
+                    onClick={() => handleGenreChange(genre.id.toString())}
+                  />
+                ))}
               </div>
             </div>
           </form>
           <div className='w-full h-fit py-5 grid grid-cols-4'>
-              {movies.map((movie) => (
+              {filteredMovies.map((movie) => (
                 <MovieCard key={movie.id} id={movie.id} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width='w-[20svw]' height='h-[30svw]' textSize="text-lg" buttonSize='text-[1svw]' date='' details={true}/>
               ))}
           </div>

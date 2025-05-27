@@ -15,6 +15,7 @@ function SeatPage() {
   const [data, setData] = useState({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [errorSeat, setErrorSeat] = useState('')
   const detailMovie = useSelector((state) => state.data.data)
   const currentLogin = useSelector((state) => state.currentLogin.data)
   const { register, handleSubmit, watch } = useForm()
@@ -110,9 +111,14 @@ function SeatPage() {
   }
 
   function submitData(value) {
-    // console.log(value)
-    dispatch(addDataAction({seats: value.seat, payment: payment}))
-    navigate(`/buy-ticket/${id}/payment`)
+    console.log(value)
+    if (value.seat.length !== 0) {
+      setErrorSeat('')
+      dispatch(addDataAction({seats: value.seat, payment: payment}))
+      navigate(`/buy-ticket/${id}/payment`)
+    } else {
+      setErrorSeat('Silakan pilih kursi terlebih dahulu')
+    }
   }
 
   if (loading) { return (<div className="h-svh flex flex-col justify-center items-center"> Loading... </div>) }
@@ -195,6 +201,7 @@ function SeatPage() {
               <span className="text-blue-600 font-semibold text-lg">${payment}</span>
             </div>
             <button type="submit" className="w-full bg-orange-500 py-3 text-center rounded-3xl text-white font-semibold">Check Out Now</button>
+            {errorSeat && <span className='text-lg font-semibold text-red-500'>{errorSeat}</span>}
           </div>
         </form>
       </main>
