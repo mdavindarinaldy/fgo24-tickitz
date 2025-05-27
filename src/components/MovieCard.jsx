@@ -33,7 +33,7 @@ function MovieCard({id, src, width, height, name, genre, textSize, buttonSize, d
     return (
         <Link to={anchor}>
             <div className='flex flex-col justify-center items-center mb-10 gap-2' {...props}>
-              <img src={src} alt="poster-movie" className={`max-w-none rounded-3xl object-cover ${width} ${height}`}/>
+              <img src={src} alt="poster-movie" className={`max-w-none rounded-3xl object-cover ${width} ${height} hover:border-10 hover:border-orange-500`}/>
               <span className={`font-bold ${textSize} text-center`}>{name}</span>
               <div className='flex flex-row justify-center gap-5 max-w-[20svw]'>
                   {date === '' ? (
