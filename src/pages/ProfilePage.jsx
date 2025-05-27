@@ -32,7 +32,7 @@ function ProfilePage() {
 
   const currentLogin = useSelector((state) => state.currentLogin.data)
   const historyTransaction = useSelector((state) => state.history.data)
-  const filteredTransaction = historyTransaction.filter((transaction) => transaction.createdBy === currentLogin.id)
+  const filteredTransaction = historyTransaction.filter((transaction) => transaction.createdBy === currentLogin.id).reverse()
 
   if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
 
