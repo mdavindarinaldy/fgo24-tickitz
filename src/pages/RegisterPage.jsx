@@ -3,7 +3,7 @@ import backdrop from '../assets/backdrop.png'
 import logo from '../assets/logo-superwhite.png'
 import Steps from '../components/Steps'
 import Input from '../components/Input'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FcGoogle } from "react-icons/fc"
 import { FaFacebook } from "react-icons/fa"
 import { useForm } from 'react-hook-form'
@@ -32,7 +32,9 @@ function RegisterPage() {
       terms: false,
     }
   })
+
   const [error, setError] = useState('')
+  let navigate = useNavigate()
 
   function registeredUser(email, users) {
     return users.some(user => user.email === email)
@@ -52,14 +54,14 @@ function RegisterPage() {
         ...sanitizedValue
       })
       localStorage.setItem('users', JSON.stringify(users))
+      navigate('/login')
     } else {
       setError('Email sudah terdaftar, silakan login dengan email tersebut')
     }
-    // kurang toggle password input
   }
 
   return (
-    <main className='w-svw min-h-svh max-h-fit bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>
+    <main className='w-svw min-h-svh max-h-fit bg-cover bg-no-repeat flex flex-col justify-center items-center' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>
       <img src={logo} alt="icon-logo" className='w-[15svw]'/>
       <form onSubmit={handleSubmit(submitData)} id='register' className='flex flex-col gap-3 w-[40%] h-[75%] bg-white rounded-2xl px-10 py-5 mb-5'>
         <Steps text1='Fill Form' text2='Activate' text3='Done'/>

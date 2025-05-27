@@ -1,21 +1,59 @@
-import React from 'react'
+import React, { useState } from 'react'
 import backdrop from '../assets/backdrop.png'
 import logo from '../assets/logo-superwhite.png'
 import Input from '../components/Input'
 import { FcGoogle } from "react-icons/fc"
 import { FaFacebook } from "react-icons/fa"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+const validationSchema = yup.object({
+  email: yup.string().required('Email harus diisi!'),
+  password: yup.string().required('Password harus diisi!'),
+})
 
 function LoginPage() {
+  const {register, handleSubmit, formState:{errors}} = useForm({
+    resolver: yupResolver(validationSchema)
+  })
+  const [error, setError] = useState('')
+  const [errorPass, setErrorPass] = useState('')
+  let navigate = useNavigate()
+  
+  function submitData(value) {
+    const sanitizedValue = {
+      ...value,
+      email: value.email.trim(),
+    }
+    const users = JSON.parse(localStorage.getItem('users')) || []
+    const findUser = users.find((item)=> item.email === sanitizedValue.email)
+    if (findUser === -1) {
+      setError('Email tidak terdaftar, silakan lakukan registrasi akun terlebih dahulu')
+    } else {
+      setError('')
+      if(sanitizedValue.password === findUser.password) {
+        setErrorPass('')
+        localStorage.setItem('currentLogin', JSON.stringify(findUser))
+        navigate('/')
+      } else {
+        setErrorPass('Password yang digunakan salah!')
+      }
+    }
+  }
+  
   return (
-    <main className='w-svw min-h-svh max-h-fit  flex flex-col justify-center items-center' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>
+    <main className='w-svw min-h-svh max-h-fit flex flex-col justify-center items-center bg-cover bg-no-repeat' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>
         <img src={logo} alt="icon-logo" className='w-[15svw]'/>
-        <form id='login' className='flex flex-col gap-3 w-[40%] h-[75%] bg-white rounded-2xl px-10 py-5 mb-5'>
+        <form onSubmit={handleSubmit(submitData)} id='login' className='flex flex-col gap-3 w-[40%] h-[75%] bg-white rounded-2xl px-10 py-5 mb-5'>
             <span className='font-bold text-2xl'>Welcome Back 👋</span>
             <span className='text-gray-500'>Sign in with your data that you entered during
             your registration</span>
-            <Input type='email'/>
-            <Input type='password' text='Password'/>
+            <Input type='email' register={register} error={errors.email}/>
+            {error && (<p className="text-red-500 text-sm">{error}</p>)}
+            <Input type='password' register={register} text='Password' error={errors.password}/>
+            {error && (<p className="text-red-500 text-sm">{errorPass}</p>)}
             <span className='text-blue-600 text-sm self-end font-semibold'>Forgot Your Password?</span>
             <button type='submit' className='bg-amber-600 text-white font-semibold w-full rounded-sm py-2'>Login</button>
             <span className='text-center text-sm'>Don't have an account? <Link to='/register' className='text-blue-700'>Register</Link></span>

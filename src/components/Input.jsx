@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import eye from '../assets/eye.svg'
-// import eyeoff from '../assets/eye-off.svg'
+import eyeoff from '../assets/eye-off.svg'
 
 function Input({type, text, register, error}) {
+  const [showPassword, setShowPassword] = useState(false)
+
+  function togglePasswordVisibility() {
+    setShowPassword((prev) => !prev)
+  }
+
   if (type==='email') {
     return (
         <div className='flex flex-col w-full gap-4'>
@@ -17,8 +23,10 @@ function Input({type, text, register, error}) {
         <div className='flex flex-col w-full gap-4'>
             <label htmlFor="password" className='font-semibold text-lg'>{text}</label>
             <div className='flex flex-row justify-between items-center border-gray-400 border-1 w-full px-3 py-3 rounded-sm'>
-                <input  {...register('password')} type="password" id='password' placeholder='Enter your password here' className='outline-0  flex-1 border-0' autoComplete='off'/>
-                <img src={eye} alt="eye-icon" />
+                <input  {...register('password')} type={showPassword ? 'text' : 'password'} id='password' placeholder='Enter your password here' className='outline-0  flex-1 border-0' autoComplete='off'/>
+                <button className="eye" type="button" onClick={togglePasswordVisibility}>
+                    <img src={showPassword ? eyeoff : eye} alt="icon-password" />
+                </button>
             </div>
             {error && <p className="text-red-500 text-sm">{error.message}</p>}
         </div>
