@@ -32,7 +32,7 @@ function LoginPage() {
       email: value.email.trim(),
     }
     const findUser = users.find((item)=> item.email === sanitizedValue.email)
-    if (findUser === -1) {
+    if (findUser === undefined) {
       setError('Email tidak terdaftar, silakan lakukan registrasi akun terlebih dahulu')
     } else {
       setError('')
@@ -56,7 +56,7 @@ function LoginPage() {
             <Input type='email' register={register} error={errors.email}/>
             {error && (<p className="text-red-500 text-sm">{error}</p>)}
             <Input type='password' register={register} text='Password' error={errors.password}/>
-            {error && (<p className="text-red-500 text-sm">{errorPass}</p>)}
+            {errorPass && (<p className="text-red-500 text-sm">{errorPass}</p>)}
             <span className='text-blue-600 text-sm self-end font-semibold'>Forgot Your Password?</span>
             <button type='submit' className='bg-amber-600 text-white font-semibold w-full rounded-sm py-2'>Login</button>
             <span className='text-center text-sm'>Don't have an account? <Link to='/register' className='text-blue-700'>Register</Link></span>

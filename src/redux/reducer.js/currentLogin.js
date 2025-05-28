@@ -10,9 +10,11 @@ const currentLogin = createSlice({
     reducers: {
         currentLoginAction: function(state, action) {
             state.data = {...action.payload}
+            return state
         },
-        removeLoginAction: function(state) {
-            state.data = {}
+        removeLoginAction: function() {
+            // state.data = {}
+            return initialState
         }
     }
 })
