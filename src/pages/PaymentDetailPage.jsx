@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Steps from '../components/Steps'
@@ -15,7 +15,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { addDataAction } from '../redux/reducer.js/buyTicket'
-import { IoIosCloseCircleOutline } from "react-icons/io"
+import Modal from '../components/Modal'
 
 function PaymentDetailPage() {
   const { id } = useParams()
@@ -26,6 +26,7 @@ function PaymentDetailPage() {
   const detailMovie = useSelector((state) => state.data.data)
   const currentLogin = useSelector((state) => state.currentLogin.data)
   const {register, handleSubmit, watch} = useForm()
+  const modalRef = useRef(null)
   const [modal, setModal] = useState(false)
   const formState = watch()
   const dispatch = useDispatch()
@@ -44,6 +45,13 @@ function PaymentDetailPage() {
     }
     getMovies()
   }, [id])  
+
+  useEffect(() => {
+    if (modal && modalRef.current) {
+      modalRef.current.focus()
+      modalRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [modal])
 
   if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
   
@@ -137,27 +145,18 @@ function PaymentDetailPage() {
                 <button type='submit' className='py-5 w-full bg-orange-500 rounded-2xl text-white font-bold'>Pay Your Order</button>
                 {errorMethod && <span className='text-lg font-semibold text-red-500 text-center'>{errorMethod}</span>}
             </form>
-            <section id='modal' className={`w-full h-[140%] flex-col justify-center items-center absolute ${ modal ? 'flex' : 'hidden'}`}>
-                <div className='w-[50svw] h-fit px-10 py-5 bg-white rounded-2xl flex flex-col justify-center items-center gap-5'>
-                    <div className='w-full flex flex-row justify-between'>
-                        <div className='size-[20px]'></div>
-                        <span className='text-2xl font-bold'>Payment Info</span>
-                        <IoIosCloseCircleOutline onClick={()=>setModal(false)} className='hover:cursor-pointer size-[25px]'/>
-                    </div>
-                    <hr className='w-full bg-gray-300'/>
-                    <div className='w-full flex flex-row justify-between'>
-                        <span className='text-gray-400 text-base'>No. Rekening Virtual:</span>
-                        <span className='text-lg'>12321328913829724</span>
-                    </div>
-                    <div className='w-full flex flex-row justify-between'>
-                        <span className='text-gray-400 text-base'>Total Payment:</span>
-                        <span className='text-lg'>${detailMovie.payment},00</span>
-                    </div>
-                    <span className='font-semibold'>Pay this payment bill before it's due on <span className='text-red-500'>{`${detailMovie.date} at ${detailMovie.showtime}`}</span></span>
-                    <span className='font-semibold'>If the bill has not been paid by the specified time, it will be forfeited</span>
-                    <button type='button' className='w-full py-3 font-bold text-lg bg-orange-500 text-white rounded-2xl' onClick={()=> navigate(`/buy-ticket/${id}/ticket-result`)}>Pay Now</button>
-                </div>
-            </section>
+            <Modal
+                ref={modalRef}
+                modalHeading = 'Payment Info'
+                infoSubheading1 = 'No. Rekening Virtual:'
+                info1 = '12321328913829724'
+                infoSubheading2 = 'Total Payment:'
+                info2 = {`$${detailMovie.payment},00`}
+                additionalInfo = {`Pay this payment bill before it's due on ${detailMovie.date} at ${detailMovie.showtime}. If the bill has not been paid by the specified time, it will be forfeited`}
+                modal= {modal}
+                onClose={() => setModal(false)}
+                onPayNow={() => navigate(`/buy-ticket/${id}/ticket-result`)}
+            />
         </div>
         <Footer/>
     </main>
