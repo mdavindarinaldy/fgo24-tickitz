@@ -3,7 +3,7 @@ import backdrop from '../assets/backdrop.png'
 import logo from '../assets/logo-superwhite.png'
 import Steps from '../components/Steps'
 import Input from '../components/Input'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { FcGoogle } from "react-icons/fc"
 import { FaFacebook } from "react-icons/fa"
 import { useForm } from 'react-hook-form'
@@ -35,10 +35,13 @@ function RegisterPage() {
     }
   })
   const users = useSelector((state) => state.users.data) || []
+  const currentLogin = useSelector((state) => state.currentLogin.data)
   const dispatch = useDispatch()
 
   const [error, setError] = useState('')
   let navigate = useNavigate()
+
+  if(currentLogin.email) { return (<Navigate to='/' replace/>) }
 
   function registeredUser(email, users) {
     return users.some(user => user.email === email)

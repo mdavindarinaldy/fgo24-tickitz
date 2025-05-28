@@ -4,7 +4,7 @@ import logo from '../assets/logo-superwhite.png'
 import Input from '../components/Input'
 import { FcGoogle } from "react-icons/fc"
 import { FaFacebook } from "react-icons/fa"
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -24,7 +24,10 @@ function LoginPage() {
   const [errorPass, setErrorPass] = useState('')
   let navigate = useNavigate()
   const users = useSelector((state) => state.users.data) || []
+  const currentLogin = useSelector((state) => state.currentLogin.data)
   const dispatch = useDispatch()
+
+  if(currentLogin.email) { return (<Navigate to='/' replace/>) }
   
   function submitData(value) {
     const sanitizedValue = {
