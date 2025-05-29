@@ -14,9 +14,13 @@ const validationSchema = yup.object({
     // eslint-disable-next-line no-useless-escape
     .matches(/^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,5}$/, {message:'Email tidak valid!', excludeEmptyString:true})
     .required('Email harus diisi!'),
-  password: yup.string().min(8, 'Karakter minimal 8 karakter').max(12, 'Karakter maksimal 12 karakter').required('Password harus diisi!'),
+  password: yup.string()
+    .transform((value) => (value === '' ? null : value))
+    .nullable()
+    .optional()
+    .min(8, 'Karakter minimal 8 karakter')
+    .max(12, 'Karakter maksimal 12 karakter'),
   phonenumber: yup.string().matches(/^[8][0-9]{10,11}$/, {message: 'Nomor Ponsel tidak valid'}).required('Nomor Ponsel harus diisi'),
-  terms: yup.bool().oneOf([true], 'Syarat dan ketentuan harus disetujui'),
 })
 
 function ProfilePage() {
@@ -31,12 +35,17 @@ function ProfilePage() {
 //   if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
 
   function submitChange(value) {
-    const sanitizedValue = {
-        ...value,
-        password: btoa(value.password),
+    let sanitizedValue = {
+        ...currentLogin,
         fullname: value.fullname.trim(),
         email: value.email.trim(),
         phonenumber: value.phonenumber.trim()
+    }
+    if (value.password !== null) {
+        sanitizedValue = {
+            ...sanitizedValue,
+            password: value.password
+        }
     }
     dispatch(editUserAction({currentLogin, sanitizedValue}))
     dispatch(currentLoginAction({...currentLogin, ...sanitizedValue}))

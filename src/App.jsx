@@ -84,7 +84,7 @@ const router = createBrowserRouter ([
         element: <ProfilePage/>
       }, {
         path: '/profile/history-transaction',
-        element: <HistoryTransactionPage/ >
+        element: <HistoryTransactionPage/>
       }
     ]
   }, {
