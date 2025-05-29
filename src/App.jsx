@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Children } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import BuyTicketPage from './pages/BuyTicketPage'
@@ -15,6 +15,8 @@ import AddNewMoviePage from './pages/AddNewMoviePage'
 import { Provider } from 'react-redux'
 import { persistor, store } from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
+import ProfileLayout from './components/ProfileLayout'
+import HistoryTransactionPage from './pages/HistoryTransactionPage'
 
 const router = createBrowserRouter ([
   {
@@ -75,11 +77,16 @@ const router = createBrowserRouter ([
     )
   }, {
     path: '/profile',
-    element: (
-      <>
-        <ProfilePage/>
-      </>
-    )
+    element: <ProfileLayout/>,
+    children: [
+      {
+        path: '/profile/edit-profile',
+        element: <ProfilePage/>
+      }, {
+        path: '/profile/history-transaction',
+        element: <HistoryTransactionPage/ >
+      }
+    ]
   }, {
     path: '/dashboard',
     element: (

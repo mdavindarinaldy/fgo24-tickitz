@@ -55,7 +55,7 @@ function Navbar({currentlyOn, ...props}) {
           </button>
           {dropdown && (
             <div className="absolute top-[60px] right-0 bg-white border border-gray-300 rounded-lg shadow-lg w-[150px] flex flex-col z-50">
-              <Link to="/profile" className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg" onClick={() => setDropdown(false)}>Profile</Link>
+              <Link to="/profile/edit-profile" className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg" onClick={() => setDropdown(false)}>Profile</Link>
               <button type='button' className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-b-lg text-left" onClick={logout}>Logout</button>
             </div>
           )}

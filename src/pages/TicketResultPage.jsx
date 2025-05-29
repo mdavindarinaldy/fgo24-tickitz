@@ -42,7 +42,7 @@ function TicketResultPage() {
         ...detailMovie,
         title: data.title
     }))
-    navigate(`/`)
+    navigate(`/profile/history-transaction`)
   }
 
   return (
