@@ -85,7 +85,7 @@ function PaymentDetailPage() {
     <main>
         <Navbar currentlyOn='buy'/>
         <div className='h-[10svh]'></div>
-        <div className='w-svw h-fit bg-gray-100 flex flex-col justify-center items-center py-10 gap-5 relative'>
+        <div className='w-svw h-[140%] bg-gray-100 flex flex-col justify-center items-center py-10 gap-5 relative'>
             <Steps text1='Date & Time' text2='Seat' text3='Payment'/>
             <form onSubmit={handleSubmit(submitData)} id='payment' className='bg-white w-[50%] h-fit rounded-3xl py-10 px-10 flex flex-col gap-10'>
                 <div className='flex flex-col gap-5 w-full'>
@@ -154,8 +154,9 @@ function PaymentDetailPage() {
                 info2 = {`$${detailMovie.payment},00`}
                 additionalInfo = {`Pay this payment bill before it's due on ${detailMovie.date} at ${detailMovie.showtime}. If the bill has not been paid by the specified time, it will be forfeited`}
                 modal= {modal}
+                buttonText = 'Pay Now'
                 onClose={() => setModal(false)}
-                onPayNow={() => navigate(`/buy-ticket/${id}/ticket-result`)}
+                onButton={() => navigate(`/buy-ticket/${id}/ticket-result`)}
             />
         </div>
         <Footer/>

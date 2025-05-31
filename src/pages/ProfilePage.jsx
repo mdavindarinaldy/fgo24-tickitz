@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Input from '../components/Input'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { currentLoginAction } from '../redux/reducer.js/currentLogin'
 import { Navigate, useNavigate } from 'react-router-dom'
+import Modal from '../components/Modal'
 
 const validationSchema = yup.object({
   fullname: yup.string().min(3, 'Nama minimal 3 karakter').required('Nama harus diisi!'),
@@ -21,6 +22,7 @@ const validationSchema = yup.object({
     .min(8, 'Karakter minimal 8 karakter')
     .max(12, 'Karakter maksimal 12 karakter'),
   phonenumber: yup.string().matches(/^[8][0-9]{10,11}$/, {message: 'Nomor Ponsel tidak valid'}).required('Nomor Ponsel harus diisi'),
+  confirmPassword: yup.string().required('Anda harus konfirmasi terlebih dahulu menggunakan password lama')
 })
 
 function ProfilePage() {
@@ -32,7 +34,11 @@ function ProfilePage() {
   const currentLogin = useSelector((state) => state.currentLogin.data)
   const navigate = useNavigate()
 
-//   if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
+  const modalRef = useRef(null)
+  const [modal, setModal] = useState(false)
+  const [errorConfirm, setErrorConfirm] = useState('')
+
+//if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
 
   function submitChange(value) {
     let sanitizedValue = {
@@ -47,12 +53,18 @@ function ProfilePage() {
             password: value.password
         }
     }
-    dispatch(editUserAction({currentLogin, sanitizedValue}))
-    dispatch(currentLoginAction({...currentLogin, ...sanitizedValue}))
-    setUpdate('Profile berhasil dilakukan perubahan!')
-    setTimeout(() => {
-        setUpdate('')
-    }, 3000);
+    if (value.confirmPassword === currentLogin.password) {
+      setErrorConfirm('')
+      dispatch(editUserAction({currentLogin, sanitizedValue}))
+      dispatch(currentLoginAction({...currentLogin, ...sanitizedValue}))
+      setUpdate('Profile berhasil dilakukan perubahan!')
+      setModal(false)
+      setTimeout(() => {
+          setUpdate('')
+      }, 5000);
+    } else {
+      setErrorConfirm('Password salah!')
+    }
   }
 
   return (
@@ -61,7 +73,7 @@ function ProfilePage() {
             <button type='button' className={`text-lg font-semibold border-b-3 border-orange-300`} disabled>Account Settings</button>
             <button type='button' className={`text-lg font-semibold hover:border-b-3 hover:border-orange-300`} onClick={()=>{navigate('/profile/history-transaction')}}>Order History</button>
         </div>
-        <form onSubmit={handleSubmit(submitChange)} id='profile' className='w-full flex flex-col gap-10'>
+        <form onSubmit={handleSubmit(submitChange)} id='profile' className='w-full flex flex-col gap-10 relative'>
             <div className='bg-white rounded-2xl w-full px-10 py-5 flex flex-col gap-5'>
                 <div className='border-b-1 border-gray-400 py-3'>
                     <span className='text-semibold text-base'>Details Information</span>
@@ -79,7 +91,20 @@ function ProfilePage() {
                 </div>
                 {update && <span className='text-lg text-green-400 font-semibold'>{update}</span>}
             </div>
-            <button type='submit' className='text-white font-semibold bg-orange-500 py-4 w-[30%] rounded-2xl'>Update Changes</button>
+            <button type='button' onClick={()=> {setModal(true)}} className='text-white font-semibold bg-orange-500 py-4 w-[30%] rounded-2xl'>Update Changes</button>
+            <Modal
+                ref={modalRef}
+                modalHeading = 'Confirmation'
+                option = 'input'
+                additionalInfo = 'Konfirmasi dengan password lama Anda terlebih dahulu'
+                modal= {modal}
+                errors = {errors.confirmPassword}
+                errorConfirm = {errorConfirm}
+                register = {register}
+                buttonText = 'Confirm'
+                onClose={() => setModal(false)}
+                onSubmit={() => submitChange}
+            />
         </form>
     </>
   )

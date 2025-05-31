@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import eye from '../assets/eye.svg'
 import eyeoff from '../assets/eye-off.svg'
 
-function Input({type, text, register, error, ...props}) {
+function Input({type, text, register, error, errorConfirm, ...props}) {
   const [showPassword, setShowPassword] = useState(false)
 
   function togglePasswordVisibility() {
@@ -29,6 +29,21 @@ function Input({type, text, register, error, ...props}) {
                 </button>
             </div>
             {error && <p className="text-red-500 text-sm">{error.message}</p>}
+        </div>
+    )
+  }
+  if (type==='confirmPassword') {
+    return (
+        <div className='flex flex-col w-full gap-4'>
+            <label htmlFor="confirmPassword" className='font-semibold text-lg'>{text}</label>
+            <div className='flex flex-row justify-between items-center border-gray-400 border-1 w-full px-3 py-3 rounded-sm'>
+                <input  {...register('confirmPassword')} type={showPassword ? 'text' : 'password'} id='confirmPassword' placeholder='Enter your password here' className='outline-0  flex-1 border-0' autoComplete='off'/>
+                <button className="eye" type="button" onClick={togglePasswordVisibility}>
+                    <img src={showPassword ? eyeoff : eye} alt="icon-password" />
+                </button>
+            </div>
+            {error && <p className="text-red-500 text-sm">{error.message}</p>}
+            {errorConfirm && <p className="text-red-500 text-sm">{errorConfirm}</p>}
         </div>
     )
   }
