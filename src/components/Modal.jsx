@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react'
 import { IoIosCloseCircleOutline } from "react-icons/io"
 import Input from './Input'
 
-const Modal = forwardRef(({modalHeading, infoSubheading1, info1, infoSubheading2, info2, additionalInfo, onClose, onSubmit, onButton, modal, buttonText, option, register, errorConfirm}, ref) => {
+const Modal = forwardRef(({modalHeading, infoSubheading1, info1, infoSubheading2, info2, additionalInfo, onClose, onSubmit, onButton, modal, buttonText, option, register, errorConfirm, success}, ref) => {
 
   function Option() {
     if (option==='input') {
@@ -13,6 +13,19 @@ const Modal = forwardRef(({modalHeading, infoSubheading1, info1, infoSubheading2
                 <button type='button' className='w-full py-3 font-bold text-lg bg-orange-500 text-white rounded-2xl' onClick={onSubmit}>{buttonText}</button>
             </>
         )
+    } else if (option==='forgetPassword') {
+         return (            
+            <>
+                <div className='flex flex-col w-full gap-4'>
+                    <label htmlFor="forgot" className='font-semibold text-lg'>Email</label>
+                    <input {...register('forgetPassword')} type="email" id='forgot' placeholder='Enter your email here' className='border-gray-400 border-1 outline-0 rounded-sm w-full px-3 py-3' autoComplete='off'/>
+                    {errorConfirm && <p className="text-red-500 text-sm">{errorConfirm}</p>}
+                </div>
+                <span className='font-semibold text-center'>{additionalInfo}</span>
+                <button type='button' className='w-full py-3 font-bold text-lg bg-orange-500 text-white rounded-2xl' onClick={onSubmit}>{buttonText}</button>
+                {success && <p className="text-green-500 text-lg font-semibold text-center">{success}</p>}
+            </>
+         )   
     } else {
         return (
             <>

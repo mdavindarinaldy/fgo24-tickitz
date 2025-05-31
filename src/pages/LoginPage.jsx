@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import backdrop from '../assets/backdrop.png'
 import logo from '../assets/logo-superwhite.png'
 import Input from '../components/Input'
@@ -10,6 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
 import { currentLoginAction } from '../redux/reducer.js/currentLogin'
+import Modal from '../components/Modal'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email harus diisi!'),
@@ -17,7 +18,7 @@ const validationSchema = yup.object({
 })
 
 function LoginPage() {
-  const {register, handleSubmit, formState:{errors}} = useForm({
+  const {register, handleSubmit, getValues, setValue, formState:{errors}} = useForm({
     resolver: yupResolver(validationSchema)
   })
   const [error, setError] = useState('')
@@ -26,9 +27,29 @@ function LoginPage() {
   const users = useSelector((state) => state.users.data) || []
   const currentLogin = useSelector((state) => state.currentLogin.data)
   const dispatch = useDispatch()
+  const modalRef = useRef(null)
+  const [modal, setModal] = useState(false)
+  const [errorConfirm, setErrorConfirm] = useState('')
+  const [success, setSuccess] = useState('')
 
   if(currentLogin.email) { return (<Navigate to='/' replace/>) }
   
+  function forgotPass() {
+    const value = getValues()
+    const findUser = users.find((item)=> item.email === value.forgetPassword)
+    if (findUser === undefined) {
+      setErrorConfirm('Email tidak terdaftar!')
+    } else {
+      setErrorConfirm('')
+      setSuccess('Password sementara telah dikirimkan melalui email!')
+      setTimeout(function() {
+        setModal(false)
+        setValue('forgetPassword', '')
+        setSuccess('')
+      }, 3000)
+    }
+  }
+
   function submitData(value) {
     const sanitizedValue = {
       ...value,
@@ -60,7 +81,7 @@ function LoginPage() {
             {error && (<p className="text-red-500 text-sm">{error}</p>)}
             <Input type='password' register={register} text='Password' error={errors.password}/>
             {errorPass && (<p className="text-red-500 text-sm">{errorPass}</p>)}
-            <span className='text-blue-600 text-sm self-end font-semibold'>Forgot Your Password?</span>
+            <button type='button' onClick={()=>setModal(true)}className='text-blue-600 text-sm self-end font-semibold border-0 bg-none'>Forgot Your Password?</button>
             <button type='submit' className='bg-amber-600 text-white font-semibold w-full rounded-sm py-2'>Login</button>
             <span className='text-center text-sm'>Don't have an account? <Link to='/register' className='text-blue-700'>Register</Link></span>
             <div className='flex flex-row items-center gap-2 w-full'>
@@ -79,6 +100,22 @@ function LoginPage() {
                 </div>
             </div>
         </form>
+        <Modal
+          ref={modalRef}
+          modalHeading='Forgot Password'
+          errorConfirm={errorConfirm}
+          success={success}
+          option='forgetPassword'
+          additionalInfo='Password sementara akan dikirimkan melalui email, silakan login dengan password tersebut dan rubah password Anda di menu profile'
+          modal={modal}
+          register={register}
+          buttonText='Send'
+          onClose={function () {
+            setErrorConfirm('')
+            setModal(false)
+          }}
+          onSubmit={function () {forgotPass()}}
+        />
     </main>
   )
 }
