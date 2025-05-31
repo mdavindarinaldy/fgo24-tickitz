@@ -69,47 +69,54 @@ function SeatPage() {
     const items = []
     let currentLetter = 'A'
     let number = 1
-    for (let i = 0; i < 64; i++) {
-      if (i % 8 === 0 && i !== 56) {
-        items.push(<Letter key={`letter-${i}`} letter={currentLetter} />)
-        if (currentLetter === 'H') { continue }
-        currentLetter = String.fromCharCode(currentLetter.charCodeAt(0) + 1)
-      } else if (i < 56) {
-        items.push(
-          <Seat key={`seat-${i}`} value={i + 1} register={register} formState={formState}/>
-        )
-      } else if (i === 56) {
-        items.push(
-          <div key={`item-${i}`} className="size-[20px] text-base font-normal"></div>
-        )
-      } else {
-        items.push(
-          <div key={`item-${i}`} className="size-[20px] w-full text-base font-normal text-center">
-            {number}
-          </div>
-        )
-        number += 1
+    for (let i=0;i<8;i++) {
+      for (let j=0;j<8;j++) {
+        if (j===0) {
+          if (i===7) {
+            items.push(
+              <div key={`item-${j}`} className="size-[20px] text-base font-normal"></div>
+            )     
+          } else {
+            items.push(<Letter key={`letter-${i}`} letter={currentLetter}/>)
+          }
+        } else if (i===7) {
+          items.push(
+            <div key={`item-${j}`} className="size-[20px] w-full text-base font-normal text-center">
+              {number}
+            </div>
+          )
+          number += 1
+        } else {
+          items.push(
+            <Seat key={`seat-${currentLetter}${j}`} value={`${currentLetter}${j}`} register={register} formState={formState}/>
+          )
+        }
       }
+      currentLetter = String.fromCharCode(currentLetter.charCodeAt(0) + 1)
     }
     return items
   }
 
   function SectionB() {
     const items = []
+    let currentLetter = 'A'
     let number = 8
-    for (let i = 0; i < 56; i++) {
-      if (i < 49) {
-        items.push(
-          <Seat key={`seat-${i}`} value={57 + i} register={register} formState={formState}/>
-        )
-      } else {
-        items.push(
-          <div key={`item-${i}`} className="size-[20px] w-full text-base font-normal text-center">
-            {number}
-          </div>
-        )
-        number += 1
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 7; j++) {
+        if (i===7) {
+          items.push(
+            <div key={`item-${number}`} className="size-[20px] w-full text-base font-normal text-center">
+              {number}
+            </div>
+          )
+          number += 1
+        } else {
+          items.push(
+            <Seat key={`seat-${currentLetter}${j+8}`} value={`${currentLetter}${j+8}`} register={register} formState={formState}/>
+          )
+        }
       }
+      currentLetter = String.fromCharCode(currentLetter.charCodeAt(0) + 1)
     }
     return items
   }
