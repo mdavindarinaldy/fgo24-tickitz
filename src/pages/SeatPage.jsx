@@ -18,7 +18,7 @@ function SeatPage() {
   const [errorSeat, setErrorSeat] = useState('')
   const detailMovie = useSelector((state) => state.data.data)
   const currentLogin = useSelector((state) => state.currentLogin.data)
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch, setValue } = useForm({
     defaultValues: {
       seat: [],
     },
@@ -45,6 +45,7 @@ function SeatPage() {
 
   useEffect(()=> {
     if (formState.seat !== undefined) {setPayment(formState.seat.length * 10)}
+    console.log(formState.seat)
   },[formState])
 
   if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
@@ -54,13 +55,30 @@ function SeatPage() {
   }
 
   function Seat({value, formState}) {
+    function handleChange(e) {
+      const isChecked = e.target.checked
+      const currentSeats = formState.seat || []
+      let updatedSeats
+      if (isChecked) {
+        updatedSeats = [...currentSeats, value]
+      } else {
+        updatedSeats = currentSeats.filter((seat) => seat !== value)
+      }
+      setValue('seat', updatedSeats)
+    }
     return (
       <div className="relative inline-block">
         <span 
-            className={`size-[30px] border-1 border-gray-500 rounded-sm inline-block 
-            ${formState.seat?.includes(value.toString()) ? 'bg-blue-500' : 'bg-white'}`}
+          className={`size-[30px] border-1 border-gray-500 rounded-sm inline-block 
+          ${formState.seat?.includes(value.toString()) ? 'bg-blue-500' : 'bg-white'}`}
         ></span>
-        <input type="checkbox" value={value} name="seat" {...register('seat')} className="absolute size-[30px] rounded-sm opacity-0 cursor-pointer left-0"/>
+        <input 
+          type="checkbox" 
+          value={value} 
+          name="seat" 
+          {...register('seat')} 
+          onChange={handleChange}
+          className="absolute size-[30px] rounded-sm opacity-0 cursor-pointer left-0"/>
       </div>
     );
   }
@@ -122,7 +140,6 @@ function SeatPage() {
   }
 
   function submitData(value) {
-    console.log(value)
     if (value.seat.length !== 0) {
       setErrorSeat('')
       dispatch(addDataAction({seats: value.seat, payment: payment}))
