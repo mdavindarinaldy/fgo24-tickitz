@@ -2,15 +2,15 @@ import React, { forwardRef } from 'react'
 import { IoIosCloseCircleOutline } from "react-icons/io"
 import Input from './Input'
 
-const Modal = forwardRef(({modalHeading, infoSubheading1, info1, infoSubheading2, info2, additionalInfo, onClose, onSubmit, onButton, modal, buttonText, option, register, errors, errorConfirm}, ref) => {
+const Modal = forwardRef(({modalHeading, infoSubheading1, info1, infoSubheading2, info2, additionalInfo, onClose, onSubmit, onButton, modal, buttonText, option, register, errorConfirm}, ref) => {
 
   function Option() {
     if (option==='input') {
         return (
             <>
-                <Input type='confirmPassword' text='Confirm Password' register={register} error={errors} errorConfirm={errorConfirm}/>
+                <Input type='confirmPassword' text='Confirm Password' register={register} errorConfirm={errorConfirm}/>
                 <span className='font-semibold text-center'>{additionalInfo}</span>
-                <button type='submit' className='w-full py-3 font-bold text-lg bg-orange-500 text-white rounded-2xl' onClick={onSubmit}>{buttonText}</button>
+                <button type='button' className='w-full py-3 font-bold text-lg bg-orange-500 text-white rounded-2xl' onClick={onSubmit}>{buttonText}</button>
             </>
         )
     } else {

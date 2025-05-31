@@ -17,11 +17,11 @@ const users = createSlice({
             return state
         },
         editUserAction: function(state, action) {
-            const {currentLogin, sanitizedValue} = action.payload
+            const {currentLogin, formData} = action.payload
             const found = state.data.findIndex(user => user.id === currentLogin.id)
             const newValue = {
                 ...currentLogin,
-                ...sanitizedValue
+                ...formData
             }
             state.data[found] = newValue
         }

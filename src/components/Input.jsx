@@ -42,7 +42,6 @@ function Input({type, text, register, error, errorConfirm, ...props}) {
                     <img src={showPassword ? eyeoff : eye} alt="icon-password" />
                 </button>
             </div>
-            {error && <p className="text-red-500 text-sm">{error.message}</p>}
             {errorConfirm && <p className="text-red-500 text-sm">{errorConfirm}</p>}
         </div>
     )
