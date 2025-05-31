@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import fetchChosenMovie from '../script/fetchChosenMovie'
 import { useDispatch, useSelector } from 'react-redux'
 import { addHistoryAction } from '../redux/reducer.js/historyTransactions'
+import { removeDataAction } from '../redux/reducer.js/buyTicket'
 
 function TicketResultPage() {
   const { id } = useParams()
@@ -42,6 +43,7 @@ function TicketResultPage() {
         ...detailMovie,
         title: data.title
     }))
+    dispatch(removeDataAction())
     navigate(`/profile/history-transaction`)
   }
 
@@ -77,7 +79,7 @@ function TicketResultPage() {
                                 </div>
                                 <div className='flex flex-col gap-1'>
                                     <span className='text-gray-400 text-sm'>Count</span>
-                                    <span className='text-lg'>{detailMovie.seats.length} pcs</span>
+                                    <span className='text-lg'>{detailMovie.seats?.length} pcs</span>
                                 </div>
                             </div>
                             <div className='flex flex-col gap-3 justify-start items-start'>
@@ -91,7 +93,7 @@ function TicketResultPage() {
                                 </div>
                                 <div className='flex flex-col gap-1'>
                                     <span className='text-gray-400 text-sm'>Seats</span>
-                                    <span className='text-lg'>{detailMovie.seats.join(', ')}</span>
+                                    <span className='text-lg'>{detailMovie.seats?.join(', ')}</span>
                                 </div>
                             </div>
                         </div>    

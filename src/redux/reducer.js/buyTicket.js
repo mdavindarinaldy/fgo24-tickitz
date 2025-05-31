@@ -13,9 +13,12 @@ const buyTicket = createSlice({
                 ...state.data,
                 ...action.payload
             }
+        },
+        removeDataAction: function() {
+            return initialState
         }
     }
 })
 
-export const { addDataAction } = buyTicket.actions
+export const { addDataAction, removeDataAction } = buyTicket.actions
 export default buyTicket.reducer

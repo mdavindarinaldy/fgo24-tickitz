@@ -65,7 +65,6 @@ function PaymentDetailPage() {
   }
 
   function submitData(value) {
-    console.log(value.method)
     if(value.method) {
         setErrorMethod('')
         dispatch(addDataAction({

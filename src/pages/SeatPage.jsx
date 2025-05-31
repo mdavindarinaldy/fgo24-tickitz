@@ -43,9 +43,19 @@ function SeatPage() {
 
   const formState = watch()
 
+  const history = useSelector((state) => state.history.data)
+  const filteredHistory = history.filter((item) => 
+    item.title === data.title 
+    && item.location === detailMovie.location
+    && item.cinema === detailMovie.cinema
+    && item.showtime === detailMovie.showtime
+    && item.date === detailMovie.date
+  )
+
+  const occupiedSeats = filteredHistory.flatMap((item) => item.seats || [])
+
   useEffect(()=> {
     if (formState.seat !== undefined) {setPayment(formState.seat.length * 10)}
-    console.log(formState.seat)
   },[formState])
 
   if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
@@ -54,8 +64,11 @@ function SeatPage() {
     return <div className="size-[20px] text-base font-normal">{letter}</div>
   }
 
-  function Seat({value, formState}) {
+  function Seat({value, formState, occupiedSeats}) {
+    const isOccupied = occupiedSeats.includes(value.toString())
+    // console.log(isOccupied)
     function handleChange(e) {
+      if (isOccupied) return
       const isChecked = e.target.checked
       const currentSeats = formState.seat || []
       let updatedSeats
@@ -69,18 +82,21 @@ function SeatPage() {
     return (
       <div className="relative inline-block">
         <span 
-          className={`size-[30px] border-1 border-gray-500 rounded-sm inline-block 
-          ${formState.seat?.includes(value.toString()) ? 'bg-blue-500' : 'bg-white'}`}
+          className={`size-[30px] border-1 border-gray-500 rounded-sm inline-block ${
+            isOccupied ? 'bg-black' : 
+              formState.seat?.includes(value.toString()) ? 'bg-blue-500' : 'bg-white'
+          }`}
         ></span>
         <input 
           type="checkbox" 
           value={value} 
-          name="seat" 
+          name="seat"
+          disabled={isOccupied} 
           {...register('seat')} 
           onChange={handleChange}
           className="absolute size-[30px] rounded-sm opacity-0 cursor-pointer left-0"/>
       </div>
-    );
+    )
   }
 
   function SectionA() {
@@ -106,7 +122,13 @@ function SeatPage() {
           number += 1
         } else {
           items.push(
-            <Seat key={`seat-${currentLetter}${j}`} value={`${currentLetter}${j}`} register={register} formState={formState}/>
+            <Seat 
+              key={`seat-${currentLetter}${j}`} 
+              value={`${currentLetter}${j}`} 
+              register={register} 
+              formState={formState}
+              occupiedSeats={occupiedSeats}
+            />
           )
         }
       }
@@ -130,7 +152,13 @@ function SeatPage() {
           number += 1
         } else {
           items.push(
-            <Seat key={`seat-${currentLetter}${j+8}`} value={`${currentLetter}${j+8}`} register={register} formState={formState}/>
+            <Seat 
+              key={`seat-${currentLetter}${j+8}`} 
+              value={`${currentLetter}${j+8}`} 
+              register={register} 
+              formState={formState}
+              occupiedSeats={occupiedSeats}
+            />
           )
         }
       }
@@ -235,7 +263,7 @@ function SeatPage() {
       </main>
       <Footer/>
     </div>
-  );
+  )
 }
 
-export default SeatPage;
+export default SeatPage
