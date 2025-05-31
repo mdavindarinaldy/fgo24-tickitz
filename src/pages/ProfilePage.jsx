@@ -53,11 +53,17 @@ function ProfilePage() {
   const [update, setUpdate] = useState('')
   const [formData, setFormData] = useState(null)
   const [errorConfirm, setErrorConfirm] = useState('')
+  const [errorRegistered, setErrorRegistered] = useState('')
   const currentLogin = useSelector((state) => state.currentLogin.data)
+  const users = useSelector((state) => state.users.data)
   const navigate = useNavigate()
 
   const modalRef = useRef(null)
   const [modal, setModal] = useState(false)
+
+  function registeredUser(email, users) {
+    return users.some(user => user.email === email && user.email !== currentLogin.email)
+  }
 
   function updateChange(value) {
     let sanitizedValue = {
@@ -69,12 +75,17 @@ function ProfilePage() {
     if (value.password) {
       sanitizedValue = {
         ...sanitizedValue,
-        password: value.password
+        password: btoa(value.password)
       }
     }
-    setFormData(sanitizedValue)
-    setModal(true)
-    setErrorConfirm('')
+    if (registeredUser(sanitizedValue.email, users)) {
+      setErrorRegistered('Email ini sudah terdaftar dengan akun yang lain!')
+    } else {
+      setFormData(sanitizedValue)
+      setModal(true)
+      setErrorConfirm('')
+      setErrorRegistered('')
+    }
   }
 
   function submitChange() {
@@ -83,7 +94,7 @@ function ProfilePage() {
       setErrorConfirm('Anda harus memasukkan password lama!')
       return
     }
-    if (value.confirmPassword !== currentLogin.password) {
+    if (value.confirmPassword !== atob(currentLogin.password)) {
       setErrorConfirm('Password salah!')
       return
     }
@@ -94,6 +105,7 @@ function ProfilePage() {
     setErrorConfirm('')
     setFormData(null)
     setValue('confirmPassword', '')
+    setValue('password', '')
     setTimeout(function () {
       setUpdate('')
     }, 5000)
@@ -112,6 +124,7 @@ function ProfilePage() {
           </div>
           <Input type='fullname' register={register} defaultValue={currentLogin.fullname} error={errors.fullname} />
           <Input type='email' register={register} defaultValue={currentLogin.email} error={errors.email} />
+          {errorRegistered && <p className="text-red-500 text-sm">{errorRegistered}</p>}
           <Input type='phonenumber' register={register} defaultValue={currentLogin.phonenumber} error={errors.phonenumber}/>
         </div>
         <div className='bg-white rounded-2xl w-full px-10 py-5 flex flex-col gap-5'>
