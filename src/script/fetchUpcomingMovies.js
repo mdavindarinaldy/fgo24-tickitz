@@ -1,18 +1,9 @@
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 const fetchUpcomingMovies = async () => {
-  const pages = [
-    'page=1',
-    'page=2',
-    'page=3',
-    'page=4',
-    'page=5',
-    'page=6',
-    'page=7'
-  ]
   try {
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&${pages[0]}&region=ID&language=id`,
+      `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&page=1&region=ID&language=id`,
       {
         method: 'GET',
           headers: {
