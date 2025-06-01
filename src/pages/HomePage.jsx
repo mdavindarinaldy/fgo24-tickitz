@@ -22,7 +22,7 @@ function HomePage() {
         const data = await fetchNowPlayingMovies();
         const upcomingData = await fetchUpcomingMovies();
         setUpcomingMovies(upcomingData);
-        setMovies(data);
+        setMovies(data.slice(0,10));
         setLoading(false);
       } catch (err) {
         setError(err.message);
