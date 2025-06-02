@@ -82,7 +82,7 @@ function SeatPage() {
     return (
       <div className="relative inline-block">
         <span 
-          className={`size-[30px] border-1 border-gray-500 rounded-sm inline-block ${
+          className={`size-[20px] sm:size-[30px] border-1 border-gray-500 rounded-sm inline-block ${
             isOccupied ? 'bg-black' : 
               formState.seat?.includes(value.toString()) ? 'bg-blue-500' : 'bg-white'
           }`}
@@ -94,7 +94,7 @@ function SeatPage() {
           disabled={isOccupied} 
           {...register('seat')} 
           onChange={handleChange}
-          className="absolute size-[30px] rounded-sm opacity-0 cursor-pointer left-0"/>
+          className="absolute size-[20px] sm:size-[30px] rounded-sm opacity-0 cursor-pointer left-0"/>
       </div>
     )
   }
@@ -186,18 +186,18 @@ function SeatPage() {
       <div className="h-[10svh]"></div>
       <main className="w-svw h-fit bg-gray-100 flex flex-col justify-center items-center py-10 gap-5">
         <Steps text1="Date & Time" text2="Seat" text3="Payment" />
-        <form onSubmit={handleSubmit(submitData)} className="w-[90%] h-fit flex flex-row gap-5">
-          <div className="w-[65%] h-fit bg-white rounded-2xl flex flex-col gap-10 pt-5 pb-10 px-5">
-            <div className="w-full h-fit flex flex-row gap-5 py-3 px-3 border-1 border-gray-300 rounded-sm">
-              <img src={`https://image.tmdb.org/t/p/w1280${data.backdrop_path}`} className="w-[200px] rounded-sm" alt="movie-poster"/>
-              <div className="flex flex-col flex-1 gap-5">
+        <form onSubmit={handleSubmit(submitData)} className="w-[90%] h-fit flex flex-col lg:flex-row gap-5">
+          <div className="w-full lg:w-[65%] h-fit bg-white rounded-2xl flex flex-col gap-10 pt-5 pb-10 px-5">
+            <div className="w-full h-fit flex flex-col lg:flex-row gap-5 py-3 px-3 border-1 border-gray-300 rounded-sm items-center lg:items-start">
+              <img src={`https://image.tmdb.org/t/p/w1280${data.backdrop_path}`} className="w-[500px] lg:w-[200px] rounded-sm" alt="movie-poster"/>
+              <div className="flex flex-col flex-1 gap-5 w-full items-center lg:items-start">
                 <span className="font-bold text-2xl">{data.title}</span>
                 <div className="flex flex-row gap-1">
                   {data.genres?.map((item) => (
                     <GenreButton key={item.id} id={item.id} text={item.name} />
                   ))}
                 </div>
-                <div className="flex flex-row justify-between flex-1">
+                <div className="flex flex-col items-center gap-5 lg:gap-0 lg:flex-row lg:justify-between w-full flex-1">
                   <span>{detailMovie.date}</span>
                   <Button text="Change" className="on" href={`/buy-ticket/${id}`} />
                 </div>
@@ -206,11 +206,11 @@ function SeatPage() {
             <div className="w-full h-fit flex flex-col gap-10">
               <span className="text-3xl font-bold">Choose Your Seat</span>
               <div className="w-full bg-gray-200 rounded-3xl py-2 text-center font-semibold">Screen</div>
-              <div className="w-full flex flex-row justify-evenly items-center">
-                <div className="grid grid-cols-8 gap-2">
+              <div className="w-full flex flex-row justify-evenly items-center gap-3 sm:gap-0">
+                <div className="grid grid-cols-8 gap-1 sm:gap-2">
                   <SectionA/>
                 </div>
-                <div className="grid grid-cols-7 gap-2 justify-center items-center">
+                <div className="grid grid-cols-7 gap-1 sm:gap-2 justify-center items-center">
                   <SectionB/>
                 </div>
               </div>
@@ -233,7 +233,7 @@ function SeatPage() {
               </div>
             </div>
           </div>
-          <div className="w-[35%] h-fit bg-white rounded-2xl flex flex-col justify-center items-center py-8 px-5 gap-7">
+          <div className="w-full lg:w-[35%] h-fit bg-white rounded-2xl flex flex-col justify-center items-center py-8 px-5 gap-7">
             <span className="text-3xl font-bold">CINEMA: {detailMovie.cinema}</span>
             <div className="w-full flex flex-row justify-between items-center">
               <span className="text-gray-400 font-semibold text-sm">Movie selected</span>
