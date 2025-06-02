@@ -51,14 +51,14 @@ function TicketResultPage() {
     <div className='bg-black'>
         <Navbar currentlyOn='buy'/>
         <div className='h-[10svh]'></div>
-        <main className='flex flex-row w-svw h-fit'>
-            <div className='w-[60%] h-[120svh] bg-cover bg-center bg-no-repeat flex flex-col justify-center gap-5 px-10' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://image.tmdb.org/t/p/w1280${data.backdrop_path}')`}}>
+        <main className='flex flex-col lg:flex-row w-svw h-fit'>
+            <div className='w-svw h-svh lg:w-[60%] lg:h-[120svh] bg-cover bg-center bg-no-repeat flex flex-col justify-center gap-5 px-10' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://image.tmdb.org/t/p/w1280${data.backdrop_path}')`}}>
                 <img src={logo} alt="logo-icon" className='w-[20svw]'/>
                 <span className='text-4xl text-white font-semibold'>Thankyou For Purchasing</span>
                 <span className='text-lg text-white font-extralight'>Lorem ipsum dolor sit amet consectetur. Quam pretium pretium tempor integer sed magna et.</span>
                 <span className='text-lg text-white font-normal'>Please Download Your Ticket &rarr;</span>
             </div>
-            <div className='w-[40%] h-[120svh] bg-gray-200 flex flex-col gap-10 justify-center items-center py-10'>
+            <div className='w-svw lg:w-[40%] h-[120svh] bg-gray-200 flex flex-col gap-10 justify-center items-center py-10'>
                 <div className='w-[50%] h-fit py-8 bg-white rounded-2xl flex flex-col justify-center items-center'>
                     <img src={qr} alt="qr-code"/>
                     <div className='w-full flex flex-row gap-0 relative'>
