@@ -86,7 +86,7 @@ function PaymentDetailPage() {
         <div className='h-[10svh]'></div>
         <div className='w-svw h-[140%] bg-gray-100 flex flex-col justify-center items-center py-10 gap-5 relative'>
             <Steps text1='Date & Time' text2='Seat' text3='Payment'/>
-            <form onSubmit={handleSubmit(submitData)} id='payment' className='bg-white w-[50%] h-fit rounded-3xl py-10 px-10 flex flex-col gap-10'>
+            <form onSubmit={handleSubmit(submitData)} id='payment' className='bg-white w-[85%] lg:w-[50%] h-fit rounded-3xl py-10 px-10 flex flex-col gap-10'>
                 <div className='flex flex-col gap-5 w-full'>
                     <span className='font-bold text-2xl'>Payment Info</span>                
                     <div className='flex flex-col gap-1 flex-1'>
@@ -130,7 +130,7 @@ function PaymentDetailPage() {
                 </div>
                 <div className='flex flex-col gap-5 w-full'>
                     <span className='font-bold text-2xl'>Payment Method</span>                
-                    <div className='grid grid-cols-4 gap-3'>
+                    <div className='grid grid-cols-2 lg:grid-cols-4 gap-3'>
                         <Card src={gpay} method={'gpay'} register={register}/>
                         <Card src={visa} method={'visa'} register={register}/>
                         <Card src={gopay} method={'gopay'} register={register}/>

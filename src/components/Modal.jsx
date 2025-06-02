@@ -46,7 +46,7 @@ const Modal = forwardRef(({modalHeading, infoSubheading1, info1, infoSubheading2
 
   return (
     <section ref={ref} id='modal' tabIndex={-1} className={`w-full h-full flex-col justify-center items-center absolute ${modal ? 'flex' : 'hidden'}`}>
-        <div className='w-[50%] h-fit px-10 py-5 bg-white rounded-2xl flex flex-col justify-center items-center gap-5'>
+        <div className='w-[85%] lg:w-[50%] h-fit px-10 py-5 bg-white rounded-2xl flex flex-col justify-center items-center gap-5'>
             <div className='w-full flex flex-row justify-between'>
                 <div className='size-[20px]'></div>
                 <span className='text-2xl font-bold'>{modalHeading}</span>

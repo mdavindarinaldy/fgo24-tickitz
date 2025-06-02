@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import profile from '../assets/profile.png'
 import { removeLoginAction } from '../redux/reducer.js/currentLogin'
+import { RxHamburgerMenu } from 'react-icons/rx'
 
 function Navbar({currentlyOn, ...props}) {
   const currentLogin = useSelector((state) => state.currentLogin.data)
@@ -48,7 +49,7 @@ function Navbar({currentlyOn, ...props}) {
 
     if(currentLogin.email) {
       return (
-        <div className='flex flex-row relative' ref={dropdownRef}>
+        <div className='hidden lg:flex flex-row relative' ref={dropdownRef}>
           <button type='button' className='flex flex-row gap-5 items-center' onClick={() => setDropdown(!dropdown)}>
             <span className='text-lg font-semibold'>{currentLogin.fullname}</span>
             <img src={profile} alt="profile-picture" className='size-[50px]'/>
@@ -63,7 +64,7 @@ function Navbar({currentlyOn, ...props}) {
       )
     } else {
       return (
-        <div className='flex flex-row gap-5'>
+        <div className='hidden flex-row gap-5 lg:flex'>
             <Button text="Log In" href="/login" className="off"/>
             <Button text="Sign Up" href="/register" className="on"/>
         </div>
@@ -71,16 +72,73 @@ function Navbar({currentlyOn, ...props}) {
     }
   }
 
+  function HamburgerMenu() {
+    const [dropdown, setDropdown] = useState(false)
+    const dropdownRef = useRef(null)
+
+    useEffect(() => {
+      function handleClickOutside(event) {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setDropdown(false)
+        }
+      }
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      }
+    }, [])
+
+    function State() {
+      function logout() {
+        setDropdown(false)
+        dispatch(removeLoginAction())
+        navigate('/')
+      }
+      if(currentLogin.email) {
+        return (
+          <div className='flex flex-row gap-5 mt-5'>
+              <Link to="/profile/edit-profile" className="px-4 py-2 border-1 border-orange-500 hover:bg-orange-300 rounded-lg font-semibold" >Profile</Link>
+              <button type='button' className="px-4 py-2 border-1 border-orange-500 hover:bg-orange-300 rounded-lg font-semibold" onClick={logout}>Logout</button>
+          </div>
+        )
+      } else {
+        return (
+          <div className='flex flex-row gap-5 mt-5'>
+              <Button text="Log In" href="/login" className="off"/>
+              <Button text="Sign Up" href="/register" className="on"/>
+          </div>
+        )
+      }
+    }
+
+    return (
+      <section id='hamburgerMenu' className='flex lg:hidden flex-col relative' ref={dropdownRef}>
+        <button type='button' onClick={()=>setDropdown(!dropdown)}>
+          <RxHamburgerMenu className='size-[25px]'/>
+        </button>
+        {dropdown && 
+          <div className='fixed flex flex-col top-[10svh] w-svw right-[0px] gap-3 justify-center items-center bg-white shadow z-50 pb-5'>
+            <Link to='/' className={isHome ? 'currentlyHere' : 'currentlyNotHere'}>HOME</Link>
+            <Link to='/movie' className={isMovie ? 'currentlyHere' : 'currentlyNotHere'}>MOVIE</Link>
+            <Link className={isBuy ? 'currentlyHere' : 'currentlyNotHere'}>BUY TICKET</Link>
+            <State/>
+          </div>
+        }
+      </section>
+    )
+  }
+
   return (
-    <div className='navbar' {...props}>
-        <Logo type='0' className='w-[10svw] h-[4svw]'/>
-        <div className='flex flex-row gap-5'>
+    <nav className='navbar' {...props}>
+        <Logo type='0' className='w-[20svw] h-[6svw] lg:w-[10svw] lg:h-[4svw]'/>
+        <div className='hidden flex-row gap-5 lg:flex'>
             <Link to='/' className={isHome ? 'currentlyHere' : 'currentlyNotHere'}>HOME</Link>
             <Link to='/movie' className={isMovie ? 'currentlyHere' : 'currentlyNotHere'}>MOVIE</Link>
             <Link className={isBuy ? 'currentlyHere' : 'currentlyNotHere'}>BUY TICKET</Link>
         </div>
         <Menu/>
-    </div>
+        <HamburgerMenu/>
+    </nav>
   )
 }
 
