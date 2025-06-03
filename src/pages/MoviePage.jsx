@@ -129,12 +129,12 @@ function MoviePage() {
       <section id='content' className='w-svw max-h-fit h-fit flex justify-center items-center'>
         <div className='flex flex-col justify-center items-center w-[88%]'>
           <div className='flex flex-row justify-between items-center w-full'>
-            <span className='font-extrabold text-[3svw]'>Now Showing in Cinemas</span>
+            <span className='font-extrabold text-[5svw] lg:text-[3svw]'>Now Showing in Cinemas</span>
             <GenreButton text='POPULAR' isActive={true}/>
           </div>
-          <form onSubmit={handleSubmit(searchData)} id='search' className='flex flex-row justify-start items-center w-full h-fit py-5 gap-10'>
-            <div className='w-[30%] flex flex-col gap-5'>
-              <span className='text-[1.5svw] font-bold'>Find Movie</span>
+          <form onSubmit={handleSubmit(searchData)} id='search' className='flex flex-col justify-center items-start lg:flex-row lg:justify-start lg:items-center w-full h-fit py-5 gap-5 lg:gap-10'>
+            <div className='w-full lg:w-[30%] flex flex-col gap-5'>
+              <span className='text-[5svw] lg:text-[1.5svw] font-bold'>Find Movie</span>
               <div className='border-1 border-gray-400 rounded-3xl px-5 py-2 flex gap-2 items-center'>
                 <button type='submit'>
                   <img src={search} alt="icon-search"/>
@@ -147,9 +147,9 @@ function MoviePage() {
                 />
               </div>
             </div>
-            <div className='w-[65%] flex flex-col gap-5'>
-              <span className='text-[1.5svw] font-bold'>Filters</span>
-              <div className='flex flex-row gap-3'>
+            <div className='w-full lg:w-[65%] flex flex-col gap-5'>
+              <span className='text-[5svw] lg:text-[1.5svw] font-bold'>Filters</span>
+              <div className='grid grid-cols-2 lg:flex lg:flex-row gap-3'>
                 {genres.map((genre) => (
                   <GenreButton
                     key={genre.id}
@@ -162,7 +162,7 @@ function MoviePage() {
               </div>
             </div>
           </form>
-          <div className='w-full h-fit py-5 grid grid-cols-4'>
+          <div className='w-full h-fit py-5 grid grid-cols-2 lg:grid-cols-4'>
             {currentMovies.map((movie) => (
               <MovieCard 
                 key={movie.id} 
@@ -170,7 +170,7 @@ function MoviePage() {
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
                 name={movie.title.toUpperCase()} 
                 genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} 
-                width='w-[20svw]' height='h-[30svw]' textSize="text-lg" buttonSize='text-[1svw]' 
+                width='w-[40svw] lg:w-[20svw]' height='lg:h-[30svw]' textSize="text-lg" buttonSize='text-[3svw] lg:text-[1svw]' 
                 date='' details={true}
               />
             ))}

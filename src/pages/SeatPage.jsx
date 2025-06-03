@@ -94,7 +94,7 @@ function SeatPage() {
           disabled={isOccupied} 
           {...register('seat')} 
           onChange={handleChange}
-          className="absolute size-[20px] sm:size-[30px] rounded-sm opacity-0 cursor-pointer left-0"/>
+          className="absolute size-[20px] sm:size-[30px] rounded-sm cursor-pointer left-0 top-0 opacity-0"/>
       </div>
     )
   }

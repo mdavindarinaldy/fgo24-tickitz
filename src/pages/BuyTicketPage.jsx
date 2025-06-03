@@ -81,12 +81,12 @@ function BuyTicketPage() {
   
   function CinemaCard({src, id, value, register}) {
     return (
-      <div className='flex flex-col justify-between w-full lg:w-[25%] h-[20svh] rounded-3xl border-1 border-gray-400 px-5 py-5'>
+      <div className='flex flex-col justify-between w-full md:w-[25%] h-[20svh] rounded-3xl border-1 border-gray-400 px-5 py-5'>
         <div className='flex flex-row items-end justify-end w-full'>
           <input name='cinema' type='radio' id={id} {...register('cinema')} className='self-end' value={value}/>
         </div>
         <div className='flex flex-row justify-center items-center w-full h-fit'>
-          <img src={src} alt="logo-cinema" className='w-[30svw] lg:w-[10svw] lg:h-[3svw]'/>
+          <img src={src} alt="logo-cinema" className='w-[30svw] md:w-[10svw] md:h-[3svw]'/>
         </div>
       </div>
     )
@@ -106,14 +106,14 @@ function BuyTicketPage() {
     <div>
       <Navbar currentlyOn='buy'/>
       <div className='h-[10svh]'></div>
-      <section id='header' className='flex flex-col gap-2 relative w-[99svw] h-fit lg:h-svh lg:mb-5'>
-        <div className={`h-[60svh] lg:h-[65%] w-full bg-cover bg-center bg-no-repeat rounded-3xl flex flex-col justify-center items-center`} style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(https://image.tmdb.org/t/p/w1280${data.backdrop_path})`}}>
-          <div className='lg:w-[90%] h-full flex flex-col-reverse lg:flex-row'>
-            <div className='lg:w-[25%] h-full relative'>
-              <img src={`https://image.tmdb.org/t/p/w500${data.poster_path}`} alt="movie-poster" className='w-[50svw] lg:w-[20svw] left-[25svw] rounded-3xl absolute lg:bottom-[-25svh] lg:left-[0svw]'/>
+      <section id='header' className='flex flex-col gap-2 relative w-[99svw] h-fit md:h-svh md:mb-5'>
+        <div className={`h-[60svh] md:h-[65%] w-full bg-cover bg-center bg-no-repeat rounded-3xl flex flex-col justify-center items-center`} style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(https://image.tmdb.org/t/p/w1280${data.backdrop_path})`}}>
+          <div className='md:w-[90%] h-full flex flex-col-reverse md:flex-row'>
+            <div className='md:w-[25%] h-full relative'>
+              <img src={`https://image.tmdb.org/t/p/w500${data.poster_path}`} alt="movie-poster" className='w-[60svw] md:w-[20svw] left-[20svw] rounded-3xl absolute md:bottom-[-25svh] md:left-[0svw]'/>
             </div>
-            <div className='w-svw px-5 lg:w-[75%] flex flex-col justify-end gap-5 lg:px-0 py-5 text-white'>
-              <span className='text-2xl lg:text-[3svw] font-bold'>{data.title}</span>
+            <div className='w-svw px-5 md:w-[75%] flex flex-col justify-end gap-5 md:px-0 py-5 text-white'>
+              <span className='text-2xl md:text-[3svw] font-bold'>{data.title}</span>
               <p className='text-lg font-light'>{data.overview}</p>
               <div className='flex flex-row gap-5'>
                 {data.genres.map((item) => (
@@ -123,11 +123,11 @@ function BuyTicketPage() {
             </div>
           </div>
         </div>
-        <div className={`h-fit lg:h-30% w-full flex flex-col justify-center items-center mt-[38svw] mb-[10svh] lg:mt-0 lg:mb-0`}>
-          <div className='w-svw lg:w-[90%] h-full flex flex-col lg:flex-row'>
+        <div className={`h-fit md:h-30% w-full flex flex-col justify-center items-center mt-[65svw] mb-[10svh] md:mt-0 md:mb-0`}>
+          <div className='w-svw md:w-[90%] h-full flex flex-col md:flex-row'>
             <div className='w-[25%] h-full'></div>
-            <div className='w-full lg:w-[75%] flex flex-col lg:flex-row justify-start px-10 lg:px-0 gap-5 lg:gap-10'>
-              <div className='flex flex-col gap-5 w-full lg:w-[25%]'>
+            <div className='w-full md:w-[75%] flex flex-col md:flex-row justify-start px-10 md:px-0 gap-5 md:gap-10'>
+              <div className='flex flex-col gap-5 w-full md:w-[25%]'>
                 <div className='flex flex-col gap-1'>
                   <span className='font-bold'>Release Date</span>
                   <span>{data.release_date}</span>
@@ -137,7 +137,7 @@ function BuyTicketPage() {
                   <span>{runtime}</span>
                 </div>
               </div>
-              <div className='flex flex-col gap-5 w-full lg:w-[75%]'>
+              <div className='flex flex-col gap-5 w-full md:w-[75%]'>
                 <div className='flex flex-col gap-1'>
                   <span className='font-bold'>Directed By</span>
                   <span>{director}</span>
@@ -151,12 +151,12 @@ function BuyTicketPage() {
           </div>
         </div>
       </section>
-      <section id='book-ticket' className='flex flex-col justify-center items-center gap-2 w-[99svw] h-fit lg:h-[70svh]'>
+      <section id='book-ticket' className='flex flex-col justify-center items-center gap-2 w-[99svw] h-fit md:h-[70svh]'>
         <form onSubmit={handleSubmit(submitData)} className='w-[90%] h-full flex flex-col justify-center gap-10'>
           <div className='flex flex-row items-center justify-between'>
             <span className='text-4xl font-bold'>Book Tickets</span>
           </div>
-          <div className='flex flex-col lg:flex-row gap-5 w-full justify-between'>
+          <div className='flex flex-col md:flex-row gap-5 w-full justify-between'>
             <div className='flex flex-col gap-4 min-w-[30%] flex-1'>
               <label htmlFor="date" className='text-2xl font-bold'>Choose Date</label>
               <div className='bg-white border-1 border-gray-400 rounded-3xl px-2 py-1 flex flex-row items-center gap-4 w-full'>
@@ -195,7 +195,7 @@ function BuyTicketPage() {
             <div>
               <span className='text-2xl font-bold'>Choose Cinema</span>
             </div>
-            <div className='flex flex-col lg:flex-row gap-5'>
+            <div className='flex flex-col md:flex-row gap-5'>
               <CinemaCard src={ebv} register={register} id='cinema-1' value='ebv'/>
               <CinemaCard src={cineone} register={register} id='cinema-2' value='cineone'/>
               <CinemaCard src={hiflix} register={register} id='cinema-3' value='hiflix'/>

@@ -35,10 +35,10 @@ function MovieCard({id, src, width, height, name, genre, textSize, buttonSize, d
             <div className='flex flex-col justify-center items-center mb-10 gap-2' {...props}>
               <img src={src} alt="poster-movie" className={`max-w-none rounded-3xl object-cover ${width} ${height} hover:border-10 hover:border-orange-500`}/>
               <span className={`font-bold ${textSize} text-center`}>{name}</span>
-              <div className='flex flex-row justify-center gap-5 max-w-[20svw]'>
+              <div className='flex flex-row justify-center gap-5 max-w-svw lg:max-w-[20svw]'>
                   {date === '' ? (
                       genres.map((item, index) => (
-                          <div key={`movie-card-${index}`} className={`bg-gray-300 rounded-2xl py-1 px-5 font-normal ${buttonSize} text-gray-600 w-fit`}>{item}</div>
+                          <div key={`movie-card-${index}`} className={`bg-gray-300 rounded-2xl py-1 px-5 font-normal ${buttonSize} text-gray-600 w-[50%] lg:w-fit`}>{item}</div>
                       ))
                   ) : (
                       <div className={`bg-orange-100 rounded-3xl text-orange-500 font-bold text-[10px] w-fit py-2 px-3`}>{date}</div>
