@@ -12,9 +12,9 @@ function ProfileLayout() {
   return (
     <div>
         <Navbar/>
-        <div className='h-[10svh]'></div>
-        <div className='h-fit w-svw bg-gray-200 flex flex-row justify-center items-start gap-5 py-10'>
-            <div className='bg-white w-[25%] px-5 py-5 rounded-2xl flex flex-col gap-5 justify-center items-center'>
+        <div className='h-[3svh] lg:h-[10svh]'></div>
+        <div className='h-fit w-svw bg-gray-200 flex flex-col-reverse lg:flex-row justify-center items-start gap-5 py-10'>
+            <div className='bg-white w-[25%] px-5 py-5 rounded-2xl hidden lg:flex flex-col gap-5 justify-center items-center'>
                 <div className='w-full flex flex-row justify-between'>
                     <span>INFO</span>
                     <img src={dot} alt="icon-dot" />
@@ -33,7 +33,7 @@ function ProfileLayout() {
                     <div className='absolute w-[60%] bg-orange-500 h-[2svh] rounded-lg'></div>
                 </div>
             </div>
-            <div className='w-[60%] flex flex-col gap-5'>
+            <div className='w-svw lg:w-[60%] flex flex-col gap-5 items-center lg:items-start'>
                 <Outlet/>
             </div>
         </div>

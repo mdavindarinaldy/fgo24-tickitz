@@ -6,6 +6,8 @@ import { editUserAction } from '../redux/reducer.js/users'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { currentLoginAction } from '../redux/reducer.js/currentLogin'
+import dot from '../assets/dot.png'
+import profile from '../assets/profile.png'
 import { useNavigate } from 'react-router-dom'
 import Modal from '../components/Modal'
 
@@ -113,12 +115,31 @@ function ProfilePage() {
 
   return (
     <>
-      <div className='bg-white rounded-2xl w-full px-10 py-5 flex flex-row gap-10'>
+      <div className='bg-white lg:rounded-2xl w-full px-10 py-5 flex flex-row gap-10 lg:justify-start justify-center'>
         <button type='button' className={`text-lg font-semibold border-b-3 border-orange-300`} disabled>Account Settings</button>
         <button type='button' className={`text-lg font-semibold hover:border-b-3 hover:border-orange-300`} onClick={function () { navigate('/profile/history-transaction') }}>Order History</button>
       </div>
-      <form onSubmit={function(e) {handleSubmit(updateChange)(e)}} id='profile' className='w-full flex flex-col gap-10 relative'>
-        <div className='bg-white rounded-2xl w-full px-10 py-5 flex flex-col gap-5'>
+      <div className='bg-white w-[90%] px-5 py-5 rounded-2xl flex lg:hidden flex-col gap-5 justify-center items-center'>
+          <div className='w-full flex flex-row justify-between'>
+              <span>INFO</span>
+              <img src={dot} alt="icon-dot" />
+          </div>
+          <img src={profile} alt="profile-picture" className='size-[10svw]'/>
+          <span className='font-bold text-2xl text-center'>{currentLogin.fullname}</span>
+          <span className='text-gray-400'>Moviegoers</span>
+          <hr className='w-full h-0.5 border-1 border-gray-400'/>
+          <span className='self-start text-lg font-semibold'>Loyalty Points</span>
+          <div className='bg-orange-200 flex flex-col self-start px-5 py-5 w-full rounded-2xl h-[20svh] justify-between'>
+              <span className='text-2xl font-bold'>Moviegoers</span>
+              <span className='text-lg font-bold'>320 <span className='text-sm font-normal'>points</span></span>
+          </div>
+          <span>180 points become a master</span>
+          <div className='relative w-[90%] bg-gray-300 h-[2svh] rounded-lg'>
+              <div className='absolute w-[60%] bg-orange-500 h-[2svh] rounded-lg'></div>
+          </div>
+      </div>
+      <form onSubmit={function(e) {handleSubmit(updateChange)(e)}} id='profile' className='w-full flex flex-col gap-10 relative items-center'>
+        <div className='bg-white rounded-2xl w-[90%] lg:w-full px-10 py-5 flex flex-col gap-5'>
           <div className='border-b-1 border-gray-400 py-3'>
             <span className='text-semibold text-base'>Details Information</span>
           </div>
@@ -127,7 +148,7 @@ function ProfilePage() {
           {errorRegistered && <p className="text-red-500 text-sm">{errorRegistered}</p>}
           <Input type='phonenumber' register={register} defaultValue={currentLogin.phonenumber} error={errors.phonenumber}/>
         </div>
-        <div className='bg-white rounded-2xl w-full px-10 py-5 flex flex-col gap-5'>
+        <div className='bg-white rounded-2xl w-[90%] lg:w-full px-10 py-5 flex flex-col gap-5'>
           <div className='border-b-1 border-gray-400 py-3'>
             <span className='text-semibold text-base'>Account and Privacy</span>
           </div>
@@ -136,7 +157,7 @@ function ProfilePage() {
           </div>
           {update && <span className='text-lg text-green-400 font-semibold'>{update}</span>}
         </div>
-        <button type='submit' className='text-white font-semibold bg-orange-500 py-4 w-[30%] rounded-2xl'>Update Changes</button>
+        <button type='submit' className='text-white font-semibold bg-orange-500 py-4 w-[90%] lg:w-[30%] rounded-2xl text-center lg:self-start'>Update Changes</button>
         <Modal
           ref={modalRef}
           modalHeading='Confirmation'
