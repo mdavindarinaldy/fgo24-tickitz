@@ -36,6 +36,10 @@ body {
   @apply pr-8 pl-3 py-1 bg-white border-1 rounded-2xl text-sm w-1/2 outline-0
 }
 
+.no-scroll {
+  @apply overflow-hidden pr-[1svw]
+}
+
 ::-webkit-scrollbar {
   width: 1svw;
   z-index: 0;

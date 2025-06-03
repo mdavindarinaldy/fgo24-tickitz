@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Input from '../components/Input'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -62,6 +62,17 @@ function ProfilePage() {
 
   const modalRef = useRef(null)
   const [modal, setModal] = useState(false)
+
+  useEffect(() => {
+    if (modal) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, [modal]);
 
   function registeredUser(email, users) {
     return users.some(user => user.email === email && user.email !== currentLogin.email)
