@@ -185,7 +185,7 @@ function SeatPage() {
       <Navbar currentlyOn="buy" />
       <div className="h-[10svh]"></div>
       <main className="w-svw h-fit bg-gray-100 flex flex-col justify-center items-center py-10 gap-5">
-        <Steps text1="Date & Time" text2="Seat" text3="Payment" />
+        <Steps text1="Date & Time" text2="Seat" text3="Payment" statusT1={'passed'} statusT2={'on'}/>
         <form onSubmit={handleSubmit(submitData)} className="w-[90%] h-fit flex flex-col lg:flex-row gap-5">
           <div className="w-full lg:w-[65%] h-fit bg-white rounded-2xl flex flex-col gap-10 pt-5 pb-10 px-5">
             <div className="w-full h-fit flex flex-col lg:flex-row gap-5 py-3 px-3 border-1 border-gray-300 rounded-sm items-center lg:items-start">

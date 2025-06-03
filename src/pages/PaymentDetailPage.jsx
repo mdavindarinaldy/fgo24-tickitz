@@ -85,7 +85,7 @@ function PaymentDetailPage() {
         <Navbar currentlyOn='buy'/>
         <div className='h-[10svh]'></div>
         <div className='w-svw h-[140%] bg-gray-100 flex flex-col justify-center items-center py-10 gap-5 relative'>
-            <Steps text1='Date & Time' text2='Seat' text3='Payment'/>
+            <Steps text1='Date & Time' text2='Seat' text3='Payment' statusT1={'passed'} statusT2={'passed'} statusT3={'on'}/>
             <form onSubmit={handleSubmit(submitData)} id='payment' className='bg-white w-[85%] lg:w-[50%] h-fit rounded-3xl py-10 px-10 flex flex-col gap-10'>
                 <div className='flex flex-col gap-5 w-full'>
                     <span className='font-bold text-2xl'>Payment Info</span>                
