@@ -55,7 +55,7 @@ docker build . -t ubuntu:tickitz
 ```
 4. Run image with docker
 ```
-docker run -p 8080:80 -d react-slicing:latest
+docker run -p 8080:80 -d ubuntu:tickitz
 ```
 5. Project will be running on http://localhost:8080
 
