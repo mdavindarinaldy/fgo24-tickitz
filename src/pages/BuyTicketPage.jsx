@@ -95,7 +95,7 @@ function BuyTicketPage() {
   function submitData(value) {
     if (currentLogin.email) {
       setErrorLogin('')
-      dispatch(addDataAction(value))
+      dispatch(addDataAction({...value, id: id, genre:data.genres}))
       navigate(`/buy-ticket/${id}/seat`)
     } else {
       setErrorLogin('*Silakan login terlebih dahulu sebelum memesan tiket!')
