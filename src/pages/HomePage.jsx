@@ -57,7 +57,7 @@ function HomePage() {
           </div>
           <div className='w-[100%] h-fit flex justify-center'>
             <div className='w-[90%] h-fit flex flex-row overflow-x-scroll gap-5'>
-              {movies.map((movie) => (
+              {movies?.map((movie) => (
                 <MovieCard key={movie.id} id={movie.id} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width=' w-[40svw] md:w-[25svw] lg:w-[20svw]' height='md:h-[30svw]' textSize="text-lg" buttonSize='text-[2svw] md:text-[1svw]' date='' details={true}/>
               ))}
             </div>
@@ -99,7 +99,7 @@ function HomePage() {
         <section id='upcoming' className='w-[100svw] h-fit md:h-[60svh] bg-gray-100 flex flex-col-reverse md:flex-row justify-center items-center gap-5 pb-5 mb-5 mt-5 pt-5 md:pt-0'>
           <div className='flex flex-col justify-between w-2/3 h-[90%]'>
             <div className='flex flex-row overflow-x-scroll w-full h-fit gap-5'>
-            {upcomingMovies.map((movie) => (
+            {upcomingMovies?.map((movie) => (
                 <MovieCard key={movie.id} src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width='w-[25svw] md:w-[10svw]' height='h-[35svw] md:h-[15svw]' textSize='text-sm' buttonSize='text-[0.75svw]' date={movie.release_date} details={false}/>
               ))}
             </div>
