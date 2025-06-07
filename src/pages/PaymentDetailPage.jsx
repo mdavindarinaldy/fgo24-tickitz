@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import moment from 'https://cdn.jsdelivr.net/npm/moment@2.30.1/+esm'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Steps from '../components/Steps'
@@ -69,7 +70,8 @@ function PaymentDetailPage() {
         setErrorMethod('')
         dispatch(addDataAction({
             method: value.method,
-            createdBy: currentLogin.id
+            createdAt: moment().format('ddd, DD-MMM-YYYY'),
+            createdBy: currentLogin.id,
         }))
         setModal(true) 
     } else {
