@@ -32,8 +32,6 @@ function LoginPage() {
   const [errorConfirm, setErrorConfirm] = useState('')
   const [success, setSuccess] = useState('')
 
-  if(currentLogin.email) { return (<Navigate to='/' replace/>) }
-  
   function forgotPass() {
     const value = getValues()
     const findUser = users.find((item)=> item.email === value.forgetPassword)
@@ -63,12 +61,15 @@ function LoginPage() {
       if(sanitizedValue.password === atob(findUser.password)) {
         setErrorPass('')
         dispatch(currentLoginAction(findUser))
-        navigate('/')
+        if(findUser.email === 'admin@gmail.com') { navigate('/dashboard-admin') }
+        else { navigate('/') }
       } else {
         setErrorPass('Password yang digunakan salah!')
       }
     }
   }
+
+  if(currentLogin.email && currentLogin.email!=='admin@gmail.com') { return (<Navigate to='/' replace/>) }
   
   return (
     <main className='w-svw min-h-svh max-h-fit flex flex-col justify-center items-center bg-cover bg-no-repeat' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>
