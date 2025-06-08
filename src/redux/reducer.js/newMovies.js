@@ -9,16 +9,13 @@ const newMovies = createSlice({
   initialState,
   reducers: {
     addMovieAction: function(state, action) {
-        state.movies = {
-          ...state.movies,
-          ...action.payload
-        }
+        state.movies.push({...action.payload})
     },
-    removeDataAction: function() {
+    removeMovieAction: function() {
         return initialState
     }
   }
 })
 
-export const { addDataAction, removeDataAction } = newMovies.actions
+export const { addMovieAction, removeMovieAction } = newMovies.actions
 export default newMovies.reducer
