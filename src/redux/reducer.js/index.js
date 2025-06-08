@@ -5,32 +5,39 @@ import buyTicket from './buyTicket'
 import users from './users'
 import currentLogin from './currentLogin'
 import history from './historyTransactions'
+import movies from './newMovies'
 
 const ticketPersistConfig = {
-    key: 'data',
-    storage
+  key: 'data',
+  storage
 }
 
 const usersPersistConfig = {
-    key: 'users',
-    storage
+  key: 'users',
+  storage
 }
 
 const currentLoginPersistConfig = {
-    key: 'currentLogin',
-    storage
+  key: 'currentLogin',
+  storage
 }
 
 const historyPersistConfig = {
-    key: 'history',
-    storage
+  key: 'history',
+  storage
+}
+
+const newMovies = {
+  key: 'newMovies',
+  storage
 }
 
 const reducer = combineReducers({
-    data: persistReducer(ticketPersistConfig, buyTicket),
-    users: persistReducer(usersPersistConfig, users),
-    currentLogin: persistReducer(currentLoginPersistConfig, currentLogin),
-    history: persistReducer(historyPersistConfig, history)
+  data: persistReducer(ticketPersistConfig, buyTicket),
+  users: persistReducer(usersPersistConfig, users),
+  currentLogin: persistReducer(currentLoginPersistConfig, currentLogin),
+  history: persistReducer(historyPersistConfig, history),
+  newMovies: persistReducer(newMovies, movies)
 })
 
 export default reducer
