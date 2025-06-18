@@ -5,7 +5,7 @@ body {
 }
 
 .button {
-  @apply w-[18svw] h-[5svh] md:w-[15svw] lg:w-[10svw] py-1 md:px-4 box-border flex justify-center items-center border-1 rounded-full font-normal md:font-medium text-xs md:text-sm
+  @apply w-fit py-1 md:px-4 box-border flex justify-center items-center border-1 rounded-full font-normal md:font-medium text-xs md:text-sm
 }
 
 .button.off {
