@@ -1,17 +1,17 @@
 import React from 'react'
 import Logo from './Logo'
-import ig from '../assets/ig.png'
-import fb from '../assets/fb.png'
-import x from '../assets/x.png'
-import yt from '../assets/yt.png'
-import ebv from '../assets/ebv.png'
-import hiflix from '../assets/hiflix.png'
-import cineone from '../assets/cineone.png'
+import { FaFacebook } from "react-icons/fa6"
+import { FaInstagramSquare } from "react-icons/fa"
+import { FaSquareXTwitter } from "react-icons/fa6"
+import { FaYoutube } from "react-icons/fa6"
+import ebv from '../assets/ebv-black.png'
+import hiflix from '../assets/hiflix-black.png'
+import cineone from '../assets/cineone-black.png'
 
 function Footer() {
   return (
-    <div className='bg-black rounded-t-[70px] h-fit lg:h-[50svh] w-[99svw] flex flex-row justify-center items-center'>
-        <div className='flex flex-col h-full justify-evenly w-5/6 text-white gap-5 lg:gap-0'>
+    <div className='bg-secondary rounded-t-[70px] h-fit lg:h-[50svh] w-[99svw] flex flex-row justify-center items-center'>
+        <div className='flex flex-col h-full justify-evenly w-5/6 text-darkblue gap-5 lg:gap-0'>
             <div className='flex flex-col justify-center items-center w-full lg:flex-row lg:justify-between'>
                 <Logo type='1' className='w-[50svw] lg:w-[30svw] lg:h-[10svw]'/>
                 <div className='flex flex-col gap-5 items-center lg:items-start lg:gap-0 lg:flex-row lg:justify-evenly w-[60%]'>
@@ -30,20 +30,20 @@ function Footer() {
                     </div>
                     <div className='flex flex-col gap-4 items-center lg:items-start'>
                         <span className='font-semibold text-2xl'>FOLLOW US</span>
-                        <div className='flex flex-row gap-3'>
-                            <img src={fb} alt="logo-fb"/>
+                        <div className='flex flex-row gap-3 items-center'>
+                            <FaFacebook />
                             <span>tickitz.cinema.id</span>
                         </div>
-                        <div className='flex flex-row gap-3'>
-                            <img src={ig} alt="logo-ig"/>
+                        <div className='flex flex-row gap-3 items-center'>
+                            <FaInstagramSquare />
                             <span>tickitz.cinema.id</span>
                         </div>
-                        <div className='flex flex-row gap-3'>
-                            <img src={x} alt="logo-x"/>
+                        <div className='flex flex-row gap-3 items-center'>
+                            <FaSquareXTwitter />
                             <span>tickitz.cinema.id</span>
                         </div>
-                        <div className='flex flex-row gap-3'>
-                            <img src={yt} alt="logo-yt"/>
+                        <div className='flex flex-row gap-3 items-center'>
+                            <FaYoutube />
                             <span>tickitz.cinema.id</span>
                         </div>
                     </div>

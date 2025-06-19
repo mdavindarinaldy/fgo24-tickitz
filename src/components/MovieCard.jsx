@@ -39,7 +39,7 @@ function MovieCard({id, src, width, height, name, genre, textSize, buttonSize, d
           <img 
             src={imageError ? placeholder : src} 
             alt="poster-movie" 
-            className={`max-w-none rounded-3xl object-cover ${width} ${height} hover:border-10 hover:border-orange-500`}
+            className={`max-w-none rounded-3xl object-cover border-accents ${width} ${height} hover:border-10`}
             onError={()=>setImageError(true)}
           />
           <span className={`font-bold ${textSize} text-center`}>{name}</span>
@@ -49,7 +49,7 @@ function MovieCard({id, src, width, height, name, genre, textSize, buttonSize, d
                       <div key={`movie-card-${index}`} className={`bg-gray-300 rounded-2xl py-1 px-5 font-normal ${buttonSize} text-gray-600 w-[50%] lg:w-fit`}>{item}</div>
                   ))
               ) : (
-                  <div className={`bg-orange-100 rounded-3xl text-orange-500 font-bold text-[10px] w-fit py-2 px-3`}>{date}</div>
+                  <div className={`bg-primary rounded-3xl text-orange-500 font-bold text-[10px] w-fit py-2 px-3`}>{date}</div>
               )}
           </div>
         </div>

@@ -120,7 +120,7 @@ function MoviePage() {
           <div className="absolute inset-0 bg-[url(/background.png)] bg-cover bg-center rounded-4xl" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 to-black/85 rounded-4xl" />
           <div className='absolute start-5 bottom-10 flex flex-col justify-center items-start gap-5'>
-            <span className='bg-orange-100 rounded-3xl text-orange-500 font-bold text-[10px] w-fit py-2 px-3'>LIST MOVIE OF THE WEEK</span>
+            <span className='bg-primary rounded-3xl text-orange-500 font-bold text-[10px] w-fit py-2 px-3'>LIST MOVIE OF THE WEEK</span>
             <span className='text-white font-bold text-2xl'>Experience the Magic of Cinema: <span className='text-orange-500'>Book Your Tickets Today</span></span>
             <span className='text-white font-light text-lg'>Sign up and get the ticket with a lot of discount</span>
           </div>

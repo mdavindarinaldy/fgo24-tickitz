@@ -40,7 +40,7 @@ function HomePage() {
         <Navbar currentlyOn='home'/>
         <div className='h-[12svh]'></div>
         <section id='hero' className='h-[30svh] w-[100svw] flex flex-col justify-center items-center gap-4 mb-[5svh]'>
-            <span className='bg-orange-100 rounded-3xl text-orange-500 font-bold text-[3svw] md:text-[10px] w-fit py-1 px-3'>MOVIE TICKET PURCHASES #1 IN INDONESIA</span>
+            <span className='bg-primary rounded-3xl text-orange-500 font-bold text-[3svw] md:text-[10px] w-fit py-1 px-3'>MOVIE TICKET PURCHASES #1 IN INDONESIA</span>
             <div className='flex flex-col gap-1 justify-center items-center'>
                 <span className='text-[5svw] md:text-[3svw] lg:text-[2svw] font-bold'>Experience the Magic of Cinema:</span>
                 <span className='text-[5svw] md:text-[3svw] lg:text-[2svw] font-extrabold text-orange-500'>Book Your Tickets Today</span>
@@ -64,28 +64,28 @@ function HomePage() {
           </div>
         </section>
         <section id='benefit' className='w-[100svw] h-fit md:h-[60svh] bg-white'>
-          <div className='w-[99svw] py-10 md:py-0 h-fit md:h-full bg-black rounded-2xl flex flex-col justify-center items-center'>
+          <div className='w-[99svw] py-10 md:py-0 h-fit md:h-full bg-secondary rounded-2xl flex flex-col justify-center items-center text-darkblue'>
               <div className='flex flex-col md:flex-row w-full md:w-[80%] h-[60%] justify-between gap-5 md:gap-0'>
                 <div className='flex flex-col justify-start items-center md:items-start w-full md:w-[40%] h-full gap-2 md:gap-0'>
-                  <span className='bg-orange-100 rounded-3xl text-orange-500 font-bold text-[2svw] md:text-[10px] w-fit py-2 px-5'>WHY CHOOSE US</span>
-                  <span className='font-bold text-[3svw] text-white'>Unleashing the Ultimate Movie Experience</span>
+                  <span className='bg-primary rounded-3xl font-bold text-[2svw] md:text-[10px] w-fit py-2 px-5'>WHY CHOOSE US</span>
+                  <span className='font-bold text-[3svw]'>Unleashing the Ultimate Movie Experience</span>
                 </div>
-                <div className='w-full md:w-[60%] h-full flex flex-col items-center md:flex-row gap-5 lg:gap-10'>
-                  <div className='w-[50%] md:w-[32%] lg:w-[30%] h-full rounded-2xl bg-orange-100 flex flex-col justify-between py-5 px-5 box-border gap-5 md:gap-0'>
+                <div className='w-full md:w-[60%] h-full flex flex-col items-center md:flex-row gap-5 md:gap-3 lg:gap-10'>
+                  <div className='w-[80%] md:w-[32%] lg:w-[30%] h-full rounded-2xl bg-primary flex flex-col justify-between py-5 px-5 box-border gap-5 md:gap-0'>
                     <div className='flex flex-col gap-2'>
                       <img src={affordable} className='size-[3svw]' alt="icon" />
                       <span className='font-bold text-base lg:text-lg'>Affordable</span>
                     </div>
                     <span className='font-light text-xs lg:text-sm'>Lorem ipsum dolor sit amet, consectetur adipis elit. Sit enim nec, proin faucibus nibh et sagittis a.</span>
                   </div>
-                  <div className='w-[50%] md:w-[32%] lg:w-[30%] h-full rounded-2xl bg-orange-100 flex flex-col justify-between py-5 px-5 box-border gap-5 md:gap-0'>
+                  <div className='w-[80%] md:w-[32%] lg:w-[30%] h-full rounded-2xl bg-primary flex flex-col justify-between py-5 px-5 box-border gap-5 md:gap-0'>
                     <div className='flex flex-col gap-2'>
                       <img src={guaranted} className='size-[3svw]' alt="icon" />
                       <span className='font-bold text-base lg:text-lg'>Guaranted</span>
                     </div>
                     <span className='font-light text-xs lg:text-sm'>Lorem ipsum dolor sit amet, consectetur adipis elit. Sit enim nec, proin faucibus nibh et sagittis a.</span>
                   </div>
-                  <div className='w-[50%] md:w-[32%] lg:w-[30%] h-full rounded-2xl bg-orange-100 flex flex-col justify-between py-5 px-5 box-border gap-5 md:gap-0'>
+                  <div className='w-[80%] md:w-[32%] lg:w-[30%] h-full rounded-2xl bg-primary flex flex-col justify-between py-5 px-5 box-border gap-5 md:gap-0'>
                     <div className='flex flex-col gap-2'>
                       <img src={customer} className='size-[3svw]' alt="icon" />
                       <span className='font-bold text-base lg:text-lg'>24/7 Customer Support</span>
@@ -107,7 +107,7 @@ function HomePage() {
           </div>
           <div className='flex flex-col justify-between w-3/4 h-[20svh] md:w-1/4 md:h-[90%]'>
             <div className='flex flex-col justify-start gap-2 md:gap-0'>
-              <span className='bg-orange-100 rounded-3xl text-orange-500 font-bold text-[3svw] md:text-[10px] w-fit py-2 px-3'>UPCOMING MOVIES</span>
+              <span className='bg-primary rounded-3xl text-orange-500 font-bold text-[3svw] md:text-[10px] w-fit py-2 px-3'>UPCOMING MOVIES</span>
               <span className='text-[5svw] md:text-[3svw] font-bold'>Exciting Movie Coming Soon</span>
             </div>
             <div className='self-end'>

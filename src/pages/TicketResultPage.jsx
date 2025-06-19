@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import logo from '../assets/logo-superwhite.png'
+import logo from '../assets/logo_cinemate.png'
 import qr from '../assets/qrcode.png'
 import download from '../assets/download.svg'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -48,7 +48,7 @@ function TicketResultPage() {
   }
 
   return (
-    <div className='bg-black'>
+    <div className='bg-secondary'>
         <Navbar currentlyOn='buy'/>
         <div className='h-[10svh]'></div>
         <main className='flex flex-col lg:flex-row w-svw h-fit'>
@@ -100,7 +100,7 @@ function TicketResultPage() {
                     </div>
                 </div>
                 <div className='w-[50%] flex flex-col gap-5'>
-                    <button className='flex flex-row gap-3 justify-center items-center bg-orange-200 rounded-2xl px-5 py-3 font-semibold'>
+                    <button className='flex flex-row gap-3 justify-center items-center bg-secondary rounded-2xl px-5 py-3 font-semibold'>
                         <img src={download} alt="icon-download" />
                         <span>Download</span>
                     </button>

@@ -1,11 +1,19 @@
 @import "tailwindcss";
 
+
+@theme {
+  --color-primary: #FFE382;
+  --color-secondary: #FFC47E;
+  --color-accents: #FF7D29;
+  --color-darkblue: #2E4057;
+}
+
 body {
   @apply bg-white w-svw overflow-x-hidden box-border
 }
 
 .button {
-  @apply w-fit py-1 md:px-4 box-border flex justify-center items-center border-1 rounded-full font-normal md:font-medium text-xs md:text-sm
+  @apply w-fit py-1 px-2 md:px-4 box-border flex justify-center items-center border-1 rounded-full font-normal md:font-medium text-xs md:text-sm
 }
 
 .button.off {
@@ -13,7 +21,7 @@ body {
 }
 
 .button.on {
-  @apply bg-orange-500 text-white border-white
+  @apply bg-accents text-white border-white
 }
 
 .navbar {
@@ -21,7 +29,7 @@ body {
 }
 
 .currentlyHere {
-  @apply font-semibold border-b-1 border-orange-500
+  @apply font-semibold border-b-2 border-secondary
 }
 
 .currentlyNotHere {
@@ -29,7 +37,7 @@ body {
 }
 
 .currentlyNotHere:hover {
-  @apply border-b-1 border-orange-500
+  @apply border-b-2 border-secondary
 }
 
 .subscription-input {
@@ -50,7 +58,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: oklch(70.5% 0.213 47.604);
+  background: #FF7D29;
 }
 
 button:hover {

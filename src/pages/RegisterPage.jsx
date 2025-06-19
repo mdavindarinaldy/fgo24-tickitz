@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import backdrop from '../assets/backdrop.png'
-import logo from '../assets/logo-superwhite.png'
+import logo from '../assets/logo_cinemate.png'
 import Steps from '../components/Steps'
 import Input from '../components/Input'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
@@ -66,8 +66,8 @@ function RegisterPage() {
 
   return (
     <main className='w-svw min-h-svh max-h-fit bg-cover bg-no-repeat flex flex-col justify-center items-center' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>
-      <img src={logo} alt="icon-logo" className='w-[15svw]'/>
-      <form onSubmit={handleSubmit(submitData)} id='register' className='flex flex-col gap-3 w-[85%] lg:w-[40%] h-[75%] bg-white rounded-2xl px-10 py-5 mb-5'>
+      <form onSubmit={handleSubmit(submitData)} id='register' className='flex flex-col gap-3 w-[85%] lg:w-[40%] h-[75%] bg-white rounded-2xl px-10 py-5 mb-5 mt-3'>
+        <img src={logo} alt="icon-logo" className='w-[10svw] mb-5 self-center'/>
         <Steps text1='Fill Form' text2='Activate' text3='Done'/>
         <Input type='fullname' register={register} error={errors.fullname}/>
         <Input type='phonenumber' register={register} error={errors.phonenumber}/>

@@ -130,7 +130,7 @@ function Navbar({currentlyOn, ...props}) {
 
   return (
     <nav className='navbar' {...props}>
-        <Logo type='0' className='w-[20svw] h-[6svw] lg:w-[10svw] lg:h-[4svw]'/>
+        <Logo type='0' className='w-[20svw] h-[6svw] lg:w-[9svw] lg:h-[3svw]'/>
         <div className='hidden flex-row gap-5 lg:flex'>
             <Link to='/' className={isHome ? 'currentlyHere' : 'currentlyNotHere'}>HOME</Link>
             <Link to='/movie' className={isMovie ? 'currentlyHere' : 'currentlyNotHere'}>MOVIE</Link>

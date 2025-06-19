@@ -58,7 +58,7 @@ function NavbarAdmin({currentlyOn, ...props}) {
 
   return (
     <div className='navbar' {...props}>
-        <Logo type='0' className='w-[10svw] h-[4svw]'/>
+        <Logo type='0' className='w-[20svw] h-[6svw] lg:w-[9svw] lg:h-[3svw]'/>
         <div className='flex flex-row gap-5'>
             <Link to='/dashboard-admin' className={isDashboard ? 'currentlyHere' : 'currentlyNotHere'}>DASHBOARD</Link>
             <Link to='/list-movie' className={isMovie ? 'currentlyHere' : 'currentlyNotHere'}>MOVIE</Link>

@@ -3,9 +3,9 @@ import React from 'react'
 function Subscription() {
   return (
     <div className='w-svw h-fit bg-white flex flex-row justify-center p-[20px]'>
-        <form id='subscription' className='flex flex-row justify-center items-center w-[90%] h-fit min-h-[40svh] bg-orange-100 rounded-4xl'>
+        <form id='subscription' className='flex flex-row justify-center items-center w-[90%] h-fit min-h-[40svh] bg-primary rounded-4xl'>
             <div className='flex flex-col gap-[5px] justify-center items-center w-[90%] lg:w-[50%]'>
-                <span className='text-4xl font-extrabold mb-5 text-center'>Subscribe to Our Newsletter</span>
+                <span className='text-4xl font-extrabold mb-5 text-center text-darkblue'>Subscribe to Our Newsletter</span>
                 <div className='flex flex-row gap-5 w-full'>
                     <input id='firstName' type="text" placeholder='Your First Name' className='subscription-input w-1/2'/>
                     <input id='email' type="email" placeholder='Your Email Address' className='subscription-input w-1/2' autoComplete='off'/>

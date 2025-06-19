@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import backdrop from '../assets/backdrop.png'
-import logo from '../assets/logo-superwhite.png'
+import logo from '../assets/logo_cinemate.png'
 import Input from '../components/Input'
 import { FcGoogle } from "react-icons/fc"
 import { FaFacebook } from "react-icons/fa"
@@ -73,10 +73,10 @@ function LoginPage() {
   
   return (
     <main className='w-svw min-h-svh max-h-fit flex flex-col justify-center items-center bg-cover bg-no-repeat' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>
-        <img src={logo} alt="icon-logo" className='w-[15svw]'/>
         <form onSubmit={handleSubmit(submitData)} id='login' className='flex flex-col gap-3 w-[85%] lg:w-[40%] h-[75%] bg-white rounded-2xl px-10 py-5 mb-5'>
-            <span className='font-bold text-2xl'>Welcome Back 👋</span>
-            <span className='text-gray-500'>Sign in with your data that you entered during
+            <img src={logo} alt="icon-logo" className='w-[8svw] h-[3svw] self-center mb-1'/>
+            <span className='font-bold text-2xl self-center'>Welcome Back 👋</span>
+            <span className='text-gray-500 self-center'>Sign in with your data that you entered during
             your registration</span>
             <Input type='email' register={register} error={errors.email}/>
             {error && (<p className="text-red-500 text-sm">{error}</p>)}
