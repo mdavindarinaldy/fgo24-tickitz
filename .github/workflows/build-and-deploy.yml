@@ -15,11 +15,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and publish a Docker image for ${{ github.repository }}
-        uses: macbre/push-to-ghcr@master
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
         with:
-          image_name: ${{ github.repository }}  # it will be lowercased internally
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}/fgo24-fe-tickitz:latest
+          file: Dockerfile
+          build-args: |
+            VITE_TMDB_API_KEY=${{ secrets.VITE_TMDB_API_KEY }}
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
