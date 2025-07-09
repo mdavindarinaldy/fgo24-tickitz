@@ -1,5 +1,5 @@
 name: Push Frontend Tickitz APP to GHCR and Deploy to VPS
-run-name: Release and Deploy Image
+run-name: Release and Deploy Images
 on: [push]
 jobs:
   build-and-deploy:
