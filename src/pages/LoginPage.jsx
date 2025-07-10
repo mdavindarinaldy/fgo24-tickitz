@@ -75,6 +75,8 @@ function LoginPage() {
       } else if (err.response.data.message.includes("password")) {
         setError('')
         setErrorPass('Password yang digunakan salah!')
+      } else {
+        setErrorPass('Terjadi kesalahan pada server. Silakan refresh halaman atau coba beberapa saat lagi.')
       }
     }
   }
