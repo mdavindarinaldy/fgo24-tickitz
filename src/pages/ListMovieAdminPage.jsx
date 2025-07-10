@@ -19,7 +19,7 @@ function ListMovieAdminPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 5
 
-  const currentLogin = useSelector((state) => state.currentLogin.data)
+  const currentLogin = useSelector((state) => state.currentLogin)
   const newMovies = useSelector((state) => state.newMovies.movies)
   
   useEffect(() => {
@@ -41,7 +41,7 @@ function ListMovieAdminPage() {
     setCurrentPage(1)
   }
 
-  if (currentLogin.email !== 'admin@gmail.com') { return (<Navigate to='/' replace/>) }
+  if (currentLogin.profile.role !== 'admin') { return (<Navigate to='/' replace/>) }
   if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>
   if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>
 

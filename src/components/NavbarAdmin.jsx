@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { removeLoginAction } from '../redux/reducer.js/currentLogin'
 
 function NavbarAdmin({currentlyOn, ...props}) {
-  const currentLogin = useSelector((state) => state.currentLogin.data)
+  const currentLogin = useSelector((state) => state.currentLogin)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -44,7 +44,7 @@ function NavbarAdmin({currentlyOn, ...props}) {
     return (
       <div className='hidden lg:flex flex-row relative' ref={dropdownRef}>
         <button type='button' className='flex flex-row gap-5 items-center' onClick={() => setDropdown(!dropdown)}>
-          <span className='text-lg font-semibold'>{currentLogin.fullname}</span>
+          <span className='text-lg font-semibold'>{currentLogin.profile.name}</span>
           <img src={profile} alt="profile-picture" className='size-[50px]'/>
         </button>
         {dropdown && (

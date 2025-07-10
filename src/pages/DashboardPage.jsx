@@ -16,7 +16,7 @@ ChartJS.register(
 )
 
 function DashboardPage() {
-  const currentLogin = useSelector((state) => state.currentLogin.data)
+  const currentLogin = useSelector((state) => state.currentLogin)
   const transaction = useSelector((state) => state.history.data)
   const movies = [...new Set(transaction.map((item)=>item.title))]
   const {register, handleSubmit} = useForm({})
@@ -212,7 +212,7 @@ function DashboardPage() {
     }
   }
 
-  if(currentLogin.email !== 'admin@gmail.com') { return (<Navigate to='/' replace/>) } 
+  if(currentLogin.profile.role !== 'admin') { return (<Navigate to='/' replace/>) } 
   if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>
 
   return (
