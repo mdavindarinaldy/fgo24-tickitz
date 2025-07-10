@@ -9,8 +9,8 @@ import { FaFacebook } from "react-icons/fa"
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useDispatch, useSelector } from 'react-redux'
-import { addUserAction } from '../redux/reducer.js/users'
+import { useSelector } from 'react-redux'
+import http from '../lib/http'
 
 const validationSchema = yup.object({
   fullname: yup.string().min(3, 'Nama minimal 3 karakter').required('Nama harus diisi!'),
@@ -30,37 +30,57 @@ function RegisterPage() {
       fullname: "",
       email: "",
       password: "",
+      confirmPassword: "",
       phonenumber: "",
       terms: false,
     }
   })
-  const users = useSelector((state) => state.users.data) || []
-  const currentLogin = useSelector((state) => state.currentLogin.data)
-  const dispatch = useDispatch()
+  const currentLogin = useSelector((state) => state.currentLogin)
 
   const [error, setError] = useState('')
+  const [errorConfirm, setErrorConfirm] = useState('')
   let navigate = useNavigate()
 
-  if(currentLogin.email) { return (<Navigate to='/' replace/>) }
-
-  function registeredUser(email, users) {
-    return users.some(user => user.email === email)
-  }
-
-  function submitData(value) {
+  if(currentLogin.token && currentLogin.profile.role==='admin') { return (<Navigate to='/dashboard-admin' replace/>) }
+  if(currentLogin.token && currentLogin.profile.role==='user') { return (<Navigate to='/' replace/>) }
+  
+  async function submitData(value) {
     const sanitizedValue = {
-      ...value,
-      password: btoa(value.password),
+      confirmPassword: value.confirmPassword,
+      password: value.password,
       fullname: value.fullname.trim(),
       email: value.email.trim(),
       phonenumber: value.phonenumber.trim()
     }
-    if (!registeredUser(sanitizedValue.email, users)) {
+
+    if (sanitizedValue.password !== sanitizedValue.confirmPassword) {
+      setErrorConfirm('Password dan konfirmasi password tidak sama!')
       setError('')
-      dispatch(addUserAction(sanitizedValue))
-      navigate('/login')
     } else {
-      setError('Email sudah terdaftar, silakan login dengan email tersebut')
+      try {
+        await http().post('/auth/register',{
+          email: sanitizedValue.email,
+          name: sanitizedValue.fullname,
+          phonenumber: sanitizedValue.phonenumber,
+          password: sanitizedValue.password,
+          confPass: sanitizedValue.confirmPassword
+        })
+        setError('')
+        setErrorConfirm('')
+        navigate('/login')
+      } catch (err) {
+        console.log(err)
+        if (err.response.data.errors.includes("email already used by another user")) {
+          setError('Email sudah terdaftar, silakan login dengan email tersebut')
+          setErrorConfirm('')
+        } else if (err.response.data.errors.includes("phone number already used by another user")) {
+          setError('Nomor ponsel sudah digunakan, mohon gunakan nomor lain')
+          setErrorConfirm('')
+        } else {
+          setError('Terjadi kesalahan pada server. Silakan refresh halaman atau coba beberapa saat lagi.')
+          setErrorConfirm('')
+        }
+      }
     }
   }
 
@@ -73,6 +93,7 @@ function RegisterPage() {
         <Input type='phonenumber' register={register} error={errors.phonenumber}/>
         <Input type='email' register={register} error={errors.email}/>
         <Input type='password' text='Password' register={register} error={errors.password}/>
+        <Input type='confirmPassword' text='Confirm Password' register={register} errorConfirm={errorConfirm}/>
         <div className='flex flex-row gap-2 w-full justify-start items-center'>
             <input {...register('terms')} type="checkbox" id='checkbox' className='size-4'/>
             <label htmlFor="checkbox">I agree to terms and conditions</label>
