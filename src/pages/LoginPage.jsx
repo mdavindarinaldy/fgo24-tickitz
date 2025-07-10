@@ -11,6 +11,7 @@ import * as yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
 import { currentLoginAction } from '../redux/reducer.js/currentLogin'
 import Modal from '../components/Modal'
+import http from '../lib/http'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email harus diisi!'),
@@ -25,7 +26,7 @@ function LoginPage() {
   const [errorPass, setErrorPass] = useState('')
   let navigate = useNavigate()
   const users = useSelector((state) => state.users.data) || []
-  const currentLogin = useSelector((state) => state.currentLogin.data)
+  const currentLogin = useSelector((state) => state.currentLogin)
   const dispatch = useDispatch()
   const modalRef = useRef(null)
   const [modal, setModal] = useState(false)
@@ -48,28 +49,38 @@ function LoginPage() {
     }
   }
 
-  function submitData(value) {
+  async function submitData(value) {
     const sanitizedValue = {
       ...value,
       email: value.email.trim(),
     }
-    const findUser = users.find((item)=> item.email === sanitizedValue.email)
-    if (findUser === undefined) {
-      setError('Email tidak terdaftar, silakan lakukan registrasi akun terlebih dahulu')
-    } else {
+    try {
+      const response = await http().post('/auth/login', {
+        email: sanitizedValue.email,
+        password: sanitizedValue.password
+      })
       setError('')
-      if(sanitizedValue.password === atob(findUser.password)) {
-        setErrorPass('')
-        dispatch(currentLoginAction(findUser))
-        if(findUser.email === 'admin@gmail.com') { navigate('/dashboard-admin') }
-        else { navigate('/') }
+      const getProfile = await http(response.data.results).get('/profile')
+      const profile = getProfile.data.results
+      const token = response.data.results
+      dispatch(currentLoginAction({token, profile}))
+      if (profile.role==="admin") {
+        navigate('/dashboard-admin')
       } else {
+        navigate('/')
+      }
+    } catch (err) {
+      if (err.response.data.message.includes("not registered")) {
+        setError('Email tidak terdaftar, silakan lakukan registrasi akun terlebih dahulu')
+      } else if (err.response.data.message.includes("password")) {
+        setError('')
         setErrorPass('Password yang digunakan salah!')
       }
     }
   }
 
-  if(currentLogin.email && currentLogin.email!=='admin@gmail.com') { return (<Navigate to='/' replace/>) }
+  if(currentLogin.token && currentLogin.profile.role==='admin') { return (<Navigate to='/dashboard-admin' replace/>) }
+  if(currentLogin.token && currentLogin.profile.role==='user') { return (<Navigate to='/' replace/>) }
   
   return (
     <main className='w-svw min-h-svh max-h-fit flex flex-col justify-center items-center bg-cover bg-no-repeat' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdrop})`}}>

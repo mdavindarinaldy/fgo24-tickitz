@@ -8,7 +8,7 @@ import { removeLoginAction } from '../redux/reducer.js/currentLogin'
 import { RxHamburgerMenu } from 'react-icons/rx'
 
 function Navbar({currentlyOn, ...props}) {
-  const currentLogin = useSelector((state) => state.currentLogin.data)
+  const currentLogin = useSelector((state) => state.currentLogin)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -47,11 +47,11 @@ function Navbar({currentlyOn, ...props}) {
       navigate('/')
     }
 
-    if(currentLogin.email) {
+    if(currentLogin.token) {
       return (
         <div className='hidden lg:flex flex-row relative' ref={dropdownRef}>
           <button type='button' className='flex flex-row gap-5 items-center' onClick={() => setDropdown(!dropdown)}>
-            <span className='text-lg font-semibold'>{currentLogin.fullname}</span>
+            <span className='text-lg font-semibold'>{currentLogin.profile.name}</span>
             <img src={profile} alt="profile-picture" className='size-[50px]'/>
           </button>
           {dropdown && (
@@ -94,7 +94,7 @@ function Navbar({currentlyOn, ...props}) {
         dispatch(removeLoginAction())
         navigate('/')
       }
-      if(currentLogin.email) {
+      if(currentLogin.token) {
         return (
           <div className='flex flex-row gap-5 mt-5'>
               <Link to="/profile/edit-profile" className="px-4 py-2 border-1 border-orange-500 hover:bg-orange-300 rounded-lg font-semibold" >Profile</Link>

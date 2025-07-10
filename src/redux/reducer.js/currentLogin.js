@@ -1,7 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    data: {}
+    token: "",
+    profile: {
+      email: "",
+      name: "",
+      role: "",
+      phoneNumber: "",
+      profilePicture: "",
+    },
 }
 
 const currentLogin = createSlice({
@@ -9,7 +16,9 @@ const currentLogin = createSlice({
     initialState,
     reducers: {
         currentLoginAction: function(state, action) {
-            state.data = {...action.payload}
+            const {token, profile} = action.payload
+            state.token = token
+            state.profile = profile
             return state
         },
         removeLoginAction: function() {
