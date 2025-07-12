@@ -69,7 +69,6 @@ function RegisterPage() {
         setErrorConfirm('')
         navigate('/login')
       } catch (err) {
-        console.log(err)
         if (err.response.data.errors.includes("email already used by another user")) {
           setError('Email sudah terdaftar, silakan login dengan email tersebut')
           setErrorConfirm('')
