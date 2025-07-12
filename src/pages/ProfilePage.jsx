@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import Input from '../components/Input'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { editUserAction } from '../redux/reducer.js/users'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { currentLoginAction } from '../redux/reducer.js/currentLogin'
@@ -10,6 +9,7 @@ import dot from '../assets/dot.png'
 import profile from '../assets/profile.png'
 import { useNavigate } from 'react-router-dom'
 import Modal from '../components/Modal'
+import http from '../lib/http'
 
 const validationSchema = yup.object({
   fullname: yup.string().min(3, 'Nama minimal 3 karakter').required('Nama harus diisi!'),
@@ -23,6 +23,10 @@ const validationSchema = yup.object({
     .optional()
     .min(8, 'Karakter minimal 8 karakter')
     .max(12, 'Karakter maksimal 12 karakter'),
+  confirmPassword: yup.string()
+    .transform((value) => (value === '' ? null : value))
+    .nullable()
+    .optional(),
   phonenumber: yup.string()
     .required('Nomor Ponsel harus diisi')
     .test({
@@ -44,7 +48,6 @@ const validationSchema = yup.object({
         return true;
       },
     }),
-  confirmPassword: yup.string().nullable().optional()
 })
 
 function ProfilePage() {
@@ -53,11 +56,12 @@ function ProfilePage() {
   })
   const dispatch = useDispatch()
   const [update, setUpdate] = useState('')
-  const [formData, setFormData] = useState(null)
   const [errorConfirm, setErrorConfirm] = useState('')
+  const [errorConfirmNewPass, setErrorConfirmNewPass] = useState('')
   const [errorRegistered, setErrorRegistered] = useState('')
-  const currentLogin = useSelector((state) => state.currentLogin.data)
-  const users = useSelector((state) => state.users.data)
+  const [errorPhoneNumber, setErrorPhoneNumber] = useState('')
+  const [error, setError] = useState('')
+  const currentLogin = useSelector((state) => state.currentLogin)
   const navigate = useNavigate()
 
   const modalRef = useRef(null)
@@ -74,54 +78,77 @@ function ProfilePage() {
     };
   }, [modal]);
 
-  function registeredUser(email, users) {
-    return users.some(user => user.email === email && user.email !== currentLogin.email)
-  }
-
   function updateChange(value) {
-    let sanitizedValue = {
-      ...currentLogin,
-      fullname: value.fullname.trim(),
-      email: value.email.trim(),
-      phonenumber: value.phonenumber.trim()
+    const formData = new FormData()
+    if (value.fullname.trim() !== currentLogin.profile.name.trim()) {
+      formData.append('fullname', value.fullname.trim())
     }
-    if (value.password) {
-      sanitizedValue = {
-        ...sanitizedValue,
-        password: btoa(value.password)
-      }
+    if (value.email.trim() !== currentLogin.profile.email) {
+      formData.append('email', value.email.trim())
     }
-    if (registeredUser(sanitizedValue.email, users)) {
-      setErrorRegistered('Email ini sudah terdaftar dengan akun yang lain!')
-    } else {
-      setFormData(sanitizedValue)
-      setModal(true)
-      setErrorConfirm('')
-      setErrorRegistered('')
+    if (value.phonenumber.trim() !== currentLogin.profile.phoneNumber) {
+      formData.append('phoneNumber', value.phonenumber.trim())
     }
+    if (value.password !== value.confirmPassword) {
+      setErrorConfirmNewPass("Password dan konfirmasi password baru tidak sama!")
+      return
+    } else if (value.password) {
+      formData.append('password', value.password)
+      formData.append('confirmPassword', value.confirmPassword)
+      setErrorConfirmNewPass('')
+    }
+    submitChange(formData)
+    setValue('confirmOldPassword', '')
+    setModal(true)
   }
 
-  function submitChange() {
+  async function submitChange(formData) {
     const value = getValues()
-    if (!value.confirmPassword) {
+    if (!value.confirmOldPassword) {
       setErrorConfirm('Anda harus memasukkan password lama!')
       return
     }
-    if (value.confirmPassword !== atob(currentLogin.password)) {
-      setErrorConfirm('Password salah!')
-      return
+    try {
+      const response = await http(currentLogin.token).post('/profile/check-pass',{
+        password: value.confirmOldPassword
+      })
+      if (response.data.results) {
+        await http(currentLogin.token).patch('/profile', formData)
+        setValue('confirmOldPassword', '')
+        setValue('confirmPassword', '')
+        setValue('password', '')
+        setErrorConfirm('')
+        setErrorRegistered('')
+        setErrorPhoneNumber('')
+        setErrorConfirmNewPass('')
+        setError('')
+        const getProfile = await http(currentLogin.token).get('/profile')
+        const profile = getProfile.data.results
+        const token = currentLogin.token
+        dispatch(currentLoginAction({token, profile}))
+        setModal(false)
+        setUpdate('Profile berhasil dilakukan perubahan!')
+        setTimeout(function () {
+          setUpdate('')
+        }, 5000)
+      }
+    } catch (err) {
+      setValue('confirmOldPassword', '')
+      setValue('confirmPassword', '')
+      setValue('password', '')
+      if (err.response.data.message.includes("Wrong password")) {
+        setErrorConfirm('Password salah!')
+        return
+      }
+      if (err.response.data.errors.includes("email already used by another user")) {
+        setErrorRegistered('Email sudah digunakan, mohon gunakan email lain')
+      } else if (err.response.data.errors.includes("phone number already used by another user")) {
+        setErrorPhoneNumber('Nomor ponsel sudah digunakan, mohon gunakan nomor lain')
+      } else {
+        setError('Terjadi kesalahan pada server. Silakan refresh halaman atau coba beberapa saat lagi.')
+      }
+      setModal(false)
     }
-    dispatch(currentLoginAction({ ...currentLogin, ...formData }))
-    dispatch(editUserAction({currentLogin, formData}))
-    setUpdate('Profile berhasil dilakukan perubahan!')
-    setModal(false)
-    setErrorConfirm('')
-    setFormData(null)
-    setValue('confirmPassword', '')
-    setValue('password', '')
-    setTimeout(function () {
-      setUpdate('')
-    }, 5000)
   }
 
   return (
@@ -136,7 +163,7 @@ function ProfilePage() {
               <img src={dot} alt="icon-dot" />
           </div>
           <img src={profile} alt="profile-picture" className='size-[10svw]'/>
-          <span className='font-bold text-2xl text-center'>{currentLogin.fullname}</span>
+          <span className='font-bold text-2xl text-center'>{currentLogin.profile.name}</span>
           <span className='text-gray-400'>Moviegoers</span>
           <hr className='w-full h-0.5 border-1 border-gray-400'/>
           <span className='self-start text-lg font-semibold'>Loyalty Points</span>
@@ -154,17 +181,20 @@ function ProfilePage() {
           <div className='border-b-1 border-gray-400 py-3'>
             <span className='text-semibold text-base'>Details Information</span>
           </div>
-          <Input type='fullname' register={register} defaultValue={currentLogin.fullname} error={errors.fullname} />
-          <Input type='email' register={register} defaultValue={currentLogin.email} error={errors.email} />
+          <Input type='fullname' register={register} defaultValue={currentLogin.profile.name} error={errors.fullname} />
+          <Input type='email' register={register} defaultValue={currentLogin.profile.email} error={errors.email} />
           {errorRegistered && <p className="text-red-500 text-sm">{errorRegistered}</p>}
-          <Input type='phonenumber' register={register} defaultValue={currentLogin.phonenumber} error={errors.phonenumber}/>
+          <Input type='phonenumber' register={register} defaultValue={currentLogin.profile.phoneNumber} error={errors.phonenumber}/>
+          {errorPhoneNumber && <p className="text-red-500 text-sm">{errorPhoneNumber}</p>}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
         </div>
         <div className='bg-white rounded-2xl w-[90%] lg:w-full px-10 py-5 flex flex-col gap-5'>
           <div className='border-b-1 border-gray-400 py-3'>
             <span className='text-semibold text-base'>Account and Privacy</span>
           </div>
-          <div className='flex flex-row gap-5'>
+          <div className='flex flex-col lg:flex-row gap-5'>
             <Input type='password' text='New Password' register={register} error={errors.password} />
+            <Input type='confirmPassword' text='Confirm New Password' register={register} errorConfirm={errorConfirmNewPass}/>
           </div>
           {update && <span className='text-lg text-green-400 font-semibold'>{update}</span>}
         </div>
@@ -181,7 +211,7 @@ function ProfilePage() {
           onClose={function () {
             setErrorConfirm('')
             setModal(false)
-            setValue('confirmPassword', '')
+            setValue('confirmOldPassword', '')
           }}
           onSubmit={function () {
             handleSubmit(submitChange)()

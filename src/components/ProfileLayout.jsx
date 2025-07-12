@@ -6,8 +6,8 @@ import { Navigate, Outlet } from 'react-router-dom'
 import Navbar from './Navbar'
 
 function ProfileLayout() {
-  const currentLogin = useSelector((state) => state.currentLogin.data)
-  if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
+  const currentLogin = useSelector((state) => state.currentLogin)
+  if(!currentLogin.token) { return (<Navigate to='/' replace/>) }
   
   return (
     <div>
@@ -20,7 +20,7 @@ function ProfileLayout() {
                     <img src={dot} alt="icon-dot" />
                 </div>
                 <img src={profile} alt="profile-picture" className='size-[10svw]'/>
-                <span className='font-bold text-2xl text-center'>{currentLogin.fullname}</span>
+                <span className='font-bold text-2xl text-center'>{currentLogin.profile.name}</span>
                 <span className='text-gray-400'>Moviegoers</span>
                 <hr className='w-full h-0.5 border-1 border-gray-400'/>
                 <span className='self-start text-lg font-semibold'>Loyalty Points</span>

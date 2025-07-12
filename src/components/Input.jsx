@@ -46,6 +46,20 @@ function Input({type, text, register, error, errorConfirm, ...props}) {
         </div>
     )
   }
+  if (type==='confirmOldPassword') {
+    return (
+        <div className='flex flex-col w-full gap-4'>
+            <label htmlFor="confirmOldPassword" className='font-semibold text-lg'>{text}</label>
+            <div className='flex flex-row justify-between items-center border-gray-400 border-1 w-full px-3 py-3 rounded-sm'>
+                <input  {...register('confirmOldPassword')} type={showPassword ? 'text' : 'password'} id='confirmOldPassword' placeholder='Enter your old password here' className='outline-0  flex-1 border-0' autoComplete='off'/>
+                <button className="eye" type="button" onClick={togglePasswordVisibility}>
+                    <img src={showPassword ? eyeoff : eye} alt="icon-password" />
+                </button>
+            </div>
+            {errorConfirm && <p className="text-red-500 text-sm">{errorConfirm}</p>}
+        </div>
+    )
+  }
   if (type==='fullname') {
     return (
         <div className='flex flex-col w-full gap-4'>

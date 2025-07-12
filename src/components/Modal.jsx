@@ -8,7 +8,7 @@ const Modal = forwardRef(({modalHeading, infoSubheading1, info1, infoSubheading2
     if (option==='input') {
         return (
             <>
-                <Input type='confirmPassword' text='Confirm Password' register={register} errorConfirm={errorConfirm}/>
+                <Input type='confirmOldPassword' text='Confirm Password' register={register} errorConfirm={errorConfirm}/>
                 <span className='font-semibold text-center'>{additionalInfo}</span>
                 <button type='button' className='w-full py-3 font-bold text-lg bg-orange-500 text-white rounded-2xl' onClick={onSubmit}>{buttonText}</button>
             </>
