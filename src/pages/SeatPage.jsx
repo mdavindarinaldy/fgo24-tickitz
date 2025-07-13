@@ -5,10 +5,10 @@ import Steps from '../components/Steps'
 import GenreButton from '../components/GenreButton'
 import Button from '../components/Button'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
-import fetchChosenMovie from '../script/fetchChosenMovie'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { addDataAction } from '../redux/reducer.js/buyTicket'
+import http from '../lib/http'
 
 function SeatPage() {
   const { id } = useParams()
@@ -16,8 +16,10 @@ function SeatPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [errorSeat, setErrorSeat] = useState('')
-  const detailMovie = useSelector((state) => state.data.data)
-  const currentLogin = useSelector((state) => state.currentLogin.data)
+  const [occupiedSeats, setOccupiedSeats] = useState('')
+  const showtime = useSelector((state) => state.data.data)
+  const currentLogin = useSelector((state) => state.currentLogin)
+  const backdropURL = import.meta.env.VITE_MOVIE_BACKDROP_URL
   const { register, handleSubmit, watch, setValue } = useForm({
     defaultValues: {
       seat: [],
@@ -30,8 +32,18 @@ function SeatPage() {
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const details = await fetchChosenMovie(id)
-        setData(details)
+        const response = await http().get(`/movies/${id}`)
+        const responseSeats = await http(currentLogin.token).get('/transactions/seats', {
+          params: {
+            id_movie: id,
+            cinema: showtime.cinema,
+            location: showtime.location,
+            date: showtime.date,
+            showtime: showtime.showtime
+          }
+        })
+        setData(response.data.results)
+        setOccupiedSeats(responseSeats.data.results.seats)
         setLoading(false)
       } catch (err) {
         setError(err.message)
@@ -39,26 +51,15 @@ function SeatPage() {
       }
     }
     getMovies()
-  }, [id])
+  }, [id, currentLogin.token, showtime])
 
   const formState = watch()
 
-  const history = useSelector((state) => state.history.data)
-  const filteredHistory = history.filter((item) => 
-    item.title === data.title 
-    && item.location === detailMovie.location
-    && item.cinema === detailMovie.cinema
-    && item.showtime === detailMovie.showtime
-    && item.date === detailMovie.date
-  )
-
-  const occupiedSeats = filteredHistory.flatMap((item) => item.seats || [])
-
   useEffect(()=> {
-    if (formState.seat !== undefined) {setPayment(formState.seat.length * 10)}
+    if (formState.seat !== undefined) {setPayment(formState.seat.length * 15000)}
   },[formState])
 
-  if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
+  if(!currentLogin.token) { return (<Navigate to='/' replace/>) }
 
   function Letter({ letter }) {
     return <div className="size-[20px] text-base font-normal">{letter}</div>
@@ -66,7 +67,6 @@ function SeatPage() {
 
   function Seat({value, formState, occupiedSeats}) {
     const isOccupied = occupiedSeats.includes(value.toString())
-    // console.log(isOccupied)
     function handleChange(e) {
       if (isOccupied) { return } 
       const isChecked = e.target.checked
@@ -189,16 +189,16 @@ function SeatPage() {
         <form onSubmit={handleSubmit(submitData)} className="w-[90%] h-fit flex flex-col lg:flex-row gap-5">
           <div className="w-full lg:w-[65%] h-fit bg-white rounded-2xl flex flex-col gap-10 pt-5 pb-10 px-5">
             <div className="w-full h-fit flex flex-col lg:flex-row gap-5 py-3 px-3 border-1 border-gray-300 rounded-sm items-center lg:items-start">
-              <img src={`https://image.tmdb.org/t/p/w1280${data.backdrop_path}`} className="w-[500px] lg:w-[200px] rounded-sm" alt="movie-poster"/>
+              <img src={`${backdropURL}/${data.backdrop}`} className="w-[500px] lg:w-[200px] rounded-sm" alt="movie-poster"/>
               <div className="flex flex-col flex-1 gap-5 w-full items-center lg:items-start">
                 <span className="font-bold text-2xl">{data.title}</span>
                 <div className="flex flex-row gap-1">
-                  {data.genres?.map((item) => (
-                    <GenreButton key={item.id} id={item.id} text={item.name} />
+                  {data.genres.split(', ').map((item, index) => (
+                    <GenreButton key={`genre-${index}`} id={`genre-${index}`} text={item} />
                   ))}
                 </div>
                 <div className="flex flex-col items-center gap-5 lg:gap-0 lg:flex-row lg:justify-between w-full flex-1">
-                  <span>{detailMovie.date}</span>
+                  <span>{showtime.date}</span>
                   <Button text="Change" className="on" href={`/buy-ticket/${id}`} />
                 </div>
               </div>
@@ -234,18 +234,18 @@ function SeatPage() {
             </div>
           </div>
           <div className="w-full lg:w-[35%] h-fit bg-white rounded-2xl flex flex-col justify-center items-center py-8 px-5 gap-7">
-            <span className="text-3xl font-bold">CINEMA: {detailMovie.cinema}</span>
+            <span className="text-3xl font-bold">CINEMA: {showtime.cinema}</span>
             <div className="w-full flex flex-row justify-between items-center">
               <span className="text-gray-400 font-semibold text-sm">Movie selected</span>
               <span className="text-base font-semibold">{data.title}</span>
             </div>
             <div className="w-full flex flex-row justify-between items-center">
-              <span className="text-gray-400 font-semibold text-sm">{detailMovie.date}</span>
-              <span className="text-base font-semibold">{detailMovie.showtime}</span>
+              <span className="text-gray-400 font-semibold text-sm">{showtime.date}</span>
+              <span className="text-base font-semibold">{showtime.showtime}</span>
             </div>
             <div className="w-full flex flex-row justify-between items-center">
               <span className="text-gray-400 font-semibold text-sm">One ticket price</span>
-              <span className="text-base font-semibold">$10</span>
+              <span className="text-base font-semibold">Rp15,000</span>
             </div>
             <div className="w-full flex flex-row justify-between items-center">
               <span className="text-gray-400 font-semibold text-sm">Seat choosed</span>
