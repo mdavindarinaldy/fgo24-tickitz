@@ -5,26 +5,26 @@ import logo from '../assets/logo_cinemate.png'
 import qr from '../assets/qrcode.png'
 import download from '../assets/download.svg'
 import { useNavigate, useParams } from 'react-router-dom'
-import fetchChosenMovie from '../script/fetchChosenMovie'
 import { useDispatch, useSelector } from 'react-redux'
-import { addHistoryAction } from '../redux/reducer.js/historyTransactions'
 import { removeDataAction } from '../redux/reducer.js/buyTicket'
+import http from '../lib/http'
 
 function TicketResultPage() {
   const { id } = useParams()
   const [data, setData] = useState({})
   const detailMovie = useSelector((state) => state.data.data)
-  const currentLogin = useSelector((state) => state.currentLogin.data)
+  const currentLogin = useSelector((state) => state.currentLogin)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const backdropURL = import.meta.env.VITE_MOVIE_BACKDROP_URL
 
   useEffect(() => {
     const getMovies = async () => {
         try {
-        const details = await fetchChosenMovie(id)
-        setData(details)
+        const response = await http().get(`/movies/${id}`)
+        setData(response.data.results)
         setLoading(false)
         } catch (err) {
         setError(err.message)
@@ -34,25 +34,38 @@ function TicketResultPage() {
     getMovies()
   }, [id])  
 
-  if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
+  async function transactionDone() {
+    try {
+      const payload = {
+        movieId: parseInt(id), 
+        paymentMethodId: parseInt(detailMovie.method),
+        location: detailMovie.location,
+        cinema: detailMovie.cinema,
+        date: detailMovie.date,
+        showtime: detailMovie.showtime,
+        seats: detailMovie.seats,
+      }
+      console.log(payload)
+      await http(currentLogin.token).post('/transactions', payload)
+      dispatch(removeDataAction())
+      navigate(`/profile/history-transaction`)
+      setError('')
+    } catch (err) {
+      console.log(err)
+      setError('Terjadi kesalahan pada server. Silakan refresh halaman atau coba beberapa saat lagi.')
+    }
+  }
+
+  if(!currentLogin.token) { return (<Navigate to='/' replace/>) }
   if (loading) { return (<div className="h-svh flex flex-col justify-center items-center"> Loading... </div>) }
   if (error) { return (<div className="h-svh flex flex-col justify-center items-center">{error}</div>) }
-
-  function transactionDone() {
-    dispatch(addHistoryAction({
-        ...detailMovie,
-        title: data.title
-    }))
-    dispatch(removeDataAction())
-    navigate(`/profile/history-transaction`)
-  }
 
   return (
     <div className='bg-secondary'>
         <Navbar currentlyOn='buy'/>
         <div className='h-[10svh]'></div>
         <main className='flex flex-col lg:flex-row w-svw h-fit'>
-            <div className='w-svw h-svh lg:w-[60%] lg:h-[120svh] bg-cover bg-center bg-no-repeat flex flex-col justify-center gap-5 px-10' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://image.tmdb.org/t/p/w1280${data.backdrop_path}')`}}>
+            <div className='w-svw h-svh lg:w-[60%] lg:h-[120svh] bg-cover bg-center bg-no-repeat flex flex-col justify-center gap-5 px-10' style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${backdropURL}/${data.backdrop})`}}>
                 <img src={logo} alt="logo-icon" className='w-[20svw]'/>
                 <span className='text-4xl text-white font-semibold'>Thankyou For Purchasing</span>
                 <span className='text-lg text-white font-extralight'>Lorem ipsum dolor sit amet consectetur. Quam pretium pretium tempor integer sed magna et.</span>
