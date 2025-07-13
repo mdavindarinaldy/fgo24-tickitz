@@ -3,7 +3,7 @@ import NavbarAdmin from '../components/NavbarAdmin'
 import del from '../assets/button-delete.png'
 import edit from '../assets/button-edit.png'
 import { useSelector } from 'react-redux'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import placeholder from '../assets/image-placeholder.png'
 import GenreButton from '../components/GenreButton'
 import http from '../lib/http'
@@ -15,6 +15,8 @@ function ListMovieAdminPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPage, setTotalPage] = useState(1)
   const [deletingId, setDeletingId] = useState(null)
+  const navigate = useNavigate()
+  const posterURL = import.meta.env.VITE_MOVIE_POSTER_URL
 
   const currentLogin = useSelector((state) => state.currentLogin)
 
@@ -43,16 +45,12 @@ function ListMovieAdminPage() {
   }
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this movie?')
-    if (!confirmDelete) return
-
     setDeletingId(id)
     try {
       await http(currentLogin.token).delete(`/admin/movie/${id}`)
       await getMovies()
     } catch (err) {
       console.error('Failed to delete movie:', err)
-      alert('Failed to delete movie.')
     } finally {
       setDeletingId(null)
     }
@@ -92,17 +90,25 @@ function ListMovieAdminPage() {
                     <tr key={item.id}>
                       <td>{(currentPage - 1) * 10 + index + 1}</td>
                       <td className='py-1 flex flex-row justify-center'>
+                        {item.poster ? 
                         <img
-                          src={item.poster || placeholder}
+                          src={`${posterURL}/${item.poster}`}
                           alt='movie-poster'
                           className='size-[60px] object-cover rounded-sm'
-                        />
+                        /> : <img
+                        src={placeholder}
+                        alt='movie-poster'
+                        className='size-[60px] object-cover rounded-sm'
+                        />}
                       </td>
                       <td>{item.title}</td>
                       <td>{item.genres}</td>
                       <td>{new Date(item.releaseDate).toLocaleDateString()}</td>
                       <td className='flex flex-row justify-center items-center h-[40%] gap-1'>
-                        <button>
+                        <button
+                          onClick={() => navigate(`/edit-movie/${item.id}`)}
+                          className="px-3 py-1 text-white rounded-lg text-sm"
+                        >
                           <img src={edit} alt='edit-icon' />
                         </button>
                         <button

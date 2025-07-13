@@ -17,6 +17,7 @@ import { persistor, store } from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
 import ProfileLayout from './components/ProfileLayout'
 import HistoryTransactionPage from './pages/HistoryTransactionPage'
+import EditMoviePage from './pages/EditMoviePage'
 
 const router = createBrowserRouter ([
   {
@@ -113,6 +114,13 @@ const router = createBrowserRouter ([
     element: (
       <>
         <DashboardPage/>
+      </>
+    )
+  }, {
+    path: '/edit-movie/:id',
+    element: (
+      <>
+        <EditMoviePage/>
       </>
     )
   }
