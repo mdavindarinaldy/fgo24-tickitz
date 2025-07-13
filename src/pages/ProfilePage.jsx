@@ -57,10 +57,14 @@ function ProfilePage() {
   const dispatch = useDispatch()
   const [update, setUpdate] = useState('')
   const [errorConfirm, setErrorConfirm] = useState('')
+  const [errorPicture, setErrorPicture] = useState('')
   const [errorConfirmNewPass, setErrorConfirmNewPass] = useState('')
   const [errorRegistered, setErrorRegistered] = useState('')
   const [errorPhoneNumber, setErrorPhoneNumber] = useState('')
   const [error, setError] = useState('')
+  const [formData, setFormData] = useState(null)
+  const fileInputRef = useRef(null)
+  // const pictureURL = import.meta.env.VITE_PROFILE_PICTURE_URL
   const currentLogin = useSelector((state) => state.currentLogin)
   const navigate = useNavigate()
 
@@ -80,6 +84,20 @@ function ProfilePage() {
 
   function updateChange(value) {
     const formData = new FormData()
+    const file = fileInputRef.current?.files
+    if (file && file.length > 0) {
+      const selectedFile = file[0]
+      if (selectedFile.size > 2 * 1024 * 1024) {
+        setErrorPicture('File terlalu besar, maksimum 2MB')
+        return
+      }
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png']
+      if (!allowedTypes.includes(selectedFile.type)) {
+        setErrorPicture('Tipe file tidak valid, hanya JPG, JPEG, PNG yang diperbolehkan')
+        return
+      }
+      formData.append('profilePicture', selectedFile)
+    }
     if (value.fullname.trim() !== currentLogin.profile.name.trim()) {
       formData.append('fullname', value.fullname.trim())
     }
@@ -97,12 +115,12 @@ function ProfilePage() {
       formData.append('confirmPassword', value.confirmPassword)
       setErrorConfirmNewPass('')
     }
-    submitChange(formData)
+    setFormData(formData)
     setValue('confirmOldPassword', '')
     setModal(true)
   }
 
-  async function submitChange(formData) {
+  async function submitChange() {
     const value = getValues()
     if (!value.confirmOldPassword) {
       setErrorConfirm('Anda harus memasukkan password lama!')
@@ -113,7 +131,11 @@ function ProfilePage() {
         password: value.confirmOldPassword
       })
       if (response.data.results) {
-        await http(currentLogin.token).patch('/profile', formData)
+        await http(currentLogin.token).patch('/profile', formData, {
+          headers: {
+            "Content-Type":"multipart/form-data"
+          }
+        })
         setValue('confirmOldPassword', '')
         setValue('confirmPassword', '')
         setValue('password', '')
@@ -122,6 +144,9 @@ function ProfilePage() {
         setErrorPhoneNumber('')
         setErrorConfirmNewPass('')
         setError('')
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''
+        }
         const getProfile = await http(currentLogin.token).get('/profile')
         const profile = getProfile.data.results
         const token = currentLogin.token
@@ -181,6 +206,8 @@ function ProfilePage() {
           <div className='border-b-1 border-gray-400 py-3'>
             <span className='text-semibold text-base'>Details Information</span>
           </div>
+          <Input type='file' ref={fileInputRef} name='profilePicture'/>
+          {errorPicture && <p className="text-red-500 text-sm">{errorPicture}</p>}
           <Input type='fullname' register={register} defaultValue={currentLogin.profile.name} error={errors.fullname} />
           <Input type='email' register={register} defaultValue={currentLogin.profile.email} error={errors.email} />
           {errorRegistered && <p className="text-red-500 text-sm">{errorRegistered}</p>}

@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { forwardRef, useState } from 'react'
 import eye from '../assets/eye.svg'
 import eyeoff from '../assets/eye-off.svg'
 
-function Input({type, text, register, error, errorConfirm, ...props}) {
+const Input = forwardRef(({type, text, register, error, errorConfirm, name, ...props}, ref) => {
   const [showPassword, setShowPassword] = useState(false)
 
   function togglePasswordVisibility() {
@@ -81,6 +81,21 @@ function Input({type, text, register, error, errorConfirm, ...props}) {
         </div>
     )
   }
-}
+  if (type==='file') {
+    return (
+        <div className='flex flex-col w-full gap-4'>
+          <label htmlFor={name} className='font-semibold text-lg'>Select File</label>
+          <input
+            type='file'
+            id={name}
+            name={name}
+            className='border-gray-400 border-1 outline-0 rounded-sm w-full px-3 py-3'
+            ref={ref}
+            {...props}
+          />
+        </div>
+    )
+  }
+})
 
 export default Input
