@@ -3,31 +3,8 @@ import { Link } from 'react-router-dom';
 import placeholder from '../assets/image-placeholder.png'
 
 function MovieCard({id, src, width, height, name, genre, textSize, buttonSize, date, details, ...props}) {
-  const genres=[]
+  const genres=genre
   const [imageError,setImageError] = useState(false)
-
-  function addGenre(item) {
-    if (item === '28') genres.push('Action');
-    if (item === '12') genres.push('Adventure');
-    if (item === '16') genres.push('Animation');
-    if (item === '35') genres.push('Comedy');
-    if (item === '80') genres.push('Crime');
-    if (item === '99') genres.push('Documentary');
-    if (item === '18') genres.push('Drama');        
-    if (item === '10751') genres.push('Family');
-    if (item === '14') genres.push('Fantasy');      
-    if (item === '36') genres.push('History');      
-    if (item === '27') genres.push('Horror');
-    if (item === '10402') genres.push('Music');     
-    if (item === '9648') genres.push('Mystery');    
-    if (item === '10749') genres.push('Romance');   
-    if (item === '878') genres.push('Sci-Fi');
-    if (item === '10770') genres.push('TV Movie');  
-    if (item === '53') genres.push('Thriller');     
-    if (item === '10752') genres.push('War');       
-    if (item === '37') genres.push('Western');
-  }
-  genre.forEach((item) => addGenre(item))
   
   let anchor=''
   if(details===true) {anchor = `/buy-ticket/${id}`}

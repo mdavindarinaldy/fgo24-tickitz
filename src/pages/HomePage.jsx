@@ -3,37 +3,40 @@ import Navbar from '../components/Navbar'
 import Subscription from '../components/Subscription'
 import Footer from '../components/Footer'
 import Button from '../components/Button'
-import fetchNowPlayingMovies from '../script/fetchNowPlayingMovies';
-import fetchUpcomingMovies from '../script/fetchUpcomingMovies';
-import MovieCard from '../components/MovieCard';
+import MovieCard from '../components/MovieCard'
 
 import guaranted from '../assets/guaranted.png'
 import customer from '../assets/customer.png'
 import affordable from '../assets/affordable.png'
+import http from '../lib/http'
 
 function HomePage() {
-  const [movies, setMovies] = useState([]);
-  const [upcomingMovies, setUpcomingMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [movies, setMovies] = useState([])
+  const [upcomingMovies, setUpcomingMovies] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const posterURL = import.meta.env.VITE_MOVIE_POSTER_URL
+
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const data = await fetchNowPlayingMovies();
-        const upcomingData = await fetchUpcomingMovies();
-        setUpcomingMovies(upcomingData);
-        setMovies(data?.slice(0,10));
-        setLoading(false);
+        const responseNowPlaying = await http().get(`/movies`)
+        const responseUpcoming = await http().get(`/movies/upcoming`)
+        setUpcomingMovies(responseUpcoming.data.results)
+        setMovies(responseNowPlaying.data.results)
+        setLoading(false)
       } catch (err) {
-        setError(err.message);
-        setLoading(false);
+        setError(err.message)
+        setLoading(false)
       }
-    };
-    getMovies();
-  }, []);
+    }
+    getMovies()
+  }, [])
 
-  if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>;
-  if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>;
+  console.log(movies)
+
+  if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>
+  if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>
 
   return (
     <div className='flex flex-col'>
@@ -52,13 +55,13 @@ function HomePage() {
             <div className='w-[20%]'></div>
             <span className='text-[4svw] md:text-[3svw] lg:text-[2svw] font-bold'>Now Showing in Cinemas</span>
             <div className='w-[20%]'>
-              <Button text="View All &rarr;" href="/movie" className="on"/>
+              <Button text="View All &rarr" href="/movie" className="on"/>
             </div>
           </div>
           <div className='w-[100%] h-fit flex justify-center'>
             <div className='w-[90%] h-fit flex flex-row overflow-x-scroll gap-5'>
               {movies?.map((movie) => (
-                <MovieCard key={movie.id} id={movie.id} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width=' w-[40svw] md:w-[25svw] lg:w-[20svw]' height='md:h-[30svw]' textSize="text-lg" buttonSize='text-[2svw] md:text-[1svw]' date='' details={true}/>
+                <MovieCard key={movie.id} id={movie.id} src={`${posterURL}/${movie.poster}`} name={movie.title.toUpperCase()} genre={movie.genres.split(', ')} width=' w-[40svw] md:w-[25svw] lg:w-[20svw]' height='md:h-[30svw]' textSize="text-lg" buttonSize='text-[2svw] md:text-[1svw]' date='' details={true}/>
               ))}
             </div>
           </div>
@@ -100,7 +103,7 @@ function HomePage() {
           <div className='flex flex-col justify-between w-2/3 h-[90%]'>
             <div className='flex flex-row overflow-x-scroll w-full h-fit gap-5'>
             {upcomingMovies?.map((movie) => (
-                <MovieCard key={movie.id} src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} name={movie.title.toUpperCase()} genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} width='w-[25svw] md:w-[10svw]' height='h-[35svw] md:h-[15svw]' textSize='text-sm' buttonSize='text-[0.75svw]' date={movie.release_date} details={false}/>
+                <MovieCard key={movie.id} src={`${posterURL}/${movie.poster}`} name={movie.title.toUpperCase()} genre={movie.genres.split(', ')} width='w-[25svw] md:w-[10svw]' height='h-[35svw] md:h-[15svw]' textSize='text-sm' buttonSize='text-[0.75svw]' date={movie.releaseDate.split('T')[0]} details={false}/>
               ))}
             </div>
             <div></div>
