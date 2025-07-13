@@ -1,27 +1,43 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import http from '../lib/http'
 
 function HistoryTransactionPage() {
-  const currentLogin = useSelector((state) => state.currentLogin.data)  
-  const historyTransaction = useSelector((state) => state.history.data)
-  const filteredTransaction = historyTransaction.filter((transaction) => transaction.createdBy === currentLogin.id).reverse()
+  const currentLogin = useSelector((state) => state.currentLogin)
+  const [historyTrx, setHistoryTrx] = useState([{}])  
   const navigate = useNavigate()
+  
+  useEffect(() => {
+    async function getHistory() {
+      try {
+        const response = await http(currentLogin.token).get("/transactions")
+        setHistoryTrx(response.data.results)
+      } catch(err) {
+        console.log(err)
+      }
+    }
+    getHistory()
+  }, [currentLogin.token]);
 
-  function HistoryCard(item) {
+  historyTrx.map((item)=>{
+    console.log(item.date)
+  })
+
+  function HistoryCard({item}) {
     return (
         <div className='bg-white rounded-2xl w-[90%] lg:w-full px-10 py-5 flex flex-col gap-5 border-b-10 border-b-secondary'>
             <div className='w-full flex flex-row justify-between items-center'>
-                <span className='text-gray-500 text-sm'>Date: {item.item.date}</span>
-                <span className='text-gray-500 text-sm'>Time: {item.item.showtime}</span>
+                <span className='text-gray-500 text-sm'>Date: {item.date}</span>
+                <span className='text-gray-500 text-sm'>Time: {item.showtime}</span>
             </div>
             <div className='w-full flex flex-row justify-between items-center'>
-                <span className='text-black text-2xl font-bold'>Title: {item.item.title}</span>
-                <span className='text-black text-lg font-semibold'>Cinema: {item.item.cinema}</span>
+                <span className='text-black text-2xl font-bold'>Title: {item.movieTitle}</span>
+                <span className='text-black text-lg font-semibold'>Cinema: {item.cinema}</span>
             </div>
             <div className='w-full flex flex-row justify-between items-center'>
-                <span className='text-black text-base'>Seats: {item.item.seats?.join(', ')}</span>
-                <span className='text-black text-base'>Location: {item.item.location}</span>
+                <span className='text-black text-base'>Seats: {item.seats}</span>
+                <span className='text-black text-base'>Location: {item.location}</span>
             </div>
         </div>
     )
@@ -34,7 +50,7 @@ function HistoryTransactionPage() {
             <button type='button' className={`text-lg font-semibold border-b-3 border-secondary`} disabled>Order History</button>
         </div>
         <div className='lg:w-full flex flex-col gap-10 items-center'>
-            {filteredTransaction?.map((item,index)=>(
+            {historyTrx?.map((item, index)=>(
                 <HistoryCard key={`transaction-${index}`} item={item}/>
             ))}
         </div>
