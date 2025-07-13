@@ -55,12 +55,12 @@ function BuyTicketPage() {
   
   const date = nowDate
   const showtime = [
-    '13.15',
-    '15.45',
-    '17.30',
-    '18.40',
-    '20.00',
-    '22.15'
+    '13:15:00',
+    '15:45:00',
+    '17:30:00',
+    '18:40:00',
+    '20:00:00',
+    '22:15:00'
   ]
   const location = [
     'Jakarta',
