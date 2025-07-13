@@ -11,12 +11,12 @@ import gpay from '../assets/gpay.png'
 import ovo from '../assets/ovo.png'
 import paypal from '../assets/paypal.png'
 import visa from '../assets/visa.png'
-import fetchChosenMovie from '../script/fetchChosenMovie'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { addDataAction } from '../redux/reducer.js/buyTicket'
 import Modal from '../components/Modal'
+import http from '../lib/http'
 
 function PaymentDetailPage() {
   const { id } = useParams()
@@ -25,7 +25,18 @@ function PaymentDetailPage() {
   const [error, setError] = useState(null)
   const [errorMethod, setErrorMethod] = useState('')
   const detailMovie = useSelector((state) => state.data.data)
-  const currentLogin = useSelector((state) => state.currentLogin.data)
+  const currentLogin = useSelector((state) => state.currentLogin)
+  const [paymentMethods, setPaymentMethods] = useState([])
+  const paymentIcons = {
+    GOPAY: gopay,
+    GPay: gpay,
+    DANA: dana,
+    BCA: bca,
+    BRI: bri,
+    OVO: ovo,
+    Paypal: paypal,
+    VISA: visa,
+  }
   const {register, handleSubmit, watch} = useForm()
   const modalRef = useRef(null)
   const [modal, setModal] = useState(false)
@@ -36,16 +47,25 @@ function PaymentDetailPage() {
   useEffect(() => {
     const getMovies = async () => {
         try {
-        const details = await fetchChosenMovie(id)
-        setData(details)
-        setLoading(false)
+          const response = await http().get(`/movies/${id}`)
+          setData(response.data.results)
+          setLoading(false)
         } catch (err) {
-        setError(err.message)
-        setLoading(false)
+          setError(err.message)
+          setLoading(false)
         }
     }
+    const getPaymentMethods = async () => {
+      try {
+        const res = await http(currentLogin.token).get('/transactions/payment-methods')
+        setPaymentMethods(res.data.results)
+      } catch (err) {
+        console.error('Failed to fetch payment methods:', err)
+      }
+    }
+    getPaymentMethods()
     getMovies()
-  }, [id])  
+  }, [id, currentLogin.token])  
 
   useEffect(() => {
     if (modal && modalRef.current) {
@@ -54,14 +74,14 @@ function PaymentDetailPage() {
     }
   }, [modal])
 
-  if(!currentLogin.email) { return (<Navigate to='/' replace/>) }
+  if(!currentLogin.token) { return (<Navigate to='/' replace/>) }
   
-  function Card({src,method}) {
+  function Card({ src, method, label }) {
     return (
-        <label htmlFor={method} className={`py-5 px-5 flex flex-row justify-center border-1 border-gray-400 rounded-lg hover:cursor-pointer ${formState.method?.includes(method.toString()) ? 'bg-amber-100' : 'bg-white'}`}>
-            <input id={method} value={method} type="radio" className='appearance-none' {...register('method')}/>
-            <img src={src} alt="payment-method"/>
-        </label>
+      <label htmlFor={method} className={`py-5 px-5 flex flex-row justify-center border-1 border-gray-400 rounded-lg hover:cursor-pointer ${formState.method?.includes(method.toString()) ? 'bg-amber-100' : 'bg-white'}`}>
+        <input id={method} value={method} type="radio" className='appearance-none' {...register('method')} />
+        <img src={src} alt={label || 'payment-method'} />
+      </label>
     )
   }
 
@@ -69,9 +89,8 @@ function PaymentDetailPage() {
     if(value.method) {
         setErrorMethod('')
         dispatch(addDataAction({
-            method: value.method,
-            createdAt: moment().format('ddd, DD-MMM-YYYY'),
-            createdBy: currentLogin.id,
+          method: value.method,
+          createdAt: moment().format('YYYY-MM-DD'),
         }))
         setModal(true) 
     } else {
@@ -117,30 +136,30 @@ function PaymentDetailPage() {
                     <div className='flex flex-col w-full gap-4'>
                         <span className='font-semibold text-lg'>Fullname</span>
                         <div className='border-gray-400 border-1 outline-0 rounded-sm w-full px-3 py-3'>
-                        {currentLogin.fullname}</div>
+                        {currentLogin.profile.name}</div>
                     </div>
                     <div className='flex flex-col w-full gap-4'>
                         <span className='font-semibold text-lg'>Email</span>
                         <div className='border-gray-400 border-1 outline-0 rounded-sm w-full px-3 py-3'>
-                        {currentLogin.email}</div>
+                        {currentLogin.profile.email}</div>
                     </div>
                     <div className='flex flex-col w-full gap-4'>
                         <span className='font-semibold text-lg'>Phone Number</span>
                         <div className='border-gray-400 border-1 outline-0 rounded-sm w-full px-3 py-3'>
-                        {`+62${currentLogin.phonenumber}`}</div>
+                        {`+62${currentLogin.profile.phoneNumber}`}</div>
                     </div>
                 </div>
                 <div className='flex flex-col gap-5 w-full'>
                     <span className='font-bold text-2xl'>Payment Method</span>                
                     <div className='grid grid-cols-2 lg:grid-cols-4 gap-3'>
-                        <Card src={gpay} method={'gpay'} register={register}/>
-                        <Card src={visa} method={'visa'} register={register}/>
-                        <Card src={gopay} method={'gopay'} register={register}/>
-                        <Card src={paypal} method={'paypal'} register={register}/>
-                        <Card src={dana} method={'dana'} register={register}/>
-                        <Card src={bca} method={'bca'} register={register}/>
-                        <Card src={bri} method={'bri'} register={register}/>
-                        <Card src={ovo} method={'ovo'} register={register}/>
+                    {paymentMethods.map((item) => (
+                      <Card
+                        key={item.id}
+                        src={paymentIcons[item.name]}
+                        method={item.id.toString()}
+                        label={item.name}
+                      />
+                    ))}
                     </div>
                 </div>
                 <button type='submit' className='py-5 w-full bg-orange-500 rounded-2xl text-white font-bold'>Pay Your Order</button>
