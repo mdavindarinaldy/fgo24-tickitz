@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { currentLoginAction } from '../redux/reducer.js/currentLogin'
 import Modal from '../components/Modal'
 import http from '../lib/http'
+import ModalResetPassword from '../components/ResetPass'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email harus diisi!'),
@@ -19,36 +20,51 @@ const validationSchema = yup.object({
 })
 
 function LoginPage() {
-  const {register, handleSubmit, getValues, setValue, formState:{errors}} = useForm({
+  const {register, handleSubmit, getValues, formState:{errors}} = useForm({
     resolver: yupResolver(validationSchema)
   })
   const [error, setError] = useState('')
   const [errorPass, setErrorPass] = useState('')
   let navigate = useNavigate()
-  const users = useSelector((state) => state.users.data) || []
   const currentLogin = useSelector((state) => state.currentLogin)
   const dispatch = useDispatch()
   const modalRef = useRef(null)
   const [modal, setModal] = useState(false)
   const [errorConfirm, setErrorConfirm] = useState('')
   const [success, setSuccess] = useState('')
+  const [resetModal, setResetModal] = useState(false)
+  const [resetEmail, setResetEmail] = useState('')
+  const resetRef = useRef(null)
 
-  function forgotPass() {
+  async function forgotPass() {
     const value = getValues()
-    const findUser = users.find((item)=> item.email === value.forgetPassword)
-    if (findUser === undefined) {
-      setErrorConfirm('Email tidak terdaftar!')
-    } else {
-      setErrorConfirm('')
-      setSuccess('Password sementara telah dikirimkan melalui email!')
-      setTimeout(function() {
-        setModal(false)
-        setValue('forgetPassword', '')
-        setSuccess('')
-      }, 3000)
-    }
-  }
+  
+    try {
+      await http().post('/auth/pass', {
+        email: value.forgetPassword,
+      })
 
+      setErrorConfirm('')
+      setSuccess('OTP telah dikirimkan melalui email!')
+      setResetEmail(value.forgetPassword)
+  
+      setTimeout(() => {
+        setModal(false)
+        setSuccess('')
+        setResetModal(true)
+        resetRef.current?.resetForm()
+      }, 2000)
+  
+    } catch (err) {
+      if (err?.response?.data?.message?.includes('terdaftar')) {
+        setErrorConfirm('Email tidak terdaftar!')
+      } else {
+        console.log(err)
+        setErrorConfirm('Terjadi kesalahan, silakan coba beberapa saat lagi.')
+      }
+    }
+  }  
+  
   async function submitData(value) {
     const sanitizedValue = {
       ...value,
@@ -129,6 +145,12 @@ function LoginPage() {
             setModal(false)
           }}
           onSubmit={function () {forgotPass()}}
+        />
+        <ModalResetPassword
+          ref={resetRef}
+          modal={resetModal}
+          onClose={() => setResetModal(false)}
+          email={resetEmail}
         />
     </main>
   )
