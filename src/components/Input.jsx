@@ -2,7 +2,7 @@ import React, { forwardRef, useState } from 'react'
 import eye from '../assets/eye.svg'
 import eyeoff from '../assets/eye-off.svg'
 
-const Input = forwardRef(({type, text, register, error, errorConfirm, name, ...props}, ref) => {
+const Input = forwardRef(({type, text, register, error, errorConfirm, name, fieldName, ...props}, ref) => {
   const [showPassword, setShowPassword] = useState(false)
   const [fileName, setFileName] = useState('No Picture Selected')
 
@@ -91,7 +91,28 @@ const Input = forwardRef(({type, text, register, error, errorConfirm, name, ...p
   if (type==='file') {
     return (
         <div className='flex flex-col w-full gap-4'>
-          <span htmlFor={name} className='font-semibold text-lg'>Profile Picture</span>
+          <span htmlFor={name} {...props}>{fieldName}</span>
+          <div className='border-gray-400 border-1 outline-0 rounded-sm w-full px-3 py-3'>
+            <span>Select Picture | </span>
+            <label htmlFor={name} className='hover:cursor-pointer'>{fileName}</label>
+            <input
+              type='file'
+              id={name}
+              name={name}
+              className='hidden'
+              ref={ref}
+              onChange={(e) => {
+                handleFileChange(e) 
+              }}
+            />
+          </div>
+        </div>
+    )
+  }
+  if (type==='movie') {
+    return (
+        <div className='flex flex-col w-full gap-4'>
+          <span htmlFor={name} {...props}>{fieldName}</span>
           <div className='border-gray-400 border-1 outline-0 rounded-sm w-full px-3 py-3'>
             <span>Select Picture | </span>
             <label htmlFor={name} className='hover:cursor-pointer'>{fileName}</label>

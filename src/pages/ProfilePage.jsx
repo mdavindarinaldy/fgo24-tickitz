@@ -206,7 +206,7 @@ function ProfilePage() {
           <div className='border-b-1 border-gray-400 py-3'>
             <span className='text-semibold text-base'>Details Information</span>
           </div>
-          <Input type='file' ref={fileInputRef} name='profilePicture'/>
+          <Input type='file' ref={fileInputRef} name='profilePicture' fieldName='Profile Picture' className='font-semibold text-lg'/>
           {errorPicture && <p className="text-red-500 text-sm">{errorPicture}</p>}
           <Input type='fullname' register={register} defaultValue={currentLogin.profile.name} error={errors.fullname} />
           <Input type='email' register={register} defaultValue={currentLogin.profile.email} error={errors.email} />
