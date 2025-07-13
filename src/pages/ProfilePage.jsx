@@ -64,7 +64,6 @@ function ProfilePage() {
   const [error, setError] = useState('')
   const [formData, setFormData] = useState(null)
   const fileInputRef = useRef(null)
-  // const pictureURL = import.meta.env.VITE_PROFILE_PICTURE_URL
   const currentLogin = useSelector((state) => state.currentLogin)
   const navigate = useNavigate()
 
@@ -153,6 +152,7 @@ function ProfilePage() {
         dispatch(currentLoginAction({token, profile}))
         setModal(false)
         setUpdate('Profile berhasil dilakukan perubahan!')
+        setFormData(null)
         setTimeout(function () {
           setUpdate('')
         }, 5000)

@@ -28,7 +28,8 @@ function Navbar({currentlyOn, ...props}) {
   function Menu() {
     const [dropdown, setDropdown] = useState(false)
     const dropdownRef = useRef(null)
-
+    const pictureURL = import.meta.env.VITE_PROFILE_PICTURE_URL
+    const filename = currentLogin.profile.profilePicture
     useEffect(() => {
       function handleClickOutside(event) {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -52,7 +53,8 @@ function Navbar({currentlyOn, ...props}) {
         <div className='hidden lg:flex flex-row relative' ref={dropdownRef}>
           <button type='button' className='flex flex-row gap-5 items-center' onClick={() => setDropdown(!dropdown)}>
             <span className='text-lg font-semibold'>{currentLogin.profile.name}</span>
-            <img src={profile} alt="profile-picture" className='size-[50px]'/>
+            {filename ? <img src={`${pictureURL}/${filename}`} alt="profile-picture" className='size-[50px] object-cover rounded-full'/> :
+            <img src={profile} alt="profile-picture" className='size-[50px]'/>}
           </button>
           {dropdown && (
             <div className="absolute top-[60px] right-0 bg-white border border-gray-300 rounded-lg shadow-lg w-[150px] flex flex-col z-50">

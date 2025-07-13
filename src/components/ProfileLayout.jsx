@@ -8,6 +8,8 @@ import Navbar from './Navbar'
 function ProfileLayout() {
   const currentLogin = useSelector((state) => state.currentLogin)
   if(!currentLogin.token) { return (<Navigate to='/' replace/>) }
+  const pictureURL = import.meta.env.VITE_PROFILE_PICTURE_URL
+  const filename = currentLogin.profile.profilePicture
   
   return (
     <div>
@@ -19,7 +21,8 @@ function ProfileLayout() {
                     <span>INFO</span>
                     <img src={dot} alt="icon-dot" />
                 </div>
-                <img src={profile} alt="profile-picture" className='size-[10svw]'/>
+                {filename ? <img src={`${pictureURL}/${filename}`} alt="profile-picture" className='size-[10svw] object-cover rounded-full'/> :
+                <img src={profile} alt="profile-picture" className='size-[10svw]'/>}
                 <span className='font-bold text-2xl text-center'>{currentLogin.profile.name}</span>
                 <span className='text-gray-400'>Moviegoers</span>
                 <hr className='w-full h-0.5 border-1 border-gray-400'/>
