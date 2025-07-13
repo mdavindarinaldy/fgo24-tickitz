@@ -6,6 +6,7 @@ import http from '../lib/http'
 function HistoryTransactionPage() {
   const currentLogin = useSelector((state) => state.currentLogin)
   const [historyTrx, setHistoryTrx] = useState([{}])  
+  const [error, setError] = useState("")
   const navigate = useNavigate()
   
   useEffect(() => {
@@ -13,16 +14,13 @@ function HistoryTransactionPage() {
       try {
         const response = await http(currentLogin.token).get("/transactions")
         setHistoryTrx(response.data.results)
-      } catch(err) {
-        console.log(err)
+        setError("")
+      } catch {
+        setError("Saat ini sedang terjadi kendala pada server, silakan coba lagi beberapa saat kemudian")
       }
     }
     getHistory()
   }, [currentLogin.token]);
-
-  historyTrx.map((item)=>{
-    console.log(item.date)
-  })
 
   function HistoryCard({item}) {
     return (
@@ -53,6 +51,7 @@ function HistoryTransactionPage() {
             {historyTrx?.map((item, index)=>(
                 <HistoryCard key={`transaction-${index}`} item={item}/>
             ))}
+            {error && <span className='text-lg text-black-400 font-bold'>{error}</span>}
         </div>
     </>
   )
