@@ -28,7 +28,7 @@ function AddNewMoviePage() {
   const [castSearch, setCastSearch] = useState('')
   const [selectedDirectors, setSelectedDirectors] = useState([])
   const [selectedCasts, setSelectedCasts] = useState([])
-  const [selectedGenres, setSelectedGenres] = useState([]) // State baru untuk genre
+  const [selectedGenres, setSelectedGenres] = useState([])
   const [newGenre, setNewGenre] = useState('')
   const [newDirector, setNewDirector] = useState('')
   const [newCast, setNewCast] = useState('')
