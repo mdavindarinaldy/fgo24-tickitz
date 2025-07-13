@@ -12,7 +12,7 @@ import hiflix from '../assets/hiflix-black.png'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { addDataAction } from '../redux/reducer.js/buyTicket'
-import fetchChosenMovie from '../script/fetchChosenMovie'
+import http from '../lib/http'
 
 
 function BuyTicketPage() {
@@ -24,45 +24,36 @@ function BuyTicketPage() {
   const {register, handleSubmit} = useForm()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const currentLogin = useSelector((state) => state.currentLogin.data)
+  const currentLogin = useSelector((state) => state.currentLogin)
+  const posterURL = import.meta.env.VITE_MOVIE_POSTER_URL
+  const backdropURL = import.meta.env.VITE_MOVIE_BACKDROP_URL
 
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const details = await fetchChosenMovie(id)
-        setData(details);
-        setLoading(false);
+        const response = await http().get(`/movies/${id}`)
+        setData(response.data.results)
+        setLoading(false)
       } catch (err) {
-        setError(err.message);
-        setLoading(false);
+        setError(err.message)
+        setLoading(false)
       }
-    };
-    getMovies();
-  }, [id]);
+    }
+    getMovies()
+  }, [id])
 
   if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>
   if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>
   
   function convertMinutesToHours(minutes) {
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-    return `${hours} hour(s) ${remainingMinutes} minute(s)`;
+    const hours = Math.floor(minutes / 60)
+    const remainingMinutes = minutes % 60
+    return `${hours} hour(s) ${remainingMinutes} minute(s)`
   }
   
   const runtime = convertMinutesToHours(data.runtime)
-  const directors = data.credits.crew.filter((item) => item.job === 'Director')
-  let director = ''
-  directors.forEach((item, index) => {
-    if (index < directors.length-1) {director += item.name + ', '}
-    else {director += item.name}
-  })
-  let casts = ''
-  for (let i=0;i<7;i++) {
-    if (i < 6) {casts += data.credits.cast[i].name + ', '} 
-    else {casts += data.credits.cast[i].name} 
-  }
   
-  const date = nowDate;
+  const date = nowDate
   const showtime = [
     '13.15',
     '15.45',
@@ -93,7 +84,7 @@ function BuyTicketPage() {
   }
 
   function submitData(value) {
-    if (currentLogin.email) {
+    if (currentLogin.token) {
       setErrorLogin('')
       dispatch(addDataAction({...value, id: id, genre:data.genres}))
       navigate(`/buy-ticket/${id}/seat`)
@@ -107,17 +98,17 @@ function BuyTicketPage() {
       <Navbar currentlyOn='buy'/>
       <div className='h-[10svh]'></div>
       <section id='header' className='flex flex-col gap-2 relative w-[99svw] h-fit md:h-svh md:mb-5'>
-        <div className={`h-[60svh] md:h-[65%] w-full bg-cover bg-center bg-no-repeat rounded-3xl flex flex-col justify-center items-center`} style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(https://image.tmdb.org/t/p/w1280${data.backdrop_path})`}}>
+        <div className={`h-[60svh] md:h-[65%] w-full bg-cover bg-center bg-no-repeat rounded-3xl flex flex-col justify-center items-center`} style={{backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backdropURL}/${data.backdrop})`}}>
           <div className='md:w-[90%] h-full flex flex-col-reverse md:flex-row'>
             <div className='md:w-[25%] h-full relative'>
-              <img src={`https://image.tmdb.org/t/p/w500${data.poster_path}`} alt="movie-poster" className='w-[60svw] md:w-[20svw] left-[20svw] rounded-3xl absolute md:bottom-[-25svh] md:left-[0svw]'/>
+              <img src={`${posterURL}/${data.poster}`} alt="movie-poster" className='w-[60svw] md:w-[20svw] left-[20svw] rounded-3xl absolute md:bottom-[-25svh] md:left-[0svw]'/>
             </div>
             <div className='w-svw px-5 md:w-[75%] flex flex-col justify-end gap-5 md:px-0 py-5 text-white'>
               <span className='text-2xl md:text-[3svw] font-bold'>{data.title}</span>
-              <p className='text-lg font-light'>{data.overview}</p>
+              <p className='text-lg font-light'>{data.synopsis}</p>
               <div className='flex flex-row gap-5'>
-                {data.genres.map((item) => (
-                  <GenreButton key={item.id} id={item.id} text={item.name}/>
+                {data.genres.split(', ').map((item, index) => (
+                  <GenreButton key={`genre-${index}`} id={`genre-${index}`} text={item}/>
                 ))}
               </div>
             </div>
@@ -130,7 +121,7 @@ function BuyTicketPage() {
               <div className='flex flex-col gap-5 w-full md:w-[25%]'>
                 <div className='flex flex-col gap-1'>
                   <span className='font-bold'>Release Date</span>
-                  <span>{data.release_date}</span>
+                  <span>{data.releaseDate}</span>
                 </div>
                 <div className='flex flex-col gap-1'>
                   <span className='font-bold'>Duration</span>
@@ -140,11 +131,11 @@ function BuyTicketPage() {
               <div className='flex flex-col gap-5 w-full md:w-[75%]'>
                 <div className='flex flex-col gap-1'>
                   <span className='font-bold'>Directed By</span>
-                  <span>{director}</span>
+                  <span>{data.directors}</span>
                 </div>
                 <div className='flex flex-col gap-1'>
                   <span className='font-bold'>Casts</span>
-                  <span>{casts}</span>
+                  <span>{data.casts}</span>
                 </div>
               </div>
             </div>
