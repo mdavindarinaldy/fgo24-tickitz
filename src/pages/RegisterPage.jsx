@@ -69,10 +69,10 @@ function RegisterPage() {
         setErrorConfirm('')
         navigate('/login')
       } catch (err) {
-        if (err.response.data.errors.includes("email already used by another user")) {
+        if (err.response?.data?.errors?.includes("email already used by another user")) {
           setError('Email sudah terdaftar, silakan login dengan email tersebut')
           setErrorConfirm('')
-        } else if (err.response.data.errors.includes("phone number already used by another user")) {
+        } else if (err.response?.data?.errors?.includes("phone number already used by another user")) {
           setError('Nomor ponsel sudah digunakan, mohon gunakan nomor lain')
           setErrorConfirm('')
         } else {

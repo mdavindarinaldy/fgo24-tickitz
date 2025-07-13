@@ -66,7 +66,7 @@ function SeatPage() {
   }
 
   function Seat({value, formState, occupiedSeats}) {
-    const isOccupied = occupiedSeats.includes(value.toString())
+    const isOccupied = occupiedSeats?.includes(value.toString())
     function handleChange(e) {
       if (isOccupied) { return } 
       const isChecked = e.target.checked

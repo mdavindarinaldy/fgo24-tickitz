@@ -161,13 +161,13 @@ function ProfilePage() {
       setValue('confirmOldPassword', '')
       setValue('confirmPassword', '')
       setValue('password', '')
-      if (err.response.data.message.includes("Wrong password")) {
+      if (err.response?.data?.message?.includes("Wrong password")) {
         setErrorConfirm('Password salah!')
         return
       }
-      if (err.response.data.errors.includes("email already used by another user")) {
+      if (err.response?.data?.errors?.includes("email already used by another user")) {
         setErrorRegistered('Email sudah digunakan, mohon gunakan email lain')
-      } else if (err.response.data.errors.includes("phone number already used by another user")) {
+      } else if (err.response?.data?.errors?.includes("phone number already used by another user")) {
         setErrorPhoneNumber('Nomor ponsel sudah digunakan, mohon gunakan nomor lain')
       } else {
         setError('Terjadi kesalahan pada server. Silakan refresh halaman atau coba beberapa saat lagi.')

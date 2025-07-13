@@ -86,9 +86,9 @@ function LoginPage() {
         navigate('/')
       }
     } catch (err) {
-      if (err.response.data.message.includes("not registered")) {
+      if (err.response?.data?.message?.includes("not registered")) {
         setError('Email tidak terdaftar, silakan lakukan registrasi akun terlebih dahulu')
-      } else if (err.response.data.message.includes("password")) {
+      } else if (err.response?.data?.message?.includes("password")) {
         setError('')
         setErrorPass('Password yang digunakan salah!')
       } else {

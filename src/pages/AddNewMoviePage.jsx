@@ -107,7 +107,7 @@ function AddNewMoviePage() {
       setNewGenre('')
       setErrorGenre('')
     } catch (err) {
-      if (err.response.data.message.includes("genre name should not be empty")) {
+      if (err.response?.data?.message?.includes("genre name should not be empty")) {
         setErrorGenre('Nama genre tidak boleh kosong!')
       } else {
         setErrorGenre('Terjadi kesalahan pada server. Silakan refresh halaman atau coba beberapa saat lagi.')
@@ -128,7 +128,7 @@ function AddNewMoviePage() {
       setNewDirector('')
       setErrorDirector('')
     } catch (err) {
-      if (err.response.data.message.includes("director name should not be empty")) {
+      if (err.response?.data?.message?.includes("director name should not be empty")) {
         setErrorDirector('Nama sutradara tidak boleh kosong!')
       } else {
         setErrorDirector('Terjadi kesalahan pada server. Silakan refresh halaman atau coba beberapa saat lagi.')
@@ -149,7 +149,7 @@ function AddNewMoviePage() {
       setNewCast('')
       setErrorCast('')
     } catch (err) {
-      if (err.response.data.message.includes("cast name should not be empty")) {
+      if (err.response?.data?.message?.includes("cast name should not be empty")) {
         setErrorCast('Nama pemeran tidak boleh kosong!')
       } else {
         setErrorCast('Terjadi kesalahan pada server. Silakan refresh halaman atau coba beberapa saat lagi.')
