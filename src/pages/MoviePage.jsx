@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import Navbar from '../components/Navbar'
-import fetchNowPlayingMovies from '../script/fetchNowPlayingMovies'
 import Subscription from '../components/Subscription'
 import Footer from '../components/Footer'
 import GenreButton from '../components/GenreButton'
@@ -8,10 +7,10 @@ import MovieCard from '../components/MovieCard'
 import search from '../assets/Search.png'
 import { ScrollRestoration, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import http from '../lib/http'
 
 function MoviePage() {
   const [movies, setMovies] = useState([])
-  const [filteredMovies, setFilteredMovies] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const {register, handleSubmit} = useForm()
@@ -19,22 +18,25 @@ function MoviePage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const initialPage = parseInt(searchParams.get('page')) || 1
   const [currentPage, setCurrentPage] = useState(initialPage)
+  const [totalPage, setTotalPage] = useState(1)
+  const posterURL = import.meta.env.VITE_MOVIE_POSTER_URL
 
-  const querySearch = searchParams.get('query') || null
-  const currentGenre = searchParams.get('genre') || null
+  const querySearch = searchParams.get('query') || ""
+  const currentGenre = searchParams.get('genre') || ""
   const genres = [
-    { id: 28, name: 'ACTION' },
-    { id: 12, name: 'ADVENTURE' },
-    { id: 35, name: 'COMEDY' },
-    { id: 10749, name: 'ROMANCE' },
-    { id: 878, name: 'SCI-FI' },
+    { id: 1, name: 'ACTION' },
+    { id: 2, name: 'ADVENTURE' },
+    { id: 4, name: 'COMEDY' },
+    { id: 14, name: 'ROMANCE' },
+    { id: 15, name: 'SCI-FI' },
   ]
 
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const data = await fetchNowPlayingMovies()
-        setMovies(data)
+        const response = await http().get(`/movies?search=${querySearch}&genre=${currentGenre}&page=${currentPage}`)
+        setMovies(response.data.results)
+        setTotalPage(response.data.pageInfo.totalPage)
         setLoading(false)
       } catch (err) {
         setError(err.message)
@@ -42,39 +44,15 @@ function MoviePage() {
       }
     }
     getMovies()
-  }, [])
+  }, [currentGenre, querySearch, currentPage])
 
-  useEffect(() => {
-    if (currentGenre) {
-      const filtered = movies.filter((movie) =>
-        movie.genre_ids.includes(parseInt(currentGenre, 10))
-      )
-      if (querySearch) {
-        const result = filtered.filter((movie) => movie.title.includes(querySearch)) 
-        setFilteredMovies(result)
-        setCurrentPage(1)
-      } else {
-        setFilteredMovies(filtered)
-        setCurrentPage(1)
-      }
-    } else {
-      if (querySearch) {
-        const result = movies.filter((movie) => movie.title.includes(querySearch)) 
-        setFilteredMovies(result)
-        setCurrentPage(1)
-      } else {
-        setFilteredMovies(movies)
-      }
-    }
-  }, [movies, currentGenre, querySearch])
-
-  const handleGenreChange = (genreId) => {
+  const handleGenreChange = (genreName) => {
     const params = Object.fromEntries(searchParams)
-    if (genreId === currentGenre) {
+    if (genreName === currentGenre) {
       delete params.genre
       setSearchParams({...params, page: '1' })
-    } else if (genreId) {
-      setSearchParams({...params, genre: genreId, page: '1' })
+    } else if (genreName) {
+      setSearchParams({...params, genre: genreName, page: '1' })
     }
     setCurrentPage(1)
     setLoading(false)
@@ -99,17 +77,6 @@ function MoviePage() {
   if (loading) return <div className='h-svh flex flex-col justify-center items-center'>Loading...</div>
   if (error) return <div className='h-svh flex flex-col justify-center items-center'>{error}</div>
 
-  const moviesPerPage = 12
-  const totalPages = Math.ceil(filteredMovies.length / moviesPerPage)
-  const indexOfLastMovie = currentPage * moviesPerPage
-  const indexOfFirstMovie = indexOfLastMovie - moviesPerPage
-  const currentMovies = filteredMovies.slice(indexOfFirstMovie, indexOfLastMovie)
-
-  const pageNumbers = []
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i)
-  }
-  
   return (
     <div>
       <ScrollRestoration/>
@@ -156,33 +123,33 @@ function MoviePage() {
                     id={genre.id}
                     text={genre.name}
                     isActive={currentGenre === genre.id.toString()}
-                    onClick={() => handleGenreChange(genre.id.toString())}
+                    onClick={() => handleGenreChange(genre.name.toString())}
                   />
                 ))}
               </div>
             </div>
           </form>
           <div className='w-full h-fit py-5 grid grid-cols-2 lg:grid-cols-4'>
-            {currentMovies.map((movie) => (
+            {movies.map((movie) => (
               <MovieCard 
                 key={movie.id} 
                 id={movie.id} 
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+                src={`${posterURL}/${movie.poster}`} 
                 name={movie.title.toUpperCase()} 
-                genre={[`${movie.genre_ids[0]}`,`${movie.genre_ids[1]}`]} 
+                genre={movie.genres.split(', ')} 
                 width='w-[40svw] lg:w-[20svw]' height='lg:h-[30svw]' textSize="text-lg" buttonSize='text-[3svw] lg:text-[1svw]' 
                 date='' details={true}
               />
             ))}
           </div>
-          <div className='flex flex-row gap-5'>
-            {pageNumbers.map((page) => (
-              <GenreButton 
-                key={`page-${page}`} 
-                id={`page-${page}`} 
-                text={`${page}`}
-                isActive={currentPage === page}
-                onClick={() => handlePageChange(page)} 
+          <div className='w-full flex flex-row justify-center items-center gap-5'>
+            {Array.from({ length: totalPage }, (_, i) => (
+              <GenreButton
+                key={`page-${i + 1}`}
+                id={`page-${i + 1}`}
+                text={`${i + 1}`}
+                isActive={currentPage === i + 1}
+                onClick={() => handlePageChange(i + 1)}
               />
             ))}
           </div>
