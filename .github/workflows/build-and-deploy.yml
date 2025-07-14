@@ -24,6 +24,10 @@ jobs:
           file: Dockerfile
           build-args: |
             VITE_TMDB_API_KEY=${{ secrets.VITE_TMDB_API_KEY }}
+            VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }}
+            VITE_PROFILE_PICTURE_URL=${{ secrets.VITE_PROFILE_PICTURE_URL }}
+            VITE_MOVIE_POSTER_URL=${{ secrets.VITE_MOVIE_POSTER_URL }}
+            VITE_MOVIE_BACKDROP_URL=${{ secrets.VITE_MOVIE_BACKDROP_URL }}
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
