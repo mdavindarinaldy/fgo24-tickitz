@@ -55,7 +55,7 @@ function HomePage() {
             <div className='w-[20%]'></div>
             <span className='text-[4svw] md:text-[3svw] lg:text-[2svw] font-bold'>Now Showing in Cinemas</span>
             <div className='w-[20%]'>
-              <Button text="View All &rarr" href="/movie" className="on"/>
+              <Button text="View All &rarr;" href="/movie" className="on"/>
             </div>
           </div>
           <div className='w-[100%] h-fit flex justify-center'>
