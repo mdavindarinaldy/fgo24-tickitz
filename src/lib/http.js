@@ -7,7 +7,7 @@ function http(token) {
   }
   const instance = axios.create({
     headers,
-    baseURL: import.meta.env.VITE_BACKEND_URL
+    baseURL: import.meta.env.VITE_BACKEND_URL || '/'
   })
   return instance
 }
