@@ -116,6 +116,7 @@ function ProfilePage() {
     }
     setFormData(formData)
     setValue('confirmOldPassword', '')
+    setErrorPicture('')
     setModal(true)
   }
 
