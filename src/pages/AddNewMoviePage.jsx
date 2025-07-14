@@ -124,13 +124,14 @@ function AddNewMoviePage() {
       const response = await http(currentLogin.token).post('/admin/directors', { name: newDirector })
       const updatedDirectors = [...selectedDirectors, response.data.result]
       setSelectedDirectors(updatedDirectors)
-      setValue('directors', updatedDirectors.map((d) => d.id).join(', '))
+      setValue('directors', updatedDirectors.map((d) => d?.id).join(', '))
       setNewDirector('')
       setErrorDirector('')
     } catch (err) {
       if (err.response?.data?.message?.includes("director name should not be empty")) {
         setErrorDirector('Nama sutradara tidak boleh kosong!')
       } else {
+        console.log(err)
         setErrorDirector('Terjadi kesalahan pada server. Silakan refresh halaman atau coba beberapa saat lagi.')
       }
     }
@@ -145,13 +146,14 @@ function AddNewMoviePage() {
       const response = await http(currentLogin.token).post('/admin/casts', { name: newCast })
       const updatedCasts = [...selectedCasts, response.data.result]
       setSelectedCasts(updatedCasts)
-      setValue('casts', updatedCasts.map((c) => c.id).join(', '))
+      setValue('casts', updatedCasts.map((c) => c?.id).join(', '))
       setNewCast('')
       setErrorCast('')
     } catch (err) {
       if (err.response?.data?.message?.includes("cast name should not be empty")) {
         setErrorCast('Nama pemeran tidak boleh kosong!')
       } else {
+        console.log(err)
         setErrorCast('Terjadi kesalahan pada server. Silakan refresh halaman atau coba beberapa saat lagi.')
       }
     }
@@ -251,7 +253,7 @@ function AddNewMoviePage() {
     if (!selectedDirectors.some((d) => d.id === director.id)) {
       const updatedDirectors = [...selectedDirectors, director]
       setSelectedDirectors(updatedDirectors)
-      setValue('directors', updatedDirectors.map((d) => d.id).join(', '))
+      setValue('directors', updatedDirectors.map((d) => d?.id)?.join(', '))
     }
     setDirectorSearch('')
     setDirectors([])
@@ -261,7 +263,7 @@ function AddNewMoviePage() {
     if (!selectedCasts.some((c) => c.id === cast.id)) {
       const updatedCasts = [...selectedCasts, cast]
       setSelectedCasts(updatedCasts)
-      setValue('casts', updatedCasts.map((c) => c.id).join(', '))
+      setValue('casts', updatedCasts.map((c) => c?.id)?.join(', '))
     }
     setCastSearch('')
     setCasts([])
@@ -270,13 +272,13 @@ function AddNewMoviePage() {
   const removeDirector = (id) => {
     const updatedDirectors = selectedDirectors.filter((d) => d.id !== id)
     setSelectedDirectors(updatedDirectors)
-    setValue('directors', updatedDirectors.map((d) => d.id).join(', '))
+    setValue('directors', updatedDirectors.map((d) => d?.id).join(', '))
   }
 
   const removeCast = (id) => {
-    const updatedCasts = selectedCasts.filter((c) => c.id !== id)
+    const updatedCasts = selectedCasts.filter((c) => c?.id !== id)
     setSelectedCasts(updatedCasts)
-    setValue('casts', updatedCasts.map((c) => c.id).join(', '))
+    setValue('casts', updatedCasts.map((c) => c?.id).join(', '))
   }
 
   const handleGenreChange = (id, checked) => {
