@@ -20,7 +20,7 @@ function HomePage() {
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const responseNowPlaying = await http().get(`/movies`)
+        const responseNowPlaying = await http().get(`/movies?page=1`)
         const responseUpcoming = await http().get(`/movies/upcoming`)
         setUpcomingMovies(responseUpcoming.data.results)
         setMovies(responseNowPlaying.data.results)
